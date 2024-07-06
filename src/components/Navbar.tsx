@@ -13,7 +13,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="flex flex-row items-center">
-                    <Link href="/login" className={buttonVariants({ variant: "disabled", size: "lg" })}>Login</Link>
+                    {/* <Link href="/login" className={buttonVariants({ variant: "disabled", size: "lg" })}>Login</Link> */}
                 </div>
             </div>
         </div>
