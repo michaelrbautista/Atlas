@@ -32,7 +32,7 @@ export default function Home() {
           <h1 className="text-xl lg:text-3xl font-bold text-secondaryText">
             Get access to training and nutrition programs to play Division 1 soccer.
           </h1>
-          <div className="mt-6 lg:w-96">
+          <div className="mt-6 w-full lg:w-96">
             <SignUpForm></SignUpForm>
             {/* <Link href="/createAccount" className={buttonVariants({ variant: "systemBlue", size: "lg" })}>Create Account</Link> */}
           </div>
