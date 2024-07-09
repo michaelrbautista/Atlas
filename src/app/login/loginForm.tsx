@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import ErrorToast from "../../components/errorToast";
-import onSignIn from "./onSignIn";
+import { login } from "./actions";
 
-const SignInForm = () => {
+
+const LoginForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -22,13 +23,15 @@ const SignInForm = () => {
 
         if (emailRef.current !== null && passwordRef.current !== null) {
             if (emailRef.current.value !== "" && passwordRef.current.value !== "") {
-                const signedInUser = await onSignIn(emailRef.current.value, passwordRef.current.value);
-                console.log({
-                    data: signedInUser
-                });
+                const loginError = await login(emailRef.current.value, passwordRef.current.value);
+
+                if (loginError) {
+                    setShowError(true);
+                    setErrorMessage(loginError.errorMessage);
+                }
             } else {
                 setShowError(true);
-                setErrorMessage("Email or password is incorrect.");
+                setErrorMessage("Please fill in all fields.");
             }
         } else {
             setShowError(true);
@@ -37,7 +40,7 @@ const SignInForm = () => {
     }
 
     return (
-        <form onSubmit={clientSignIn} className="flex flex-col items-center gap-4">
+        <form className="flex flex-col items-center gap-4">
             <ErrorToast showError={showError}>{errorMessage}</ErrorToast>
             <Input ref={emailRef} type="email" placeholder="Email" id="email"></Input>
             <Input ref={passwordRef}  type="password" placeholder="Password" id="password"></Input>
@@ -49,4 +52,4 @@ const SignInForm = () => {
     )
 }
 
-export default SignInForm;
+export default LoginForm;
