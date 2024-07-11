@@ -30,7 +30,7 @@ export default function Home() {
             You can go D1.
           </h1>
           <h1 className="text-xl lg:text-3xl font-bold text-secondaryText">
-            Get access to training and nutrition programs to play Division 1 soccer.
+            Get access to training and nutrition programs created by Division 1 soccer players.
           </h1>
           <div className="mt-6 w-full lg:w-96">
             <SignUpForm></SignUpForm>
