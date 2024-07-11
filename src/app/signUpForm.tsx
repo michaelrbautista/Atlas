@@ -8,7 +8,7 @@ import onSignUp from "./onSignUp";
 import SignUpConfirmation from "./signUpConfirmation";
 
 const SignUpForm = () => {
-    const emailRef = useRef<HTMLInputElement>(null);
+    const phoneRef = useRef<HTMLInputElement>(null);
 
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -21,8 +21,8 @@ const SignUpForm = () => {
         setShowError(false);
         setErrorMessage("");
 
-        if (emailRef.current !== null && emailRef.current.value !== "") {
-            const error = await onSignUp(emailRef.current.value);
+        if (phoneRef.current !== null && phoneRef.current.value !== "") {
+            const error = await onSignUp(phoneRef.current.value);
             
             if (error) {
                 if (error.code === '23505') {
@@ -44,7 +44,7 @@ const SignUpForm = () => {
     return (
         <form onSubmit={clientSignUp} className="flex flex-col items-center gap-4">
             <ErrorToast showError={showError}>{errorMessage}</ErrorToast>
-            <Input ref={emailRef} type="phone" placeholder="Enter your phone number" id="phone"></Input>
+            <Input ref={phoneRef} type="phone" placeholder="Enter your phone number" id="phone"></Input>
             <Button onClick={clientSignUp} type="submit" className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Get Access</Button>
             <SignUpConfirmation showConfirmation={showConfirmation}>Your phone number was added. We'll send you a text when you have access.</SignUpConfirmation>
         </form>
