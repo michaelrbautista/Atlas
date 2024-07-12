@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 
-const onSignUp = async (phoneNumber: string) => {
+const onSignUp = async (email: string) => {
     "use server";
 
     // 1. Create supabase client
@@ -13,7 +13,7 @@ const onSignUp = async (phoneNumber: string) => {
     // 2. Sign in
     const { error } = await supabase
         .from('sign_ups')
-        .insert({ phone_number: phoneNumber });
+        .insert({ email: email });
 
     if (error) {
         return error

@@ -27,7 +27,7 @@ const SignUpForm = () => {
             if (error) {
                 if (error.code === '23505') {
                     setShowError(true);
-                    setErrorMessage("Your phone number has already been added.");
+                    setErrorMessage("Your email has already been added.");
                 } else {
                     setShowError(true);
                     setErrorMessage(error.message);
@@ -37,16 +37,16 @@ const SignUpForm = () => {
             }
         } else {
             setShowError(true);
-            setErrorMessage("Phone number can't be empty.");
+            setErrorMessage("Email can't be empty.");
         }
     }
 
     return (
         <form onSubmit={clientSignUp} className="flex flex-col items-center gap-4">
             <ErrorToast showError={showError}>{errorMessage}</ErrorToast>
-            <Input ref={phoneRef} type="phone" placeholder="Enter your phone number" id="phone"></Input>
+            <Input ref={phoneRef} type="email" placeholder="Enter your email" id="email"></Input>
             <Button onClick={clientSignUp} type="submit" className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Get Access</Button>
-            <SignUpConfirmation showConfirmation={showConfirmation}>Your phone number was added. We'll send you a text when you have access.</SignUpConfirmation>
+            <SignUpConfirmation showConfirmation={showConfirmation}>Your email was added. We'll send you an email when you have access.</SignUpConfirmation>
         </form>
     )
 }
