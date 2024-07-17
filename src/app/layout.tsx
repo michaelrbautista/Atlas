@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Sidebar from "@/app/(sidebar)/Sidebar";
+import { AppWrapper } from "@/context";
+import Navbar from "./(navbar)/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,14 +21,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(
-        "relative h-full font-sans antialiased overscroll-none", 
+        "bg-systemGray6 min-h-screen font-sans antialiased overscroll-none", 
         inter.className
         )}>
-          <main className='relative flex flex-col min-h-screen bg-systemGray6'>
-            <div>
-              {children}
+          {children}
+          {/* <AppWrapper>
+            <div className="bg-systemGray6 flex flex-row min-h-screen w-full">
+              <div className="hidden md:flex min-w-64">
+                <Sidebar></Sidebar>
+              </div>
+              <div className="flex flex-col w-full">
+                <div className="flex md:hidden w-full">
+                  <Navbar></Navbar>
+                </div>
+                {children}
+              </div>
             </div>
-          </main>
+          </AppWrapper> */}
       </body>
     </html>
   );
