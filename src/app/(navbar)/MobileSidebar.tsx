@@ -29,7 +29,7 @@ import CreateAccountForm from "../(sidebar)/createAccountForm";
 import SignInForm from "../(sidebar)/signInForm";
 
 const MobileSidebar = () => {
-    const { authUser } = useAppContext();
+    const { authUserId } = useAppContext();
 
     const [showSignIn, setShowSignIn] = useState(false);
     const [showCreateAccount, setShowCreateAccount] = useState(false);
