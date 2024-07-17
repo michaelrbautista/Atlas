@@ -10,12 +10,46 @@ import Image from "next/image";
 import webPreview from "../../public/webPreview.png";
 import mobilePreview from "../../public/mobilePreview.png";
 import Logo from "@/components/logo";
+import { onJoin } from "./onJoin";
+import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
-  const [showError, setShowError] = useState(null);
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
   
   const emailRef = useRef<HTMLInputElement>(null);
+
+  const onJoinClient = async () => {
+    setShowConfirmation(false);
+    setShowError(false);
+    setIsSigningUp(true);
+
+    if (emailRef.current !== null && emailRef.current.value !== "") {
+      const error = await onJoin(emailRef.current.value);
+      
+      if (error) {
+        if (error.code === '23505') {
+            setShowError(true);
+            setErrorMessage("Your email has already been added.");
+        } else {
+            setShowError(true);
+            setErrorMessage(error.message);
+        }
+      } else {
+        console.log("here");
+        setShowConfirmation(true);
+      }
+    } else {
+      setShowError(true);
+      setErrorMessage("Email can't be empty.");
+    }
+
+    setIsSigningUp(false);
+  }
 
   if (isLoading) {
     return (
@@ -37,11 +71,25 @@ export default function Home() {
             <p className="text-secondaryText text-lg md:text-4xl font-medium text-center">
               Get access to training and nutrition programs created by Division 1 soccer players.
             </p>
-            <div className="flex flex-col lg:flex-row mx-auto w-full sm:w-3/4 pt-10 gap-5">
-              <Input placeholder="Enter your email"></Input>
-              <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Join Waitlist</Button>
+            <div className="flex flex-col mx-auto w-full sm:w-3/4 pt-10 gap-5">
+              <Input ref={emailRef} placeholder="Enter your email"></Input>
+              {isSigningUp ?
+                  <Button className={buttonVariants({ size: "lg" })} disabled>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin"/></Button>
+                  :
+                  <Button onClick={onJoinClient} className={buttonVariants({ variant: "systemBlue", size: "lg" })}>Join Waitlist</Button>      
+              }
             </div>
-            <p className="text-systemGray6 text-center pt-2">Your email was added. We'll let you know when you have access.</p>
+            {showConfirmation && 
+              <p className={cn("text-primaryText text-center pt-2")}>
+                Your email was added. We'll let you know when you have access.
+              </p>
+            }
+            {showError && 
+              <p className={cn("text-primaryText text-center pt-2")}>
+                {errorMessage}
+              </p>
+            }
           </div>
           <div className="flex flex-col md:flex-row py-10 px-10 gap-5 justify-center items-center">
               <div className="">
