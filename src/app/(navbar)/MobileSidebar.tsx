@@ -44,26 +44,26 @@ const MobileSidebar = () => {
                     <Logo></Logo>
                     <MobileSidebarRoutes></MobileSidebarRoutes>
                 </div>
-                {authUser ? (
+                {authUserId ? (
                     <div>
                         <h1>Account</h1>
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-5 p-5">
-                        <Dialog>
+                        <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
                             <DialogTrigger asChild>
                                 <Button className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Sign In</Button>
                             </DialogTrigger>
                             <DialogContent className="bg-systemGray6 sm:max-w-md">
-                                <SignInForm></SignInForm>
+                                <SignInForm onOpenChange={setShowSignIn}></SignInForm>
                             </DialogContent>
                         </Dialog>
-                        <Dialog>
+                        <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
                             <DialogTrigger asChild>
                                 <Button className={buttonVariants({ variant: "systemGray", size: "wide" })}>Create Account</Button>
                             </DialogTrigger>
                             <DialogContent className="bg-systemGray6 sm:max-w-md">
-                                <CreateAccountForm></CreateAccountForm>
+                                <CreateAccountForm onOpenChange={setShowCreateAccount}></CreateAccountForm>
                             </DialogContent>
                         </Dialog>
                     </div>
