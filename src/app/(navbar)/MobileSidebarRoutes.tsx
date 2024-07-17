@@ -17,7 +17,7 @@ const MobileSidebarRoutes = () => {
     return (
         <div className="flex flex-col w-full">
             {routes.map((route) => (
-                <MobileSidebarItem label={route.label} href={route.href}></MobileSidebarItem>
+                <MobileSidebarItem key={route.label} label={route.label} href={route.href}></MobileSidebarItem>
             ))}
         </div>
     );
