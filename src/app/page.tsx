@@ -64,7 +64,7 @@ export default function Home() {
           <Logo></Logo>
         </div>
         <div className="pt-40 flex flex-col gap-2 w-full justify-center items-center">
-          <div className="flex flex-col gap-2 w-4/5 sm:w-3/4">
+          <div className="flex flex-col gap-2 w-4/5 sm:w-3/5">
             <p className="text-primaryText text-4xl md:text-6xl font-bold text-center">
               You can go D1.
             </p>
