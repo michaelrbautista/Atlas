@@ -60,10 +60,10 @@ const SignInForm = ({ onOpenChange }: { onOpenChange: React.Dispatch<React.SetSt
                 <Input ref={emailRef} type="email" placeholder="Email" id="email"></Input>
                 <Input ref={passwordRef}  type="password" placeholder="Password" id="password"></Input>
                 {isLoading ?
-                    <Button className={buttonVariants({ size: "wide" })} disabled>
+                    <Button className={buttonVariants({ size: "lg" })} disabled>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/></Button>
                     :
-                    <Button type="submit" className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Sign In</Button>      
+                    <Button type="submit" className={buttonVariants({ variant: "default", size: "lg" })}>Sign In</Button>      
                 }
                 <h1 className={cn("text-primaryText text-sm text-center w-full", !showError && "hidden")}>{errorMessage}</h1>
             </form>

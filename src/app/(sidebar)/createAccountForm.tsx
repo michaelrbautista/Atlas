@@ -36,10 +36,10 @@ const CreateAccountForm = ({ onOpenChange }: { onOpenChange: React.Dispatch<Reac
                 <Input type="password" placeholder="Password"></Input>
                 <Input type="password" placeholder="Confirm Password"></Input>
                 {isLoading ?
-                    <Button className={buttonVariants({ size: "wide" })} disabled>
+                    <Button className={buttonVariants({ size: "lg" })} disabled>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/></Button>
                     :
-                    <Button onClick={() => {onOpenChange(false)}} type="submit" className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Create Account</Button>      
+                    <Button onClick={() => {onOpenChange(false)}} type="submit" className={buttonVariants({ variant: "default", size: "lg" })}>Create Account</Button>      
                 }
             </form>
         </div>
