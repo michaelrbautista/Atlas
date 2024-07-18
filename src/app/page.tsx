@@ -91,7 +91,7 @@ export default function Home() {
               </p>
             }
           </div>
-          <div className="flex flex-col md:flex-row py-10 px-10 gap-5 justify-center items-center">
+          <div className="flex flex-col md:flex-row py-20 px-10 gap-5 justify-center items-center">
               <div className="">
                 <Image layout="intrinsic" src="/webPreview.png" width={600} height={512} alt="web"></Image>
               </div>
