@@ -52,7 +52,7 @@ const MobileSidebar = () => {
                     <div className="flex flex-col items-center gap-5 p-5">
                         <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
                             <DialogTrigger asChild>
-                                <Button className={buttonVariants({ variant: "systemBlue", size: "wide" })}>Sign In</Button>
+                                <Button className={buttonVariants({ size: "lg" })}>Sign In</Button>
                             </DialogTrigger>
                             <DialogContent className="bg-systemGray6 sm:max-w-md">
                                 <SignInForm onOpenChange={setShowSignIn}></SignInForm>
@@ -60,7 +60,7 @@ const MobileSidebar = () => {
                         </Dialog>
                         <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
                             <DialogTrigger asChild>
-                                <Button className={buttonVariants({ variant: "systemGray", size: "wide" })}>Create Account</Button>
+                                <Button className={buttonVariants({ size: "lg" })}>Create Account</Button>
                             </DialogTrigger>
                             <DialogContent className="bg-systemGray6 sm:max-w-md">
                                 <CreateAccountForm onOpenChange={setShowCreateAccount}></CreateAccountForm>

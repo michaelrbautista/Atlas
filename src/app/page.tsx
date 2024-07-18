@@ -53,14 +53,14 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemGray6">
+      <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-background">
         <Spinner></Spinner>
       </div>
     )
   } else {
     return (
       <div className="h-full">
-        <div className="fixed w-full h-20 flex px-5 bg-systemGray6">
+        <div className="fixed w-full h-20 flex px-5 bg-background">
           <Logo></Logo>
         </div>
         <div className="pt-40 flex flex-col gap-2 w-full justify-center items-center">
@@ -69,15 +69,16 @@ export default function Home() {
               You can go D1.
             </p>
             <p className="text-secondaryText text-lg md:text-4xl font-medium text-center">
-              Get access to training and nutrition programs created by Division 1 soccer players.
+              Get access to training and nutrition programs to help you play at the next level.
             </p>
             <div className="flex flex-col mx-auto w-full sm:w-3/4 pt-10 gap-5">
-              <Input ref={emailRef} placeholder="Enter your email"></Input>
+              <Input ref={emailRef} type="email" placeholder="Enter your email"></Input>
               {isSigningUp ?
-                  <Button className={buttonVariants({ size: "lg" })} disabled>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin"/></Button>
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                  </Button>
                   :
-                  <Button onClick={onJoinClient} className={buttonVariants({ variant: "systemBlue", size: "lg" })}>Join Waitlist</Button>      
+                  <Button onClick={onJoinClient}>Join Waitlist</Button>      
               }
             </div>
             {showConfirmation && 
