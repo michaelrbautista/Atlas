@@ -61,7 +61,7 @@ export default function Home() {
         <div className="fixed w-full h-20 flex px-5 bg-background">
           <Logo></Logo>
         </div>
-        <div className="py-40 flex flex-col gap-2 justify-center items-center">
+        <div className="pt-40 pb-20 flex flex-col gap-2 justify-center items-center">
           <div className="flex flex-col items-center gap-2 w-4/5 sm:w-2/4 max-w-3xl">
             <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
               You can go D1.
@@ -76,7 +76,7 @@ export default function Home() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                   </Button>
                   :
-                  <Button onClick={onJoinClient}>Join Waitlist</Button>      
+                  <Button onClick={onJoinClient} variant="systemBlue">Join Waitlist</Button>      
               }
             </div>
             {showConfirmation && 
