@@ -1,4 +1,5 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config = {
   darkMode: ["class"],
@@ -29,6 +30,7 @@ const config = {
         'systemGray4': '#2C2C2E',
         'systemGray5': '#1C1C1E',
         'systemGray6': '#121214',
+        'systemBackground': '#000000',
         'systemBlue': '#0A84FF',
         'systemBlueHover': '#0875E2',
 
@@ -84,6 +86,12 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
+      aspectRatio: {
+        "6/4": "6 / 4"
       },
     },
   },

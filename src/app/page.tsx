@@ -1,25 +1,32 @@
 'use client';
 
 import { useState, useRef } from "react";
-import Program from "@/components/program";
-import { Spinner } from "@/components/spinner";
-import { getAllPrograms } from "./actions";
-import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/(misc)/spinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
-import Logo from "@/components/logo";
+import Logo from "@/components/(misc)/logo";
+
 import { onJoin } from "./onJoin";
-import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
+import CreateAccountForm from "@/components/(auth)/createAccountForm";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
+
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
+
   const [showConfirmation, setShowConfirmation] = useState(false);
-  
   const emailRef = useRef<HTMLInputElement>(null);
+
+  const emailValidation = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
   const onJoinClient = async () => {
     setShowConfirmation(false);
@@ -27,18 +34,23 @@ export default function Home() {
     setIsSigningUp(true);
 
     if (emailRef.current !== null && emailRef.current.value !== "") {
+      if (!emailValidation.test(emailRef.current.value)) {
+        setShowError(true);
+        setErrorMessage("Please enter a valid email.");
+        setIsSigningUp(false);
+        return
+      }
+
       const error = await onJoin(emailRef.current.value);
       
       if (error) {
         if (error.code === '23505') {
-            setShowError(true);
-            setErrorMessage("Your email has already been added.");
+          setShowConfirmation(true);
         } else {
             setShowError(true);
             setErrorMessage(error.message);
         }
       } else {
-        console.log("here");
         setShowConfirmation(true);
       }
     } else {
@@ -51,25 +63,34 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-background">
+      <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
         <Spinner></Spinner>
       </div>
     )
   } else {
     return (
       <div className="h-full">
-        <div className="fixed w-full h-20 flex px-5 bg-background">
+        <div className="fixed w-full h-20 flex items-center justify-between px-5 sm:px-10 bg-systemBackground">
           <Logo></Logo>
+          {/* <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
+              <DialogTrigger asChild>
+                  <Button variant="ghost">Sign In</Button>
+              </DialogTrigger>
+              <DialogContent className="bg-background max-w-96 sm:max-w-md">
+                  <DialogTitle hidden></DialogTitle>
+                  <SignInForm onOpenChange={setShowSignIn}></SignInForm>
+              </DialogContent>
+          </Dialog> */}
         </div>
         <div className="pt-40 pb-20 flex flex-col gap-2 justify-center items-center">
-          <div className="flex flex-col items-center gap-2 w-4/5 sm:w-2/4 max-w-3xl">
+          <div className="flex flex-col items-center gap-4 w-4/5 sm:w-2/4 max-w-3xl">
             <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
-              You can go D1.
+              Create your own training platform.
             </p>
-            <p className="text-secondaryText text-lg sm:text-4xl font-medium text-center">
-              Get access to training and nutrition programs to help you play at the next level.
+            <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
+              Share health and fitness content with your community and grow your online fitness business.
             </p>
-            <div className="flex flex-col items-center justify-center w-full sm:max-w-lg pt-10 gap-5">
+            <div className="flex flex-col items-center justify-center w-full sm:max-w-lg pt-4 gap-5">
               <Input ref={emailRef} type="email" placeholder="Enter your email"></Input>
               {isSigningUp ?
                   <Button disabled>
@@ -78,44 +99,47 @@ export default function Home() {
                   :
                   <Button onClick={onJoinClient} variant="systemBlue">Join Waitlist</Button>      
               }
+              {showConfirmation && 
+                <p className={cn("text-primaryText text-center pt-2")}>
+                  Your email was added to the waitlist. We'll let you know when the app is launched.
+                </p>
+              }
+              {showError && 
+                <p className={cn("text-primaryText text-center pt-2")}>
+                  {errorMessage}
+                </p>
+              }
+              {/* <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
+                  <DialogTrigger asChild>
+                    <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Create Account</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-96 sm:max-w-md">
+                    <DialogTitle hidden></DialogTitle>
+                    <CreateAccountForm onOpenChange={setShowCreateAccount}></CreateAccountForm>
+                  </DialogContent>
+              </Dialog>  */}
             </div>
-            {showConfirmation && 
-              <p className={cn("text-primaryText text-center pt-2")}>
-                Your email was added. We'll let you know when you have access.
-              </p>
-            }
-            {showError && 
-              <p className={cn("text-primaryText text-center pt-2")}>
-                {errorMessage}
-              </p>
-            }
           </div>
           <div className="flex flex-col md:flex-row py-20 justify-center items-center w-4/5 max-w-3xl">
             <div className="">
               <Image layout="intrinsic" src="/landingPageImage.png" width={800} height={512} alt="web"></Image>
             </div>
           </div>
-          <div className="bg-systemGray5 flex flex-col gap-5 sm:gap-10 w-4/5 max-w-3xl rounded-xl p-5 sm:p-10">
-            <p className="text-primaryText font-black text-xl sm:text-3xl">Everything you need to unlock your athleticism.</p>
-            <div className="flex flex-col gap-5">
-              <div className="bg-systemGray4 p-3 sm:p-5 rounded-xl flex flex-row gap-3 sm:gap-5 items-center">
-                <p className="min-w-10">🏃‍♂️🏋️‍♂️</p>
-                <p className="text-primaryText font-bold text-sm sm:text-lg">Training, strength, and conditioning programs to improve your performance.</p>
+          <p className="text-secondaryText text-xl sm:text-3xl font-bold text-center pb-20 w-4/5 sm:w-2/4 max-w-3xl">
+            <span className="text-primaryText">Atlas is a platform designed for fitness communities.</span> Give your community paid access to training programs, nutrition guidance, and more.
+          </p>
+          <div className="flex flex-col lg:flex-row gap-5 w-4/5 sm:w-2/4 max-w-3xl">
+              <div className="bg-systemGray5 p-4 rounded-xl flex flex-col gap-2 sm:gap-2 items-center">
+                <p className="min-w-10">🏃‍♂️ <span className="font-bold text-base">Training Programs</span></p>
+                <p className="text-secondaryText font-medium text-sm sm:text-lg text-center">Sell structured training programs with detailed workouts and exercises.</p>
               </div>
-              <div className="bg-systemGray4 p-3 sm:p-5 rounded-xl flex flex-row gap-3 sm:gap-5 items-center">
-                <p className="min-w-10">🍴💤</p>
-                <p className="text-primaryText font-bold text-sm sm:text-lg">Nutrition and lifestyle protocols to consistently perform and avoid injury.</p>
+              <div className="bg-systemGray5 p-4 rounded-xl flex flex-col gap-2 sm:gap-2 items-center">
+                <p className="min-w-10">📱 <span className="font-bold text-base">Easy Access</span></p>
+                <p className="text-secondaryText font-medium text-sm sm:text-lg text-center">Give your followers easy access to your content in the mobile app.</p>
               </div>
             </div>
-          </div>
         </div>
       </div>
-      // <div className="flex flex-col w-full px-16 md:px-60 pt-10">
-      //   <h1 className="text-primaryText text-2xl me:text-3xl font-bold pb-5">Home</h1>
-      //   <div className="grid grid-cols-2 gap-5">
-
-      //   </div>
-      // </div>
     )
   }
 }
