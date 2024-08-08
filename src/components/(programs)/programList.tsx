@@ -1,6 +1,6 @@
 "use client";
 
-import { Tables } from "../../../types/supabase";
+import { Tables } from "../../../database.types";
 import ProgramItem from "./programItem";
 
 interface ProgramListProps {

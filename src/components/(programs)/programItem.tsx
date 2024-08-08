@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getUser } from "@/utils/supabase/queries/userQueries";
-import { Tables } from "../../../types/supabase";
+import { Tables } from "../../../database.types";
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
