@@ -68,7 +68,6 @@ export type Database = {
       }
       programs: {
         Row: {
-          category: string
           created_at: string
           created_by: string
           currency: string
@@ -76,13 +75,11 @@ export type Database = {
           id: string
           image_path: string | null
           image_url: string | null
-          is_free: boolean
           price: string
           title: string
           weeks: number
         }
         Insert: {
-          category: string
           created_at?: string
           created_by?: string
           currency?: string
@@ -90,13 +87,11 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
-          is_free?: boolean
           price: string
           title: string
           weeks?: number
         }
         Update: {
-          category?: string
           created_at?: string
           created_by?: string
           currency?: string
@@ -104,7 +99,6 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
-          is_free?: boolean
           price?: string
           title?: string
           weeks?: number
@@ -183,38 +177,79 @@ export type Database = {
         }
         Relationships: []
       }
+      teams: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          image_path: string | null
+          image_url: string | null
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string
-          details_submitted: boolean
           email: string
           full_name: string
           id: string
+          payments_enabled: boolean
           profile_picture_path: string | null
           profile_picture_url: string | null
           stripe_account_id: string | null
+          team_id: string | null
           username: string
         }
         Insert: {
           created_at?: string
-          details_submitted?: boolean
           email: string
           full_name: string
           id?: string
+          payments_enabled?: boolean
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
+          team_id?: string | null
           username: string
         }
         Update: {
           created_at?: string
-          details_submitted?: boolean
           email?: string
           full_name?: string
           id?: string
+          payments_enabled?: boolean
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
+          team_id?: string | null
           username?: string
         }
         Relationships: [
@@ -223,6 +258,13 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]

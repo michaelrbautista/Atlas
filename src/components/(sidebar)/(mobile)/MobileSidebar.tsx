@@ -7,16 +7,15 @@ import {
     SheetTrigger
 } from "@/components/ui/sheet";
 
-import Logo from "@/components/(misc)/logo";
+import Logo from "@/components/(misc)/Logo";
 import MobileSidebarRoutes from "./MobileSidebarRoutes";
-import LoginButton from "../(auth)/LoginButton";
-import CreateAccountButton from "../(auth)/CreateAccountButton";
+import LoginButton from "../../(auth)/LoginButton";
+import CreateAccountButton from "../../(auth)/CreateAccountButton";
 import { Button, buttonVariants } from "@/components/ui/button";
-import UserInfo from "../(auth)/UserInfo";
+import UserInfo from "../../(auth)/UserInfo";
 import { createClient } from "@/utils/supabase/server";
-import { logout } from "../(auth)/actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import LogoutButton from "../(auth)/LogoutButton";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
+import LogoutButton from "../../(auth)/LogoutButton";
 
 const MobileSidebar = async () => {
     const supabase = createClient();

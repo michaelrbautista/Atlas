@@ -1,7 +1,7 @@
 "use client";
 
 import { Tables } from "../../../database.types";
-import ProgramItem from "./programItem";
+import ProgramItem from "./ProgramItem";
 
 interface ProgramListProps {
     programs: Tables<"programs">[],

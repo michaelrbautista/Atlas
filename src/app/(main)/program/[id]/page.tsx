@@ -18,7 +18,6 @@ import {
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import { Loader2 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import PurchaseModal from "@/components/(auth)/purchaseModal";
 
 const Program = ({ 
     params
@@ -33,9 +32,7 @@ const Program = ({
     const [isPurchased, setIsPurchased] = useState(false);
 
     useEffect(() => {
-        console.log("Mounting component");
-
-        const getProgramInfo = async () => {
+        const getProgram = async () => {
             const supabase = createClient();
 
             // Get program
@@ -54,9 +51,10 @@ const Program = ({
             setProgram(programData);
 
             // Get program image
-            const programImage = loadImage(programData?.image_path || "", "program_images");
-
-            setProgramImageUrl(programImage);
+            if (programData?.image_path) {
+                const programImage = loadImage(programData?.image_path ?? "", "team_images");
+                setProgramImageUrl(programImage);
+            }
 
             // Get program creator
             const { data: creatorData, error: creatorError } = await supabase
@@ -106,14 +104,12 @@ const Program = ({
             
             if (!purchasedError && purchasedData) {
                 setIsPurchased(true);
-                // console.log(purchasedError.message || "Error checking if user has purchased the program.");
-                // return
             }
 
             setIsLoading(false);
         }
 
-        getProgramInfo();
+        getProgram();
     }, []);
 
     if (isLoading) {
@@ -126,7 +122,12 @@ const Program = ({
         return (
             <div className="bg-background flex flex-col w-full sm:max-w-2xl px-5 pt-20 sm:pt-10 gap-5 sm:gap-10">
                 <div className="relative w-full aspect-video rounded-xl overflow-hidden">
-                    <Image fill src={programImageUrl} alt="programImage"></Image>
+                    {(programImageUrl == "") ? (
+                        // Replace with placeholder image
+                        <div></div>
+                    ) : (
+                        <Image fill src={programImageUrl} alt="programImage"></Image>
+                    )}
                 </div>
                 <div>
                     <p className="text-primaryText text-3xl font-bold">{program?.title}</p>
@@ -151,9 +152,7 @@ const Program = ({
                         </Select>
                     </div>
                 ) : (
-                    <PurchaseModal>
-                        <Button className={buttonVariants({ variant: "systemBlue", size: "full"})}>Buy Program - ${program?.price}</Button>
-                    </PurchaseModal>
+                    <div>Not purchased</div>
                 )}
             </div>
         )

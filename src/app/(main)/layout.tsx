@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import { cn } from "@/lib/utils";
-import { AppWrapper } from "@/context";
 import { Inter as FontSans } from "next/font/google"
-import Navbar from "@/components/(navbar)/page";
+import Navbar from "@/components/(sidebar)/(mobile)/page";
 import Sidebar from "@/components/(sidebar)/page";
+import ViewContextProvider from "@/context";
 
 const fontSans = FontSans({
   subsets: ["latin"], 
@@ -23,14 +23,14 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppWrapper>
-        <div className="h-full flex">
-            <Sidebar></Sidebar>
-            <div className="flex flex-col w-full items-center sm:pl-72">
+    <ViewContextProvider>
+      <div className="h-full flex">
+          <Sidebar></Sidebar>
+          <div className="flex flex-col w-full items-center sm:pl-72">
             <Navbar></Navbar>
             {children}
-            </div>
-        </div>
-    </AppWrapper>
+          </div>
+      </div>
+    </ViewContextProvider>
   );
 }

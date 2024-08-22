@@ -1,65 +1,34 @@
 'use client';
 
-import { useState, useRef } from "react";
-import { Spinner } from "@/components/(misc)/spinner";
+import { useState, useEffect } from "react";
+import { Spinner } from "@/components/(misc)/Spinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
-import Logo from "@/components/(misc)/logo";
+import Logo from "@/components/(misc)/Logo";
 
-import { onJoin } from "./onJoin";
-import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import CreateAccountForm from "@/components/(auth)/createAccountForm";
+import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
+import CreateAccountForm from "@/components/(auth)/CreateAccountForm";
+import SignInForm from "@/components/(auth)/SignInForm";
+import { DialogTrigger } from "@/components/ui/dialog";
+import { checkAuth } from "@/server-actions/auth";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSigningUp, setIsSigningUp] = useState(false);
-
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const [showSignIn, setShowSignIn] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const emailRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const getAuthSession = async () => {
+      const currentSession = await checkAuth();
 
-  const emailValidation = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-
-  const onJoinClient = async () => {
-    setShowConfirmation(false);
-    setShowError(false);
-    setIsSigningUp(true);
-
-    if (emailRef.current !== null && emailRef.current.value !== "") {
-      if (!emailValidation.test(emailRef.current.value)) {
-        setShowError(true);
-        setErrorMessage("Please enter a valid email.");
-        setIsSigningUp(false);
-        return
+      if (currentSession) {
+        setIsLoading(false);
       }
-
-      const error = await onJoin(emailRef.current.value);
-      
-      if (error) {
-        if (error.code === '23505') {
-          setShowConfirmation(true);
-        } else {
-            setShowError(true);
-            setErrorMessage(error.message);
-        }
-      } else {
-        setShowConfirmation(true);
-      }
-    } else {
-      setShowError(true);
-      setErrorMessage("Email can't be empty.");
     }
 
-    setIsSigningUp(false);
-  }
+    getAuthSession();
+  }, []);
 
   if (isLoading) {
     return (
@@ -72,7 +41,7 @@ export default function Home() {
       <div className="h-full">
         <div className="fixed w-full h-20 flex items-center justify-between px-5 sm:px-10 bg-systemBackground">
           <Logo></Logo>
-          {/* <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
+          <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
               <DialogTrigger asChild>
                   <Button variant="ghost">Sign In</Button>
               </DialogTrigger>
@@ -80,7 +49,7 @@ export default function Home() {
                   <DialogTitle hidden></DialogTitle>
                   <SignInForm onOpenChange={setShowSignIn}></SignInForm>
               </DialogContent>
-          </Dialog> */}
+          </Dialog>
         </div>
         <div className="pt-40 pb-20 flex flex-col gap-2 justify-center items-center">
           <div className="flex flex-col items-center gap-4 w-4/5 sm:w-2/4 max-w-3xl">
@@ -91,25 +60,7 @@ export default function Home() {
               Share health and fitness content with your community and grow your online fitness business.
             </p>
             <div className="flex flex-col items-center justify-center w-full sm:max-w-lg pt-4 gap-5">
-              <Input ref={emailRef} type="email" placeholder="Enter your email"></Input>
-              {isSigningUp ?
-                  <Button disabled>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-                  </Button>
-                  :
-                  <Button onClick={onJoinClient} variant="systemBlue">Join Waitlist</Button>      
-              }
-              {showConfirmation && 
-                <p className={cn("text-primaryText text-center pt-2")}>
-                  Your email was added to the waitlist. We'll let you know when the app is launched.
-                </p>
-              }
-              {showError && 
-                <p className={cn("text-primaryText text-center pt-2")}>
-                  {errorMessage}
-                </p>
-              }
-              {/* <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
+              <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
                   <DialogTrigger asChild>
                     <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Create Account</Button>
                   </DialogTrigger>
@@ -117,7 +68,7 @@ export default function Home() {
                     <DialogTitle hidden></DialogTitle>
                     <CreateAccountForm onOpenChange={setShowCreateAccount}></CreateAccountForm>
                   </DialogContent>
-              </Dialog>  */}
+              </Dialog>
             </div>
           </div>
           <div className="flex flex-col md:flex-row py-20 justify-center items-center w-4/5 max-w-3xl">

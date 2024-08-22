@@ -1,14 +1,41 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-var stripeSecretKey;
+let stripeSecretKey;
+let url: string;
+
 if (process.env.NODE_ENV === "production") {
     stripeSecretKey = process.env.STRIPE_LIVE_SECRET_KEY
+    url = `${process.env.LIVE_URL}/team/create`
 } else {
     stripeSecretKey = process.env.STRIPE_TEST_SECRET_KEY
+    url = `${process.env.TEST_URL}/team/create`
 }
 
 const stripe = require("stripe")(stripeSecretKey);
 
 export async function POST(request: NextRequest) {
-    
+    try {
+        const { accountId } = await request.json();
+
+        const accountLink = await stripe.accountLinks.create({
+            account: accountId,
+            refresh_url: url,
+            return_url: url,
+            type: 'account_onboarding',
+            collection_options: {
+              fields: 'eventually_due',
+            },
+          });
+
+        return NextResponse.json({
+            accountLink: accountLink
+        })
+    } catch (error) {
+        console.log(error);
+
+        return NextResponse.json(
+            { error: `Internal Server Error: ${error}` },
+            { status: 500 }
+        )
+    }
 }

@@ -1,14 +1,12 @@
-import { createClient } from "@/utils/supabase/server";
+"use client";
+
 import SidebarItem from "./SidebarItem";
+import { useViewContext } from "@/context";
 
 const anonRoutes = [
     {
         label: "Home",
         href: "/home"
-    },
-    {
-        label: "Search",
-        href: "/search"
     }
 ]
 
@@ -18,10 +16,6 @@ const userRoutes = [
         href: "/home"
     },
     {
-        label: "Search",
-        href: "/search"
-    },
-    {
         label: "Programs",
         href: "/programs"
     }
@@ -29,33 +23,29 @@ const userRoutes = [
 
 const creatorRoutes = [
     {
-        label: "Home",
-        href: "/home"
+        label: "My Team",
+        href: "/creator/team"
     },
     {
         label: "My Programs",
-        href: "/myPrograms"
+        href: "/creator/programs"
     }
 ]
 
-const SidebarRoutes = async () => {
+const SidebarRoutes = ({
+    signedIn
+}: {
+    signedIn: boolean
+}) => {
     let route = [];
 
-    const supabase = createClient();
+    const context = useViewContext();
 
-    const { data: { user }} = await supabase.auth.getUser();
-
-    if (user !== null) {
-        let currentUser = await supabase
-            .from("users")
-            .select()
-            .eq("id", user!.id)
-            .single()
-
-        if (currentUser !== null && currentUser.data !== null && currentUser.data.details_submitted) {
-            route = creatorRoutes
-        } else {
+    if (signedIn) {
+        if (context.view == "user") {
             route = userRoutes
+        } else {
+            route = creatorRoutes
         }
     } else {
         route = anonRoutes

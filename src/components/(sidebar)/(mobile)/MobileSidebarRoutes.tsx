@@ -5,10 +5,6 @@ const anonRoutes = [
     {
         label: "Home",
         href: "/home"
-    },
-    {
-        label: "Search",
-        href: "/search"
     }
 ]
 
@@ -18,10 +14,6 @@ const userRoutes = [
         href: "/home"
     },
     {
-        label: "Search",
-        href: "/search"
-    },
-    {
         label: "Programs",
         href: "/programs"
     }
@@ -29,12 +21,12 @@ const userRoutes = [
 
 const creatorRoutes = [
     {
-        label: "Home",
+        label: "My Team",
         href: "/home"
     },
     {
         label: "My Programs",
-        href: "/myPrograms"
+        href: "/creator/programs"
     }
 ]
 
@@ -49,10 +41,10 @@ const MobileSidebarRoutes = async () => {
         let currentUser = await supabase
             .from("users")
             .select()
-            .eq("id", user!.id)
+            .eq("id", user.id)
             .single()
 
-        if (currentUser !== null && currentUser.data !== null && currentUser.data.details_submitted) {
+        if (currentUser?.data?.payments_enabled) {
             route = creatorRoutes
         } else {
             route = userRoutes

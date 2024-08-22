@@ -1,7 +1,7 @@
 "use server";
 
 import { cache } from "react";
-import { createClient } from "../server";
+import { createClient } from "@/utils/supabase/server";
 
 export const getUser = cache(async (userId: string) => {
     const supabase = createClient();
