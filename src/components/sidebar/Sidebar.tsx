@@ -8,7 +8,7 @@ import UserDropdown from "./UserDropdown";
 import CreateTeamSidebarButton from "./CreateTeamSidebarButton";
 import { updateStripePaymentsEnabled } from "@/server-actions/creator";
 
-type UserRole = "user" | "creator";
+export type UserRole = "user" | "creator";
 
 const anonRoutes = [
     {
