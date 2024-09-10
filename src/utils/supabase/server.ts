@@ -5,9 +5,20 @@ import { Database } from '../../../database.types'
 export function createClient() {
   const cookieStore = cookies()
 
+  let supabaseUrl: string;
+  let supabaseAnonKey: string;
+
+  if (process.env.NODE_ENV === "production") {
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_LIVE_URL as string
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_LIVE_ANON_KEY as string
+  } else {
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_TEST_URL as string
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_TEST_ANON_KEY as string
+  }
+
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {

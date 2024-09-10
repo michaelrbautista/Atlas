@@ -3,6 +3,33 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+export async function getCreatorPrograms() {
+    const supabase = createClient();
+
+    const { data: { user: currentUser } } = await supabase.auth.getUser()
+
+    if (!currentUser) {
+        return {
+            error: "Couldn't get creator."
+        }
+    }
+
+    const { data: programsData, error: programsError } = await supabase
+        .from("programs")
+        .select()
+        .eq("created_by", currentUser.id)
+
+    if (programsError && !programsData) {
+        return {
+            error: programsError.message
+        }
+    }
+
+    return {
+        data: programsData
+    }
+}
+
 export async function updateStripeAccountId(stripeAccountId: string) {
     const supabase = createClient();
 

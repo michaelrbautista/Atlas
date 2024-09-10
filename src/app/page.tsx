@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { Spinner } from "@/components/(misc)/Spinner";
+import { Spinner } from "@/components/misc/Spinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
-import Logo from "@/components/(misc)/Logo";
+import Logo from "@/components/misc/Logo";
 
 import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
-import CreateAccountForm from "@/components/(auth)/CreateAccountForm";
-import SignInForm from "@/components/(auth)/SignInForm";
+import CreateAccountForm from "@/components/auth/CreateAccountForm";
+import SignInForm from "@/components/auth/SignInForm";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { checkAuth } from "@/server-actions/auth";
 
@@ -47,7 +47,7 @@ export default function Home() {
               </DialogTrigger>
               <DialogContent className="bg-background max-w-96 sm:max-w-md">
                   <DialogTitle hidden></DialogTitle>
-                  <SignInForm onOpenChange={setShowSignIn}></SignInForm>
+                  <SignInForm setIsOpen={setShowSignIn}></SignInForm>
               </DialogContent>
           </Dialog>
         </div>
@@ -66,7 +66,7 @@ export default function Home() {
                   </DialogTrigger>
                   <DialogContent className="max-w-96 sm:max-w-md">
                     <DialogTitle hidden></DialogTitle>
-                    <CreateAccountForm onOpenChange={setShowCreateAccount}></CreateAccountForm>
+                    <CreateAccountForm setIsOpen={setShowCreateAccount}></CreateAccountForm>
                   </DialogContent>
               </Dialog>
             </div>

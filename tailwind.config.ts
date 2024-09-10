@@ -33,6 +33,7 @@ const config = {
         'systemBackground': '#000000',
         'systemBlue': '#0A84FF',
         'systemBlueHover': '#0875E2',
+        'systemRed': '#FF443A',
 
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

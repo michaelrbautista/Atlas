@@ -9,10 +9,25 @@ export async function checkAuth() {
 
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (user) {
-        return redirect("/home");
-    } else {
+    if (!user) {
         return true
+    }
+
+    const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select()
+        .eq("id", user?.id)
+        .single()
+
+    if (userError && !userData) {
+        console.log(userError);
+        return true
+    }
+
+    if (userData.team_id) {
+        return redirect("/creator/team");
+    } else {
+        return redirect("/home");
     }
 }
 
@@ -27,8 +42,31 @@ export async function signIn(email: string, password: string) {
         }
     }
 
-    revalidatePath("/", "layout");
-    return redirect("/home");
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            errorMessage: "Couldn't get current user."
+        }
+    }
+
+    const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select()
+        .eq("id", user.id)
+        .single()
+
+    if (userError && !userData) {
+        return {
+            errorMessage: userError.message
+        }
+    }
+
+    if (userData.payments_enabled) {
+        return redirect("/creator/team");
+    } else {
+        return redirect("/home");
+    }
 }
 
 export async function createAccount(fullName: string, email: string, username: string, password: string) {
@@ -76,7 +114,7 @@ export async function createAccount(fullName: string, email: string, username: s
             })
             .select()
 
-        if (userError) {
+        if (userError && !userData) {
             return {
                 errorMessage: userError.message
             }

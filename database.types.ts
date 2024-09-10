@@ -12,42 +12,30 @@ export type Database = {
       exercises: {
         Row: {
           created_at: string
-          created_by: string | null
-          exercise_number: number | null
+          created_by: string
           id: string
           instructions: string | null
-          name: string | null
-          reps: string | null
-          sets: string | null
+          title: string
           video_path: string | null
           video_url: string | null
-          workout_id: string | null
         }
         Insert: {
           created_at?: string
-          created_by?: string | null
-          exercise_number?: number | null
+          created_by?: string
           id?: string
           instructions?: string | null
-          name?: string | null
-          reps?: string | null
-          sets?: string | null
+          title: string
           video_path?: string | null
           video_url?: string | null
-          workout_id?: string | null
         }
         Update: {
           created_at?: string
-          created_by?: string | null
-          exercise_number?: number | null
+          created_by?: string
           id?: string
           instructions?: string | null
-          name?: string | null
-          reps?: string | null
-          sets?: string | null
+          title?: string
           video_path?: string | null
           video_url?: string | null
-          workout_id?: string | null
         }
         Relationships: [
           {
@@ -55,13 +43,6 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "exercises_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
             referencedColumns: ["id"]
           },
         ]
@@ -75,7 +56,8 @@ export type Database = {
           id: string
           image_path: string | null
           image_url: string | null
-          price: string
+          price: number
+          team_id: string
           title: string
           weeks: number
         }
@@ -87,7 +69,8 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
-          price: string
+          price: number
+          team_id: string
           title: string
           weeks?: number
         }
@@ -99,7 +82,8 @@ export type Database = {
           id?: string
           image_path?: string | null
           image_url?: string | null
-          price?: string
+          price?: number
+          team_id?: string
           title?: string
           weeks?: number
         }
@@ -109,6 +93,13 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "programs_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
@@ -159,51 +150,33 @@ export type Database = {
           },
         ]
       }
-      sign_ups: {
-        Row: {
-          created_at: string
-          email: string
-          id: number
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: number
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: number
-        }
-        Relationships: []
-      }
       teams: {
         Row: {
           created_at: string
-          created_by: string | null
+          created_by: string
           description: string | null
           id: string
           image_path: string | null
           image_url: string | null
-          name: string | null
+          name: string
         }
         Insert: {
           created_at?: string
-          created_by?: string | null
+          created_by?: string
           description?: string | null
           id?: string
           image_path?: string | null
           image_url?: string | null
-          name?: string | null
+          name: string
         }
         Update: {
           created_at?: string
-          created_by?: string | null
+          created_by?: string
           description?: string | null
           id?: string
           image_path?: string | null
           image_url?: string | null
-          name?: string | null
+          name?: string
         }
         Relationships: [
           {
@@ -269,6 +242,64 @@ export type Database = {
           },
         ]
       }
+      workout_exercises: {
+        Row: {
+          created_at: string
+          created_by: string
+          exercise_id: string
+          exercise_number: number
+          id: string
+          reps: number
+          sets: number
+          title: string
+          workout_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          exercise_id?: string
+          exercise_number?: number
+          id?: string
+          reps?: number
+          sets?: number
+          title: string
+          workout_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          exercise_id?: string
+          exercise_number?: number
+          id?: string
+          reps?: number
+          sets?: number
+          title?: string
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_exercises_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_exercises_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_exercises_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workouts: {
         Row: {
           created_at: string
@@ -279,7 +310,7 @@ export type Database = {
           is_free: boolean
           program_id: string
           title: string
-          week_number: number
+          week: number
         }
         Insert: {
           created_at?: string
@@ -290,7 +321,7 @@ export type Database = {
           is_free?: boolean
           program_id: string
           title: string
-          week_number: number
+          week: number
         }
         Update: {
           created_at?: string
@@ -301,7 +332,7 @@ export type Database = {
           is_free?: boolean
           program_id?: string
           title?: string
-          week_number?: number
+          week?: number
         }
         Relationships: [
           {

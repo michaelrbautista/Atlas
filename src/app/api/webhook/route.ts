@@ -31,19 +31,44 @@ export async function POST(req: Request) {
         return new NextResponse("Invalid signature", { status: 400 });
     }
 
-    const account = event.data.object as Stripe.Account;
+    const session = event.data.object as Stripe.Checkout.Session;
 
-    if (event.type === "account.updated") {
-        console.log("charges enabled: ", account.charges_enabled);
-        console.log("details submitted: ", account.details_submitted);
-        console.log("payouts enabled: ", account.payouts_enabled);
+    switch (event.type) {
+        case "checkout.session.completed":
+            // Add to purchased_programs table
+            console.log("Session: ", session);
+            console.log("Checkout session completed.");
 
-        // Check if details submitted, payouts enabled, and charges enabled. If so, update db.
-        if (account.charges_enabled && account.details_submitted && account.payouts_enabled) {
-            console.log(account.id);
-        } else {
-            console.log("Account not fully onboarded.");
-        }
+            const supabase = createClient();
+
+            if (session.metadata) {
+                const { error: purchaseError } = await supabase
+                    .from("purchased_programs")
+                    .insert({
+                        program_id: session.metadata.programId,
+                        created_by: session.metadata.creatorId,
+                        purchased_by: session.metadata.userId
+                    })
+                
+                if (purchaseError) {
+                    console.log(purchaseError);
+                }
+            }
+
+            break;
+        // case "account.updated":
+        //     console.log("charges enabled: ", account.charges_enabled);
+        //     console.log("details submitted: ", account.details_submitted);
+        //     console.log("payouts enabled: ", account.payouts_enabled);
+
+        //     // Check if details submitted, payouts enabled, and charges enabled. If so, update db.
+        //     if (account.charges_enabled && account.details_submitted && account.payouts_enabled) {
+        //         console.log(account.id);
+        //     } else {
+        //         console.log("Account not fully onboarded.");
+        //     }
+        default:
+            break;
     }
 
     return new NextResponse("Webhook successful", { status: 200 });

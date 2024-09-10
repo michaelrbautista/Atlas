@@ -5,10 +5,10 @@ let url: string;
 
 if (process.env.NODE_ENV === "production") {
     stripeSecretKey = process.env.STRIPE_LIVE_SECRET_KEY
-    url = `${process.env.LIVE_URL}/team/create`
+    url = `${process.env.LIVE_URL}/creator/team/create`
 } else {
     stripeSecretKey = process.env.STRIPE_TEST_SECRET_KEY
-    url = `${process.env.TEST_URL}/team/create`
+    url = `${process.env.TEST_URL}/creator/team/create`
 }
 
 const stripe = require("stripe")(stripeSecretKey);

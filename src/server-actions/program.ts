@@ -4,6 +4,35 @@ import { cache } from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+export async function redirectToCheckoutUrl(url: string) {
+    return redirect(url);
+}
+
+export async function getPurchasedPrograms(userId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get user from auth."
+        }
+    }
+
+    const { data: purchaseData, error: purchaseError } = await supabase
+        .from("purchased_programs")
+        .select("id")
+        .eq("purchased_by", user.id)
+
+    if (purchaseError && !purchaseData) {
+        return {
+            error: "Couldn't get user from database."
+        }
+    }
+
+    return purchaseData
+}
+
 export async function createProgram(formData: FormData) {
     const supabase = createClient();
 
@@ -11,74 +40,83 @@ export async function createProgram(formData: FormData) {
 
     if (!user) {
         return {
-            error: "Couldn't get user."
+            error: "Couldn't get user from auth."
         }
     }
+
+    const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select()
+        .eq("id", user.id)
+        .single()
+
+    if (userError && !userData) {
+        return {
+            error: "Couldn't get user from database."
+        }
+    }
+
+    let newProgram: any;
 
     const image = formData.get("image") as File;
 
-    if (!image) {
-        return {
-            error: "Couldn't get program image from form data."
+    if (image) {
+        const imageExt = image.name.split(".").pop();
+        let date = new Date()
+        const imageName = `/${userData.team_id}/${date.toISOString()}.${imageExt}`
+
+        // Add image to storage
+        const { data: storageData, error: storageError } = await supabase
+            .storage
+            .from("program_images")
+            .upload(imageName, image, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (storageError && !storageData) {
+            return {
+                error: storageError.message
+            }
         }
-    }
 
-    const imageExt = image.name.split(".").pop();
-    let date = new Date()
-    const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
+        // Get public url for image
+        const { data: storageUrl } = supabase
+            .storage
+            .from("program_images")
+            .getPublicUrl(storageData.path);
 
-    // Add image to storage
-    const { data: storageData, error: storageError } = await supabase
-        .storage
-        .from("program_images")
-        .upload(imageName, image, {
-            cacheControl: '3600',
-            upsert: false
-        });
-
-    if (storageError && !storageData) {
-        return {
-            error: storageError.message
+        if (!storageUrl) {
+            return {
+                error: "Couldn't get public image url from storage."
+            }
         }
-    }
 
-    // Get public url for image
-    const { data: storageUrl } = supabase
-        .storage
-        .from("program_images")
-        .getPublicUrl(storageData.fullPath);
-
-    if (!storageUrl) {
-        return {
-            error: "Couldn't get public image url from storage."
+        newProgram = {
+            title: formData.get("title") as string,
+            weeks: parseInt(formData.get("weeks") as string),
+            price: parseFloat(formData.get("price") as string),
+            description: formData.get("description") as string,
+            team_id: userData.team_id,
+            image_url: storageUrl.publicUrl,
+            image_path: storageData.path
         }
-    }
-
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const price = formData.get("price") as string;
-    const weeks = formData.get("weeks") as string;
-
-    if (!title || !description || !price || !weeks) {
-        return {
-            error: "Couldn't get form data."
+    } else {
+        newProgram = {
+            title: formData.get("title") as string,
+            weeks: parseInt(formData.get("weeks") as string),
+            price: parseFloat(formData.get("price") as string),
+            description: formData.get("description") as string,
+            team_id: userData.team_id
         }
     }
 
     // Add to programs
     const { data: programData, error: programError } = await supabase
-        .from("programs")
-        .insert({
-            title: title,
-            description: description,
-            price: price,
-            currency: "usd",
-            weeks: Number(weeks),
-            image_path: storageData.fullPath,
-            image_url: storageUrl.publicUrl
-        })
-        .select()
-        .single()
+    .from("programs")
+    .insert(newProgram)
+    .select()
+    .single()
 
     if (programError && !programData) {
         return {
@@ -86,6 +124,7 @@ export async function createProgram(formData: FormData) {
         }
     }
 
+    // revalidatePath("/creator/programs");
     return redirect(`program/${programData.id}`);
 }
 
@@ -110,7 +149,7 @@ export const getProgram = cache(async (programId: string) => {
         .eq("id", programId)
         .single()
     
-        if (data) {
-            return data
-        }
+    if (data) {
+        return data
+    }
 })

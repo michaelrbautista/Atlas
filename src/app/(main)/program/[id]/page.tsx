@@ -4,7 +4,6 @@ import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { Tables } from "../../../../../database.types";
 import { useEffect, useState } from "react";
-
 import {
     Select,
     SelectContent,
@@ -14,10 +13,9 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-
-import { loadImage } from "@/utils/supabase/hooks/loadImage";
-import { Loader2 } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Dumbbell, Loader2 } from "lucide-react";
+import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
+import { Separator } from "@/components/ui/separator";
 
 const Program = ({ 
     params
@@ -30,6 +28,9 @@ const Program = ({
     const [creator, setCreator] = useState<Tables<"users">>();
     const [user, setUser] = useState<Tables<"users">>();
     const [isPurchased, setIsPurchased] = useState(false);
+    const [week, setWeek] = useState(1);
+
+    const [weeksLoop, setWeeksLoop] = useState<number[]>([]);
 
     useEffect(() => {
         const getProgram = async () => {
@@ -50,10 +51,11 @@ const Program = ({
 
             setProgram(programData);
 
+            setWeeksLoop(Array.from({length: programData.weeks}, (_, i) => i + 1));
+
             // Get program image
-            if (programData?.image_path) {
-                const programImage = loadImage(programData?.image_path ?? "", "team_images");
-                setProgramImageUrl(programImage);
+            if (programData?.image_url) {
+                setProgramImageUrl(programData.image_url);
             }
 
             // Get program creator
@@ -112,7 +114,12 @@ const Program = ({
         getProgram();
     }, []);
 
-    if (isLoading) {
+    const onValueChange = (value: string) => {
+        const week = parseInt(value);
+        setWeek(week);
+    }
+
+    if (isLoading || !program) {
         return (
             <div className="h-full w-full flex items-center justify-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -120,40 +127,49 @@ const Program = ({
         )
     } else {
         return (
-            <div className="bg-background flex flex-col w-full sm:max-w-2xl px-5 pt-20 sm:pt-10 gap-5 sm:gap-10">
+            <div className="bg-systemBackground flex flex-col w-full sm:max-w-2xl px-5 pt-20 sm:pt-10 gap-5 sm:gap-10">
                 <div className="relative w-full aspect-video rounded-xl overflow-hidden">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div></div>
+                        <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
+                            <Dumbbell className="text-secondaryText" />
+                        </div>
                     ) : (
-                        <Image fill src={programImageUrl} alt="programImage"></Image>
+                        <Image
+                            fill
+                            sizes="(max-width: 430px) 192px, (max-width: 1190px) 256px"
+                            src={programImageUrl}
+                            alt="programImage"
+                            priority
+                        />
                     )}
                 </div>
                 <div>
-                    <p className="text-primaryText text-3xl font-bold">{program?.title}</p>
-                    <p className="text-secondaryText">@{creator?.username}</p>
-                    <p className="py-5">{program?.description}</p>
-                </div>
-                {isPurchased ? (
                     <div>
-                        <Select>
+                        <p className="text-primaryText text-3xl font-bold">{program?.title}</p>
+                        <p className="text-secondaryText">@{creator?.username}</p>
+                        <p className="text-primaryText py-5">{program?.description}</p>
+                    </div>
+                    {isPurchased ? (
+                        <Select onValueChange={onValueChange}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Week"></SelectValue>
+                                <SelectValue placeholder="Week 1"></SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel hidden></SelectLabel>
-                                    <SelectItem value="week 1">Week 1</SelectItem>
-                                    <SelectItem value="week 2">Week 2</SelectItem>
-                                    <SelectItem value="week 3">Week 3</SelectItem>
-                                    <SelectItem value="week 4">Week 4</SelectItem>
+                                    {program && 
+                                        weeksLoop?.map((week) => {
+                                            return <SelectItem value={week.toString()} key={week}>Week {week}</SelectItem>
+                                        })
+                                    }
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                    </div>
-                ) : (
-                    <div>Not purchased</div>
-                )}
+                    ) : (
+                        <PurchaseProgramButton program={program}/>
+                    )}
+                </div>
             </div>
         )
     }

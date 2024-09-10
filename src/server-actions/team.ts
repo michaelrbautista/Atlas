@@ -3,19 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function getTeamPrograms(userId: string) {
+export async function getAllTeams() {
     const supabase = createClient();
 
-    const { data, error } = await supabase
-        .from('programs')
+    const { data } = await supabase
+        .from("teams")
         .select()
-        .eq("created_by", userId)
 
-    if (error && !data) {
-        return {
-            error: error.message
-        }
-    } else {
+    if (data) {
         return data
     }
 }
@@ -36,62 +31,59 @@ export async function createTeam(formData: FormData) {
         }
     }
 
-    // Get image file from form data
+    let newTeam: any;
+
     const image = formData.get("image") as File;
 
-    if (!image) {
-        console.log("Couldn't get team image from form data.");
-        return
-    }
+    if (image) {
+        const imageExt = image.name.split(".").pop();
+        let date = new Date()
+        const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
 
-    const imageExt = image.name.split(".").pop();
-    let date = new Date()
-    const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
+        // Add image to storage
+        const { data: storageData, error: storageError } = await supabase
+            .storage
+            .from("team_images")
+            .upload(imageName, image, {
+                cacheControl: '3600',
+                upsert: false
+            });
 
-    // Save image to storage
-    const { data: storageData, error: storageError } = await supabase
-        .storage
-        .from("team_images")
-        .upload(imageName, image, {
-            cacheControl: '3600',
-            upsert: false
-        });
-
-    if (storageError && !storageData) {
-        return {
-            error: storageError.message
+        if (storageError && !storageData) {
+            return {
+                error: storageError.message
+            }
         }
-    }
 
-    // Get public url for image
-    const { data: storageUrl } = supabase
-        .storage
-        .from("team_images")
-        .getPublicUrl(storageData.fullPath);
+        // Get public url for image
+        const { data: storageUrl } = supabase
+            .storage
+            .from("team_images")
+            .getPublicUrl(storageData.path);
 
-    if (!storageUrl) {
-        return {
-            error: "Couldn't get public image url from storage."
+        if (!storageUrl) {
+            return {
+                error: "Couldn't get public image url from storage."
+            }
         }
-    }
 
-    const name = formData.get("name");
-    const description = formData.get("description");
-
-    if (!name || !description) {
-        console.log("Couldn't get form data.");
-        return
+        newTeam = {
+            name: formData.get("name") as string,
+            description: formData.get("description") as string,
+            image_url: storageUrl.publicUrl,
+            image_path: storageData.path
+        }
+    } else {
+        newTeam = {
+            name: formData.get("name") as string,
+            description: formData.get("description") as string
+        }
     }
 
     // Save team to database
     const { data: teamData, error: teamError } = await supabase
         .from("teams")
-        .insert({
-            name: name.toString(),
-            description: description.toString(),
-            image_path: storageData.fullPath,
-            image_url: storageUrl.publicUrl
-        })
+        .insert(newTeam)
         .select()
         .single()
 

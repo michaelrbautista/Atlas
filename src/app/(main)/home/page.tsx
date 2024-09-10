@@ -1,25 +1,24 @@
-import { getAllPrograms } from "@/server-actions/program";
-import ProgramList from "@/components/(program)/ProgramList";
+import ProgramList from "@/components/program/ProgramList";
+import TeamList from "@/components/team/TeamList";
+import { getAllTeams } from "@/server-actions/team";
 
 const Home = async () => {
-    const programs = await getAllPrograms();
+    const teams = await getAllTeams();
 
-    
-
-    if (!programs) {
+    if (!teams) {
         return (
             <div className="text-white">
-                Couldn't load programs.
+                Couldn't load teams.
             </div>
         )
     }
 
     return (
         <div className="h-full w-full sm:max-w-4xl px-5 py-20 sm:py-10">
-            <div className="flex justify-between items-center pb-5">
+            <div className="flex justify-between items-center pb-2">
                 <p className="text-foreground text-3xl font-bold">Home</p>
             </div>
-            <ProgramList programs={programs}></ProgramList>
+            <TeamList teams={teams}/>
         </div>
     );
 }
