@@ -9,9 +9,9 @@ export default function UserLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full flex">
+    <div className="flex">
         <Sidebar userRole="creator"></Sidebar>
-        <div className="flex flex-col w-full items-center sm:pl-72">
+        <div className="flex flex-col w-full items-start sm:items-center">
           <MobileSidebar userRole="creator"></MobileSidebar>
           {children}
         </div>

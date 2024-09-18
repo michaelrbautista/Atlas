@@ -4,17 +4,18 @@ import { Dumbbell, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
-import { 
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { createClient } from "@/utils/supabase/client";
-import CreatorProgramWeek from "@/components/program/CreatorProgramWeek";
+import Calendar from "@/components/program/Calendar/Calendar";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const ViewCreatorProgram = ({ 
     params
@@ -25,9 +26,6 @@ const ViewCreatorProgram = ({
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
     const [creator, setCreator] = useState<Tables<"users">>();
-    const [week, setWeek] = useState(1);
-
-    const [weeksLoop, setWeeksLoop] = useState<number[]>([]);
 
     useEffect(() => {
         const getProgram = async () => {
@@ -49,8 +47,6 @@ const ViewCreatorProgram = ({
             }
 
             setProgram(programData);
-
-            setWeeksLoop(Array.from({length: programData.weeks}, (_, i) => i + 1));
 
             // Get program image
             if (programData?.image_url) {
@@ -87,12 +83,7 @@ const ViewCreatorProgram = ({
         getProgram();
     }, []);
 
-    const onValueChange = (value: string) => {
-        const week = parseInt(value);
-        setWeek(week);
-    }
-
-    if (isLoading) {
+    if (isLoading || !program) {
         return (
             <div className="h-full w-full flex items-center justify-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -100,45 +91,40 @@ const ViewCreatorProgram = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-2xl px-5 py-20 sm:py-10 gap-5 sm:gap-10">
-                <div className="relative w-full aspect-video rounded-xl overflow-hidden">
+            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
+                <div className="flex flex-col sm:flex-row gap-5 w-full sm:px-16">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            fill
-                            sizes="(max-width: 430px) 192px, (max-width: 1190px) 256px"
+                            className="h-[200px] w-[300px] rounded-xl"
+                            height={200}
+                            width={300}
                             src={programImageUrl}
                             alt="programImage"
+                            style={{objectFit: "cover"}}
+                            priority
                         />
                     )}
+                    <div className="flex flex-col">
+                        <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
+                        <div className="flex flex-col gap-5">
+                            <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
+                            <p className="text-primaryText text-sm">{program?.description}</p>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <p className="text-primaryText text-3xl font-bold">{program?.title}</p>
-                    <p className="text-secondaryText">@{creator?.username}</p>
-                    <p className="text-primaryText py-5">{program?.description}</p>
+                <div className="flex overflow-scroll">
+                    <Calendar
+                        programId={program.id}
+                        weeks={program.weeks}
+                        pages={Math.floor(program.weeks / 4) + 1}
+                        isCreator={true}
+                    />
                 </div>
-                <Select onValueChange={onValueChange}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Week 1"></SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel hidden></SelectLabel>
-                            {program && 
-                                weeksLoop?.map((week) => {
-                                    return <SelectItem value={week.toString()} key={week}>Week {week}</SelectItem>
-                                })
-                            }
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-                {program && (
-                    <CreatorProgramWeek programId={program.id} week={week}/>
-                )}
             </div>
         )
     }

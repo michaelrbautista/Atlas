@@ -31,7 +31,7 @@ export const ProgramSchema = z.object({
     }).min(1, {
         message: "Price must be at least 1.00."
     }),
-    description: z.string().max(400, {
+    description: z.string().max(300, {
         message: "Please enter a description that is under 400 characters."
     }).optional()
 })

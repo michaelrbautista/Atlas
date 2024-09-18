@@ -14,7 +14,7 @@ const Home = async () => {
     }
 
     return (
-        <div className="h-full w-full sm:max-w-4xl px-5 py-20 sm:py-10">
+        <div className="h-full w-full sm:max-w-5xl px-5 py-20 sm:py-10">
             <div className="flex justify-between items-center pb-2">
                 <p className="text-foreground text-3xl font-bold">Home</p>
             </div>

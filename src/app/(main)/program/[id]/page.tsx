@@ -16,6 +16,7 @@ import {
 import { Dumbbell, Loader2 } from "lucide-react";
 import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
 import { Separator } from "@/components/ui/separator";
+import Calendar from "@/components/program/Calendar/Calendar";
 
 const Program = ({ 
     params
@@ -127,49 +128,43 @@ const Program = ({
         )
     } else {
         return (
-            <div className="bg-systemBackground flex flex-col w-full sm:max-w-2xl px-5 pt-20 sm:pt-10 gap-5 sm:gap-10">
-                <div className="relative w-full aspect-video rounded-xl overflow-hidden">
+            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
+                <div className="flex flex-col sm:flex-row gap-5 w-full sm:px-16">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            fill
-                            sizes="(max-width: 430px) 192px, (max-width: 1190px) 256px"
+                            className="h-[200px] w-[300px] rounded-xl"
+                            height={200}
+                            width={300}
                             src={programImageUrl}
                             alt="programImage"
+                            style={{objectFit: "cover"}}
                             priority
                         />
                     )}
-                </div>
-                <div>
-                    <div>
-                        <p className="text-primaryText text-3xl font-bold">{program?.title}</p>
-                        <p className="text-secondaryText">@{creator?.username}</p>
-                        <p className="text-primaryText py-5">{program?.description}</p>
+                    <div className="flex flex-col">
+                        <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
+                        <div className="flex flex-col gap-2">
+                            <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
+                            <p className="text-primaryText text-sm">{program?.description}</p>
+                            {!isPurchased && (
+                                <PurchaseProgramButton program={program}/>
+                            )}
+                        </div>
                     </div>
-                    {isPurchased ? (
-                        <Select onValueChange={onValueChange}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Week 1"></SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel hidden></SelectLabel>
-                                    {program && 
-                                        weeksLoop?.map((week) => {
-                                            return <SelectItem value={week.toString()} key={week}>Week {week}</SelectItem>
-                                        })
-                                    }
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    ) : (
-                        <PurchaseProgramButton program={program}/>
-                    )}
                 </div>
+                {isPurchased && (
+                    <Calendar
+                        programId={program.id}
+                        weeks={program.weeks}
+                        pages={Math.floor(program.weeks / 4) + 1}
+                        isCreator={false}
+                    />
+                )}
             </div>
         )
     }
