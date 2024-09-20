@@ -98,7 +98,7 @@ const ProgramItem = ({
         return (
             <Link
                 href={isCreator ? `/creator/program/${programId}` : `/program/${programId}`}
-                className="bg-systemGray6 aspect-video rounded-lg"
+                className="bg-systemGray5 aspect-video rounded-lg"
             >
                 <div className="relative h-full rounded-t-lg overflow-hidden">
                     {program.image_url ? (

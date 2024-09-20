@@ -4,18 +4,8 @@ import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { Tables } from "../../../../../database.types";
 import { useEffect, useState } from "react";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
 import { Dumbbell, Loader2 } from "lucide-react";
 import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
-import { Separator } from "@/components/ui/separator";
 import Calendar from "@/components/program/Calendar/Calendar";
 
 const Program = ({ 
@@ -29,9 +19,6 @@ const Program = ({
     const [creator, setCreator] = useState<Tables<"users">>();
     const [user, setUser] = useState<Tables<"users">>();
     const [isPurchased, setIsPurchased] = useState(false);
-    const [week, setWeek] = useState(1);
-
-    const [weeksLoop, setWeeksLoop] = useState<number[]>([]);
 
     useEffect(() => {
         const getProgram = async () => {
@@ -51,8 +38,6 @@ const Program = ({
             }
 
             setProgram(programData);
-
-            setWeeksLoop(Array.from({length: programData.weeks}, (_, i) => i + 1));
 
             // Get program image
             if (programData?.image_url) {
@@ -103,9 +88,13 @@ const Program = ({
                 .select()
                 .eq("program_id", programData.id)
                 .eq("purchased_by", currentUserData.id)
-                .single()
-            
-            if (!purchasedError && purchasedData) {
+
+            if (purchasedError && !purchasedData) {
+                console.log(purchasedError);
+                return
+            }
+
+            if (purchasedData.length > 0) {
                 setIsPurchased(true);
             }
 
@@ -114,11 +103,6 @@ const Program = ({
 
         getProgram();
     }, []);
-
-    const onValueChange = (value: string) => {
-        const week = parseInt(value);
-        setWeek(week);
-    }
 
     if (isLoading || !program) {
         return (
@@ -129,7 +113,7 @@ const Program = ({
     } else {
         return (
             <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
-                <div className="flex flex-col sm:flex-row gap-5 w-full sm:px-16">
+                <div className="flex flex-col lg:flex-row gap-5 w-full sm:px-16">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
