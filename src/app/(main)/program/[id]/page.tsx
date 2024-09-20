@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import { Dumbbell, Loader2 } from "lucide-react";
 import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
 import Calendar from "@/components/program/Calendar/Calendar";
+import SignInButton from "@/components/auth/SignInButton";
+import CreateAccountButton from "@/components/auth/CreateAccountButton";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 const Program = ({ 
     params
@@ -18,6 +22,7 @@ const Program = ({
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
     const [creator, setCreator] = useState<Tables<"users">>();
     const [user, setUser] = useState<Tables<"users">>();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isPurchased, setIsPurchased] = useState(false);
 
     useEffect(() => {
@@ -80,6 +85,7 @@ const Program = ({
                 return;
             }
 
+            setIsLoggedIn(true);
             setUser(currentUserData);
 
             // Check is program is purchased
@@ -135,8 +141,14 @@ const Program = ({
                         <div className="flex flex-col gap-2">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
                             <p className="text-primaryText text-sm">{program?.description}</p>
-                            {!isPurchased && (
+                            {(!isPurchased && isLoggedIn) ? (
                                 <PurchaseProgramButton program={program}/>
+                            ) : (
+                                <div className="pt-5">
+                                    <Button variant="secondary" size="full" disabled>
+                                        You must be logged in to purchase a program.
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     </div>
