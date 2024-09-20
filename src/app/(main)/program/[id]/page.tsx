@@ -11,6 +11,7 @@ import SignInButton from "@/components/auth/SignInButton";
 import CreateAccountButton from "@/components/auth/CreateAccountButton";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import LoggedOutPurchaseButton from "@/components/auth/LoggedOutPurchaseButton";
 
 const Program = ({ 
     params
@@ -144,11 +145,7 @@ const Program = ({
                             {(!isPurchased && isLoggedIn) ? (
                                 <PurchaseProgramButton program={program}/>
                             ) : (
-                                <div className="pt-5">
-                                    <Button variant="secondary" size="full" disabled>
-                                        You must be logged in to purchase a program.
-                                    </Button>
-                                </div>
+                                <LoggedOutPurchaseButton program={program} />
                             )}
                         </div>
                     </div>
