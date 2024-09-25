@@ -9,19 +9,14 @@ import {
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import WorkoutForm from "@/components/workout/WorkoutForm"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import WorkoutPage from "@/components/workout/WorkoutPage";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { deleteWorkout } from "@/server-actions/workout"
 
 const Day = ({
     programId,
@@ -29,16 +24,37 @@ const Day = ({
     week,
     day,
     disabled,
-    isCreator
+    isCreator,
+    removeWorkout
 }: {
     programId: string,
     workouts: Tables<"workouts">[],
     week: number,
     day: string,
     disabled: boolean,
-    isCreator: boolean
+    isCreator: boolean,
+    removeWorkout: (workoutId: string) => void
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [deleteIsOpen, setDeleteIsOpen] = useState(false);
+
+    const addWorkout = (workout: Tables<"workouts">) => {
+        workouts.push(workout);
+    }
+
+    const deleteWorkoutClient = async (workoutId: string) => {
+        const error = await deleteWorkout(workoutId);
+
+        if (error) {
+            console.log(error);
+            setDeleteIsOpen(false);
+            return
+        }
+
+        removeWorkout(workoutId);
+
+        setDeleteIsOpen(false);
+    }
 
     if (disabled) {
         return (
@@ -68,7 +84,13 @@ const Day = ({
                                         Day: {day.charAt(0).toUpperCase() + day.slice(1)}
                                     </SheetDescription>
                                 </SheetHeader>
-                                <WorkoutForm programId={programId} week={week} day={day} setIsOpen={setIsOpen} />
+                                <WorkoutForm
+                                    programId={programId}
+                                    week={week}
+                                    day={day}
+                                    setIsOpen={setIsOpen}
+                                    addWorkout={addWorkout}
+                                />
                             </SheetContent>
                         </Sheet>
                     )}
@@ -77,23 +99,48 @@ const Day = ({
                 <div className="flex flex-col gap-2">
                     {workouts.map((workout) => {
                         return (
-                            <Link href={isCreator ? `/creator/workout/${workout.id}` : `/workout/${workout.id}`} className="bg-systemGray4 rounded-md p-2" key={workout.id}>
-                                <p className="text-primaryText text-sm font-semibold truncate">{workout.title}</p>
-                            </Link>
-                            // <Dialog key={workout.id}>
-                            //     <DialogTrigger asChild>
-                            //         <Button variant="secondary" size="sm">
-                            //             <p className="text-primaryText text-sm font-semibold truncate">{workout.title}</p>
-                            //         </Button>
-                            //     </DialogTrigger>
-                            //     <DialogContent className="max-w-sm sm:max-w-3xl h-5/6 overflow-scroll">
-                            //         <DialogHeader>
-                            //             <DialogTitle>{workout.title}</DialogTitle>
-                            //             <DialogDescription>{workout.description}</DialogDescription>
-                            //         </DialogHeader>
-                            //         <WorkoutPage workout={workout} />
-                            //     </DialogContent>
-                            // </Dialog>
+                            <Dialog open={deleteIsOpen} onOpenChange={setDeleteIsOpen} key={workout.id}>
+                                <DialogContent className="bg-background max-w-96 sm:max-w-md">
+                                    <DialogHeader>
+                                        <DialogTitle hidden></DialogTitle>
+                                        <DialogDescription hidden></DialogDescription>
+                                    </DialogHeader>
+                                    <div className="flex flex-col gap-5 pt-5">
+                                        <p className="text-primaryText font-base">Are you sure you want to delete this workout?
+                                        </p>
+                                        <Button
+                                            variant="destructive"
+                                            size="full"
+                                            onClick={() => {deleteWorkoutClient(workout.id)}}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </DialogContent>
+                                <ContextMenu>
+                                    <ContextMenuTrigger className="flex" asChild>
+                                        <Link
+                                            href={isCreator ? `/creator/workout/${workout.id}` : `/workout/${workout.id}`}
+                                            className="bg-systemGray4 p-2 rounded-md"
+                                            key={workout.id}
+                                        >
+                                            <p className="text-primaryText text-sm font-semibold truncate">{workout.title}</p>
+                                        </Link>
+                                    </ContextMenuTrigger>
+                                    <ContextMenuContent>
+                                        <ContextMenuItem asChild>
+                                            <Button
+                                                className="justify-start"
+                                                variant="ghost"
+                                                size="full"
+                                                onClick={() => {setDeleteIsOpen(true)}}
+                                            >
+                                                <p className="text-systemRed">Delete</p>
+                                            </Button>
+                                        </ContextMenuItem>
+                                    </ContextMenuContent>
+                                </ContextMenu>
+                            </Dialog>
                         )
                     })}
                 </div>

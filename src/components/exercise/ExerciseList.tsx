@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { Tables } from "../../../database.types"
 import { ChevronRight } from "lucide-react"
+import { Button } from "../ui/button"
+import ExerciseItem from "./ExerciseItem"
 
 const ExerciseList = ({
     exercises
@@ -18,6 +20,7 @@ const ExerciseList = ({
             ) : 
                 exercises?.map((exercise) => {
                     return (
+                        // <ExerciseItem workoutExercise={exercise}/>
                         <Link href={`/creator/exercise/${exercise.id}`} key={exercise.id} className="bg-systemGray5 flex flex-row w-full justify-between items-center p-3 rounded-lg">
                             <div className="">
                                 <p className="text-primaryText font-bold">{exercise.title}</p>

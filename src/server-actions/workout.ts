@@ -4,6 +4,49 @@ import { cache } from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { Tables } from "../../database.types";
+
+export async function editWorkout(workout: Tables <"workouts">, formData: FormData) {
+    const supabase = createClient();
+
+    let newWorkout = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string
+    }
+
+    // Add to programs
+    const { data: workoutData, error: workoutError } = await supabase
+        .from("workouts")
+        .update(newWorkout)
+        .eq("id", workout.id)
+        .select()
+        .single()
+
+    if (workoutError && !workoutData) {
+        return {
+            error: workoutError.message
+        }
+    }
+
+    return {
+        data: workoutData
+    }
+}
+
+export async function deleteWorkout(workoutId: string) {
+    const supabase = createClient();
+
+    const response = await supabase
+        .from("workouts")
+        .delete()
+        .eq("id", workoutId)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete workout."
+        }
+    }
+}
 
 export async function createWorkout(formData: FormData) {
     const supabase = createClient();
@@ -36,12 +79,12 @@ export async function createWorkout(formData: FormData) {
         day: formData.get("day") as string
     }
 
-    // Add to programs
+    // Add to workouts
     const { data: workoutData, error: workoutError } = await supabase
-    .from("workouts")
-    .insert(newWorkout)
-    .select()
-    .single()
+        .from("workouts")
+        .insert(newWorkout)
+        .select()
+        .single()
 
     if (workoutError && !workoutData) {
         return {
@@ -49,6 +92,10 @@ export async function createWorkout(formData: FormData) {
         }
     }
 
+    return {
+        data: workoutData
+    }
+
     // revalidatePath("/creator/programs");
-    return redirect(`/creator/workout/${workoutData.id}`);
+    // return redirect(`/creator/workout/${workoutData.id}`);
 }

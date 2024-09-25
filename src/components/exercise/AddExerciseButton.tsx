@@ -20,7 +20,7 @@ const AddExerciseButton = ({
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="hidden sm:flex" asChild>
-                <Button variant="ghost">+ Add exercise</Button>
+                <Button variant="systemBlue">+ Add exercise</Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background">
                 <SheetHeader>

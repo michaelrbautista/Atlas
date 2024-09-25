@@ -2,6 +2,49 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Tables } from "../../database.types";
+
+export async function editExercise(workoutExercise: Tables<"workout_exercises">, formData: FormData) {
+    const supabase = createClient();
+
+    let newExercise = {
+        sets: parseInt(formData.get("sets") as string),
+        reps: parseInt(formData.get("reps") as string)
+    }
+
+    // Update
+    const { data: exerciseData, error: exerciseError } = await supabase
+        .from("workout_exercises")
+        .update(newExercise)
+        .eq("id", workoutExercise.id)
+        .select()
+        .single()
+
+    if (exerciseError && !exerciseData) {
+        return {
+            error: exerciseError.message
+        }
+    }
+
+    return {
+        data: exerciseData
+    }
+}
+
+export async function deleteExercise(workoutExerciseId: string) {
+    const supabase = createClient();
+
+    const response = await supabase
+        .from("workout_exercises")
+        .delete()
+        .eq("id", workoutExerciseId)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete exercise."
+        }
+    }
+}
 
 // Add exercise to workout_exercises table
 export async function addExercise(formData: FormData) {

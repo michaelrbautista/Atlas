@@ -10,15 +10,17 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { createProgram } from '@/server-actions/program';
+import { editProgram } from '@/server-actions/program';
 import { Tables } from '../../../database.types';
 
-const ProgramForm = ({
-    setIsOpen,
-    addProgram
+const EditProgramForm = ({
+    program,
+    updateProgram,
+    setIsOpen
 }: {
-    setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addProgram: (program: Tables<"programs">) => void
+    program: Tables<"programs">,
+    updateProgram: (program: Tables<"programs">) => void
+    setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -26,10 +28,10 @@ const ProgramForm = ({
         resolver: zodResolver(ProgramSchema),
         defaultValues: {
             image: new File([], ""),
-            title: "",
-            weeks: 1,
-            price: 1.00,
-            description: ""
+            title: program.title,
+            weeks: program.weeks,
+            price: program.price,
+            description: program.description ?? ""
         }
     })
 
@@ -58,15 +60,15 @@ const ProgramForm = ({
             formData.append("description", data.description);
         }
 
-        let { data: programData, error: programError} = await createProgram(formData);
+        let { data: programData, error: programError } = await editProgram(program, formData);
 
         if (programError && !programData) {
             console.log(programError);
             return
         }
 
+        updateProgram(programData!);
         setIsOpen(false);
-        addProgram(programData!);
     }
 
     return (
@@ -166,7 +168,7 @@ const ProgramForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating program" : "Create Program"}
+                        {isLoading ? "Saving program" : "Save Program"}
                     </Button>
                 </div>
             </form>
@@ -174,4 +176,4 @@ const ProgramForm = ({
     )
 }
 
-export default ProgramForm
+export default EditProgramForm

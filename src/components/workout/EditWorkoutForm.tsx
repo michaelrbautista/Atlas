@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createWorkout } from "@/server-actions/workout";
+import { createWorkout, editWorkout } from "@/server-actions/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
@@ -14,26 +14,22 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Tables } from "../../../database.types";
 
-const WorkoutForm = ({
-    programId,
-    week,
-    day,
+const EditWorkoutForm = ({
+    workout,
     setIsOpen,
-    addWorkout
+    updateWorkout
 }: {
-    programId: string,
-    week: number,
-    day: string
+    workout: Tables<"workouts">,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addWorkout: (workout: Tables<"workouts">) => void
+    updateWorkout: (workout: Tables<"workouts">) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof WorkoutSchema>>({
         resolver: zodResolver(WorkoutSchema),
         defaultValues: {
-            title: "",
-            description: ""
+            title: workout.title,
+            description: workout.description ?? ""
         }
     })
 
@@ -41,15 +37,6 @@ const WorkoutForm = ({
         setIsLoading(true);
 
         const formData = new FormData();
-
-        // program id
-        formData.append("programId", programId);
-
-        // week number
-        formData.append("week", week.toString());
-
-        // day
-        formData.append("day", day);
         
         // title
         if (data.title) {
@@ -61,17 +48,16 @@ const WorkoutForm = ({
             formData.append("description", data.description);
         }
 
-        // Create workout
+        // Edit workout
+        let { data: editData, error: editError } = await editWorkout(workout, formData);
 
-        let { data: workoutData, error: workoutError } = await createWorkout(formData);
-
-        if (workoutError && !workoutData) {
-            console.log(workoutError);
+        if (editError && !editData) {
+            console.log(editError);
             return
         }
 
         setIsOpen(false);
-        addWorkout(workoutData!);
+        updateWorkout(editData!);
     }
 
     return (
@@ -116,7 +102,7 @@ const WorkoutForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating workout" : "Create Workout"}
+                        {isLoading ? "Saving workout" : "Save Workout"}
                     </Button>
                 </div>
             </form>
@@ -124,4 +110,4 @@ const WorkoutForm = ({
     )
 }
 
-export default WorkoutForm
+export default EditWorkoutForm

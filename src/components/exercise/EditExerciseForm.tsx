@@ -1,11 +1,10 @@
 "use client";
 
-import { WorkoutSchema } from "@/app/schema";
+import { ExistingExerciseSchema } from "@/app/schema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { createWorkout } from "@/server-actions/workout";
+import { editExercise } from "@/server-actions/exercise";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
@@ -14,64 +13,49 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Tables } from "../../../database.types";
 
-const WorkoutForm = ({
-    programId,
-    week,
-    day,
+const EditExerciseForm = ({
+    workoutExercise,
     setIsOpen,
-    addWorkout
+    updateExercise
 }: {
-    programId: string,
-    week: number,
-    day: string
+    workoutExercise: Tables<"workout_exercises">,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addWorkout: (workout: Tables<"workouts">) => void
+    updateExercise: (exercise: Tables<"workout_exercises">, exerciseNumber: number) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const form = useForm<z.infer<typeof WorkoutSchema>>({
-        resolver: zodResolver(WorkoutSchema),
+    console.log(workoutExercise);
+
+    const form = useForm<z.infer<typeof ExistingExerciseSchema>>({
+        resolver: zodResolver(ExistingExerciseSchema),
         defaultValues: {
-            title: "",
-            description: ""
+            sets: workoutExercise.sets,
+            reps: workoutExercise.reps
         }
     })
 
-    async function onSubmit(data: z.infer<typeof WorkoutSchema>) {
+    async function onSubmit(data: z.infer<typeof ExistingExerciseSchema>) {
         setIsLoading(true);
 
         const formData = new FormData();
 
-        // program id
-        formData.append("programId", programId);
-
-        // week number
-        formData.append("week", week.toString());
-
-        // day
-        formData.append("day", day);
-        
-        // title
-        if (data.title) {
-            formData.append("title", data.title);
+        if (data.sets) {
+            formData.append("sets", data.sets.toString());
         }
 
-        // description
-        if (data.description) {
-            formData.append("description", data.description);
+        if (data.reps) {
+            formData.append("reps", data.reps.toString());
         }
 
-        // Create workout
+        let { data: resultData, error: resultError } = await editExercise(workoutExercise, formData);
 
-        let { data: workoutData, error: workoutError } = await createWorkout(formData);
-
-        if (workoutError && !workoutData) {
-            console.log(workoutError);
+        if (resultError || !resultData) {
+            console.log(resultError);
             return
         }
 
         setIsOpen(false);
-        addWorkout(workoutData!);
+        updateExercise(resultData, workoutExercise.exercise_number);
     }
 
     return (
@@ -80,16 +64,15 @@ const WorkoutForm = ({
                 <div className="flex flex-col gap-3">
                     <FormField
                         control={form.control}
-                        name="title"
+                        name="sets"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Title</FormLabel>
+                                <FormLabel>Sets</FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        id="title"
-                                        name="title"
-                                        // placeholder="Enter title"
+                                        id="sets"
+                                        name="sets"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -98,16 +81,15 @@ const WorkoutForm = ({
                     />
                     <FormField
                         control={form.control}
-                        name="description"
+                        name="reps"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Description</FormLabel>
+                                <FormLabel>Reps</FormLabel>
                                 <FormControl>
-                                    <Textarea
+                                <Input
                                         {...field}
-                                        id="description"
-                                        name="description"
-                                        // placeholder="Enter description"
+                                        id="reps"
+                                        name="reps"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -116,7 +98,7 @@ const WorkoutForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating workout" : "Create Workout"}
+                        {isLoading ? "Saving exercise" : "Save exercise"}
                     </Button>
                 </div>
             </form>
@@ -124,4 +106,4 @@ const WorkoutForm = ({
     )
 }
 
-export default WorkoutForm
+export default EditExerciseForm

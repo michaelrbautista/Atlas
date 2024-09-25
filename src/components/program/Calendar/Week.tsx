@@ -7,13 +7,15 @@ const Week = ({
     workouts,
     week,
     disabled,
-    isCreator
+    isCreator,
+    removeWorkout
 }: {
     programId: string,
     workouts: Tables<"workouts">[]
     week: number,
     disabled: boolean,
-    isCreator: boolean
+    isCreator: boolean,
+    removeWorkout: (workoutId: string) => void
 }) => {
 
     const days = [
@@ -40,6 +42,7 @@ const Week = ({
                         workouts={workouts.filter((workout) => workout.day == day)}
                         disabled={disabled}
                         isCreator={isCreator}
+                        removeWorkout={removeWorkout}
                         key={day}
                     />
                 )

@@ -63,6 +63,10 @@ const Calendar = ({
         getWorkouts();
     }, [currentPage]);
 
+    const removeWorkout = (workoutId: string) => {
+        setWorkouts(workouts => workouts.filter(workout => workout.id !== workoutId));
+    }
+
     const calculateStartWeek = () => {
         return 1 + (4 * (currentPage - 1));
     }
@@ -120,6 +124,7 @@ const Calendar = ({
                             key={week}
                             disabled={isEnd && week > weeks}
                             isCreator={isCreator}
+                            removeWorkout={removeWorkout}
                         />
                     )
                 })}
