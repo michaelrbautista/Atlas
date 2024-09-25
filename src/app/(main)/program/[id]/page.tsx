@@ -137,7 +137,7 @@ const Program = ({
                             priority
                         />
                     )}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-full">
                         <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
                         <div className="flex flex-col gap-2">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>

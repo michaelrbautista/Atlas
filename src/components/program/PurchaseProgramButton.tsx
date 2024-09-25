@@ -81,7 +81,7 @@ const PurchaseProgramButton = ({
     } else {
         return (
             <Dialog>
-                <DialogTrigger className="w-full" asChild>
+                <DialogTrigger asChild>
                     <Button variant="systemBlue" size="full">
                         Purchase Program - {formatter.format(program.price)}
                     </Button>
