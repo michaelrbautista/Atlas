@@ -75,7 +75,7 @@ const MobileSidebar = async ({
     }
 
     return (
-        <div className="bg-systemBackground fixed w-full flex z-50 sm:hidden h-16 text-white">
+        <div className="bg-systemBackground sticky top-0 w-full z-50 flex sm:hidden h-16 text-white">
             <Sheet>
                 <SheetTrigger className="md:hidden hover:opacity-75 transition p-5">
                     <Menu color="white"/>

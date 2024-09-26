@@ -9,11 +9,10 @@ import {
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import WorkoutForm from "@/components/workout/WorkoutForm"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import WorkoutPage from "@/components/workout/WorkoutPage";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { deleteWorkout } from "@/server-actions/workout"

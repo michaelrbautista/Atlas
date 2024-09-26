@@ -12,6 +12,7 @@ import CreateAccountButton from "@/components/auth/CreateAccountButton";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import LoggedOutPurchaseButton from "@/components/auth/LoggedOutPurchaseButton";
+import MobileCalendar from "@/components/program/MobileCalendar/MobileCalendar";
 
 const Program = ({ 
     params
@@ -19,12 +20,13 @@ const Program = ({
     params: { id: string }
 }) => {
     const [isLoading, setIsLoading] = useState(true);
+
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
-    const [creator, setCreator] = useState<Tables<"users">>();
-    const [user, setUser] = useState<Tables<"users">>();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isPurchased, setIsPurchased] = useState(false);
+
+    const [creator, setCreator] = useState<Tables<"users">>();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const getProgram = async () => {
@@ -87,7 +89,6 @@ const Program = ({
             }
 
             setIsLoggedIn(true);
-            setUser(currentUserData);
 
             // Check is program is purchased
             const { data: purchasedData, error: purchasedError } = await supabase
@@ -119,8 +120,8 @@ const Program = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
-                <div className="flex flex-col lg:flex-row gap-5 w-full sm:px-16">
+            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
+                <div className="flex flex-col lg:flex-row gap-5 w-full">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
@@ -142,20 +143,21 @@ const Program = ({
                         <div className="flex flex-col gap-2">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
                             <p className="text-primaryText text-sm">{program?.description}</p>
-                            {(!isPurchased && isLoggedIn) ? (
-                                <PurchaseProgramButton program={program}/>
-                            ) : (
-                                <LoggedOutPurchaseButton program={program} />
+                            {!isPurchased && (
+                                isLoggedIn ? (
+                                    <PurchaseProgramButton program={program}/>
+                                ) : (
+                                    <LoggedOutPurchaseButton program={program} />
+                                )
                             )}
                         </div>
                     </div>
                 </div>
                 {isPurchased && (
-                    <Calendar
+                    <MobileCalendar
                         programId={program.id}
                         weeks={program.weeks}
                         pages={Math.floor(program.weeks / 4) + 1}
-                        isCreator={false}
                     />
                 )}
             </div>
