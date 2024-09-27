@@ -1,12 +1,15 @@
 "use client";
 
 import ProgramList from "@/components/program/ProgramList";
+import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 
 const Programs = () => {
     const [programIds, setProgramIds] = useState<string[]>([]);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getTeamPrograms = async () => {
@@ -15,7 +18,10 @@ const Programs = () => {
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -26,7 +32,10 @@ const Programs = () => {
                 .single()
 
             if (userError && !userData) {
-                console.log(userError);
+                toast({
+                    title: "An error occurred.",
+                    description: userError.message
+                })
                 return
             }
 
@@ -35,11 +44,15 @@ const Programs = () => {
                 .select()
                 .eq("purchased_by", userData.id)
 
-            if (data && !error) {
-                setProgramIds(data.map(program => program.program_id));
-            } else {
-                console.log("Couldnt get team's programs.");
+            if (error && !data) {
+                toast({
+                    title: "An error occurred.",
+                    description: error.message
+                })
+                return
             }
+
+            setProgramIds(data.map(program => program.program_id));
         }
 
         getTeamPrograms();

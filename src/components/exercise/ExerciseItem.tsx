@@ -13,6 +13,7 @@ import { Tables } from "../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { Ellipsis, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
 const ExerciseItem = ({
     workoutExercise
@@ -24,6 +25,8 @@ const ExerciseItem = ({
 
     const [viewExerciseIsOpen, setViewExerciseIsOpen] = useState(false);
 
+    const { toast } = useToast();
+
     useEffect(() => {
         const getExercise = async () => {
             const supabase = createClient();
@@ -31,7 +34,10 @@ const ExerciseItem = ({
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -42,7 +48,10 @@ const ExerciseItem = ({
                 .single()
 
             if (exerciseError || !exerciseData) {
-                console.log(exerciseError);
+                toast({
+                    title: "An error occurred.",
+                    description: exerciseError.message
+                })
                 return
             }
 

@@ -14,6 +14,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../database.types";
 import { Loader2 } from "lucide-react";
 import StripePaymentForm from "./StripePaymentForm";
+import { useToast } from "../ui/use-toast";
 
 const PurchaseProgramButton = ({
     program
@@ -23,6 +24,8 @@ const PurchaseProgramButton = ({
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [creator, setCreator] = useState<Tables<"users"> | null>(null);
+
+    const { toast } = useToast();
 
     const formatter = new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -38,8 +41,10 @@ const PurchaseProgramButton = ({
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("No user is logged in or couldn't get current user.");
-                setIsLoading(false);
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -48,10 +53,16 @@ const PurchaseProgramButton = ({
                 .select()
                 .eq("id", user.id)
                 .single()
-            
-            if (userData && !userError) {
-                setUser(userData);
+
+            if (userError && !userData) {
+                toast({
+                    title: "An error occurred.",
+                    description: userError.message
+                })
+                return
             }
+            
+            setUser(userData);
 
             const { data: creatorData, error: creatorError } = await supabase
                 .from("users")
@@ -60,7 +71,10 @@ const PurchaseProgramButton = ({
                 .single()
                 
             if(creatorError && !creatorData) {
-                console.log(creatorError);
+                toast({
+                    title: "An error occurred.",
+                    description: creatorError.message
+                })
                 return
             }
 

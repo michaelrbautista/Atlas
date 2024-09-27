@@ -14,7 +14,11 @@ import {
   } from "@/components/ui/dialog";
 import CreateAccountForm from "@/components/auth/CreateAccountForm";
 
-const CreateAccountButton = () => {
+const CreateAccountButton = ({
+    fromLandingPage
+}: {
+    fromLandingPage: boolean
+}) => {
     const [showCreateAccount, setShowCreateAccount] = useState(false);
     
     return (
@@ -27,7 +31,7 @@ const CreateAccountButton = () => {
                 <DialogTitle hidden>asdf</DialogTitle>
                 <DialogDescription hidden>asdf</DialogDescription>
             </DialogHeader>
-                <CreateAccountForm setIsOpen={setShowCreateAccount}></CreateAccountForm>
+                <CreateAccountForm fromLandingPage={fromLandingPage} setIsOpen={setShowCreateAccount}></CreateAccountForm>
             </DialogContent>
         </Dialog>
     );

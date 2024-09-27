@@ -31,7 +31,7 @@ export async function checkAuth() {
     }
 }
 
-export async function signIn(email: string, password: string) {
+export async function signIn(email: string, password: string, fromLandingPage: boolean) {
     const supabase = createClient()
 
     const { error } = await supabase.auth.signInWithPassword({ email: email, password: password })
@@ -62,6 +62,10 @@ export async function signIn(email: string, password: string) {
         }
     }
 
+    if (fromLandingPage) {
+        return redirect("/home");
+    }
+
     // if (userData.payments_enabled) {
     //     return redirect("/creator/team");
     // } else {
@@ -69,7 +73,7 @@ export async function signIn(email: string, password: string) {
     // }
 }
 
-export async function createAccount(fullName: string, email: string, username: string, password: string) {
+export async function createAccount(fullName: string, email: string, username: string, password: string, fromLandingPage: boolean) {
     const supabase = createClient();
 
     // Check username
@@ -120,8 +124,9 @@ export async function createAccount(fullName: string, email: string, username: s
             }
         }
 
-        revalidatePath("/", "layout");
-        return redirect("/home");
+        if (fromLandingPage) {
+            return redirect("/home");
+        }
     }
 }
 

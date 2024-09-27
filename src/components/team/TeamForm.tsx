@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { createTeam } from '@/server-actions/team';
+import { useToast } from '../ui/use-toast';
 
 const TeamForm = ({
     setIsOpen
@@ -18,6 +19,8 @@ const TeamForm = ({
     setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof TeamSchema>>({
         resolver: zodResolver(TeamSchema),
@@ -48,7 +51,10 @@ const TeamForm = ({
         let error = await createTeam(formData);
 
         if (error) {
-            console.log(error);
+            toast({
+                title: "An error occurred.",
+                description: error.error
+            })
             return
         }
 

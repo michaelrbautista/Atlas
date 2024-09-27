@@ -75,7 +75,7 @@ const MobileSidebar = async ({
     }
 
     return (
-        <div className="bg-systemBackground sticky top-0 w-full z-50 flex sm:hidden h-16 text-white">
+        <div className="bg-systemBackground sticky top-0 w-full z-50 flex md:hidden h-16 text-white">
             <Sheet>
                 <SheetTrigger className="md:hidden hover:opacity-75 transition p-5">
                     <Menu color="white"/>
@@ -108,8 +108,8 @@ const MobileSidebar = async ({
                                 </div>
                             ) : (
                                 <div className="px-5 flex flex-col gap-5">
-                                    <SignInButton></SignInButton>
-                                    <CreateAccountButton></CreateAccountButton>
+                                    <SignInButton fromLandingPage={false}></SignInButton>
+                                    <CreateAccountButton fromLandingPage={false}></CreateAccountButton>
                                 </div>
                             )}
                         </div>

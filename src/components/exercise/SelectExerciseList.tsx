@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import CreateExerciseButton from "./CreateExerciseButton";
 import ExistingExerciseForm from "./ExistingExerciseForm";
+import { useToast } from "../ui/use-toast";
 
 const SelectExerciseList = ({
     workoutId,
@@ -23,6 +24,8 @@ const SelectExerciseList = ({
     const [exercises, setExercises] = useState<Tables<"exercises">[] | null>(null);
     const [selectedExercise, setSelectedExercise] = useState<Tables<"exercises"> | null>(null);
 
+    const { toast } = useToast();
+
     useEffect(() => {
         const getExercises = async () => {
             setIsLoading(true);
@@ -32,7 +35,10 @@ const SelectExerciseList = ({
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -42,7 +48,10 @@ const SelectExerciseList = ({
                 .eq("created_by", user.id)
 
             if (exerciseError && !exerciseData) {
-                console.log(exerciseError.message);
+                toast({
+                    title: "An error occurred.",
+                    description: exerciseError.message
+                })
                 return
             }
 

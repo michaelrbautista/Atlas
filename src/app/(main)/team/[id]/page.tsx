@@ -9,6 +9,8 @@ import { redirectToHome } from "@/server-actions/creator";
 import Image from "next/image";
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import ProgramList from "@/components/program/ProgramList";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const Team = ({ 
     params
@@ -19,6 +21,8 @@ const Team = ({
     const [team, setTeam] = useState<Tables<"teams">>();
     const [teamImageUrl, setTeamImageUrl] = useState("");
     const [programIds, setProgramIds] = useState<string[]>([]);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getTeam = async () => {
@@ -31,7 +35,10 @@ const Team = ({
                 .single()
 
             if (teamError && !teamData) {
-                console.log(teamError);
+                toast({
+                    title: "An error occurred.",
+                    description: teamError.message
+                })
                 return
             }
 
@@ -50,7 +57,10 @@ const Team = ({
                 .eq("team_id", params.id)
 
             if (programsError && !programsData) {
-                console.log(programsError);
+                toast({
+                    title: "An error occurred.",
+                    description: programsError.message
+                })
                 return
             }
 
@@ -70,28 +80,35 @@ const Team = ({
         )
     } else {
         return (
-            <div className="flex flex-col gap-5 items-center w-full sm:max-w-4xl px-5 pt-20 sm:pt-10">
-                <div className="relative w-32 sm:w-48 aspect-square rounded-full overflow-hidden bg-slate-700">
+            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(teamImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[200px] rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            fill
-                            sizes="(max-width: 430px) 128px, (max-width: 1190px) 192px"
+                            className="h-[200px] w-[200px] rounded-full"
+                            height={200}
+                            width={200}
                             src={teamImageUrl}
-                            alt="teamImage"
+                            alt="programImage"
                             style={{objectFit: "cover"}}
+                            priority
                         />
                     )}
+                    <div className="flex flex-col w-full">
+                        <p className="text-primaryText text-2xl font-bold">{team.name}</p>
+                        <p className="text-secondaryText text-base">{team.description}</p>
+                    </div>
                 </div>
-                <div className="flex flex-col w-full rounded-xl">
-                    <p className="text-primaryText text-center text-3xl font-bold sm:px-40">{team?.name}</p>
-                    <p className="text-secondaryText text-center text-base font-medium px-0 sm:px-10 lg:px-40">{team?.description}</p>
-                </div>
-                <Separator></Separator>
+                <Button variant="secondary" size="full">Custom Program</Button>
+                {/* <div className="flex flex-col lg:flex-row gap-3">
+                    <Button variant="systemBlue" size="full">Join Team</Button>
+                    <Button variant="secondary" size="full">Custom Program</Button>
+                </div> */}
+                <Separator />
                 <p className="w-full text-foreground text-2xl font-bold">Programs</p>
                 <ProgramList isCreator={false} programIds={programIds} />
             </div>

@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
 
 const MobileCalendar = ({
     programId,
@@ -25,6 +26,8 @@ const MobileCalendar = ({
     const [dayWorkouts, setDayWorkouts] = useState<Tables<"workouts">[]>([] as Tables<"workouts">[]);
 
     const [selectedDay, setSelectedDay] = useState({week: 1, day: "monday"});
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const setWeeks = () => {
@@ -54,7 +57,10 @@ const MobileCalendar = ({
                 .lte("week", calculateEndWeek())
                 
             if (workoutsError && !workoutsData) {
-                console.log(workoutsData);
+                toast({
+                    title: "An error occurred.",
+                    description: workoutsError.message
+                })
                 return
             }
 

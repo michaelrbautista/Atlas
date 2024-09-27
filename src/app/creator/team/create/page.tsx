@@ -3,6 +3,7 @@
 import CreateStripeAccountSection from "@/components/team/CreateStripeAccountSection";
 import CreateTeamSection from "@/components/team/CreateTeamSection";
 import StripeOnboardingSection from "@/components/team/StripeOnboardingSection";
+import { useToast } from "@/components/ui/use-toast";
 import { updateStripePaymentsEnabled } from "@/server-actions/creator";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
@@ -13,6 +14,8 @@ const CreateTeam = () => {
     const [paymentsEnabled, setPaymentsEnabled] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
+
+    const { toast } = useToast();
 
     // Use effect
     useEffect(() => {
@@ -29,6 +32,10 @@ const CreateTeam = () => {
                     .single()
 
                 if (userError) {
+                    toast({
+                        title: "An error occurred.",
+                        description: "Couldn't get current user."
+                    })
                     return;
                 }
 

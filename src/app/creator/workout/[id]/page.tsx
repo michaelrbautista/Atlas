@@ -42,6 +42,7 @@ import { Separator } from "@/components/ui/separator";
 import { deleteExercise } from "@/server-actions/exercise";
 import EditWorkoutForm from "@/components/workout/EditWorkoutForm";
 import EditExerciseForm from "@/components/exercise/EditExerciseForm";
+import { useToast } from "@/components/ui/use-toast";
 
 const ViewCreatorWorkout = ({ 
     params
@@ -54,6 +55,8 @@ const ViewCreatorWorkout = ({
     const [editWorkoutIsOpen, setEditWorkoutIsOpen] = useState(false);
     const [editExerciseIsOpen, setEditExerciseIsOpen] = useState(false);
     const [deleteExerciseIsOpen, setDeleteExerciseIsOpen] = useState(false);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getWorkout = async () => {
@@ -69,7 +72,10 @@ const ViewCreatorWorkout = ({
                 .single()
             
             if (workoutError || !workoutData) {
-                console.log(workoutError || "Error getting workout.");
+                toast({
+                    title: "An error occurred.",
+                    description: workoutError.message
+                })
                 setIsLoading(false);
                 return
             }
@@ -84,7 +90,10 @@ const ViewCreatorWorkout = ({
                 .order("exercise_number", { ascending: true });
 
             if (exercisesError && !exercises) {
-                console.log("Couldn't get workout's exercises.");
+                toast({
+                    title: "An error occurred.",
+                    description: exercisesError.message
+                })
                 setIsLoading(false);
                 return
             }

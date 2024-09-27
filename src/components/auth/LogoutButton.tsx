@@ -5,14 +5,25 @@ import { logout } from "../../server-actions/auth";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 const LogoutButton = () => {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    const { toast } = useToast();
+
     async function clientLogout() {
         setIsLoggingOut(true);
 
-        logout();
+        const error = await logout();
+
+        if (error) {
+            toast({
+                title: "An error occurred.",
+                description: error.message
+            })
+            return
+        }
     }
 
     if (isLoggingOut) {

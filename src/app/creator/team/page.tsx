@@ -8,11 +8,15 @@ import { Separator } from "@/components/ui/separator";
 import { redirectToHome } from "@/server-actions/creator";
 import Image from "next/image";
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const TeamPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [team, setTeam] = useState<Tables<"teams">>();
     const [teamImageUrl, setTeamImageUrl] = useState("");
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getTeam = async () => {
@@ -21,7 +25,10 @@ const TeamPage = () => {
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -32,12 +39,18 @@ const TeamPage = () => {
                 .single()
 
             if (userError && !userData) {
-                console.log(userError);
+                toast({
+                    title: "An error occurred.",
+                    description: userError.message
+                })
                 return
             }
 
             if (!userData.team_id) {
-                console.log("User has not created a team yet.");
+                toast({
+                    title: "An error occurred.",
+                    description: "User has not created a team yet.."
+                })
                 redirectToHome();
                 return
             }
@@ -49,7 +62,10 @@ const TeamPage = () => {
                 .single()
 
             if (teamError && !teamData) {
-                console.log(teamError);
+                toast({
+                    title: "An error occurred.",
+                    description: teamError.message
+                })
                 return
             }
 
@@ -67,7 +83,7 @@ const TeamPage = () => {
         getTeam();
     }, []);
 
-    if (isLoading) {
+    if (isLoading || !team) {
         return (
             <div className="h-full w-full flex items-center justify-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -75,30 +91,31 @@ const TeamPage = () => {
         )
     } else {
         return (
-            <div className="flex flex-col gap-5 items-center w-full sm:max-w-4xl px-5 pt-20 sm:pt-10">
-                <div className="relative w-32 sm:w-48 aspect-square rounded-full overflow-hidden">
+            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(teamImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[200px] rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            placeholder="empty"
-                            className="z-50"
-                            fill
-                            sizes="(max-width: 430px) 128px, (max-width: 1190px) 192px"
+                            className="h-[200px] w-[200px] rounded-full"
+                            height={200}
+                            width={200}
                             src={teamImageUrl}
-                            alt="teamImage"
+                            alt="programImage"
                             style={{objectFit: "cover"}}
+                            priority
                         />
                     )}
+                    <div className="flex flex-col w-full">
+                        <p className="text-primaryText text-2xl font-bold">{team.name}</p>
+                        <p className="text-secondaryText text-base">{team.description}</p>
+                    </div>
                 </div>
-                <div className="flex flex-col gap-5 w-full rounded-xl">
-                    <p className="text-primaryText text-center text-3xl font-bold sm:px-40">{team?.name}</p>
-                    <p className="text-secondaryText text-center text-base font-medium px-0 sm:px-10 lg:px-40">{team?.description}</p>
-                </div>
-                <Separator></Separator>
+                {/* <Button variant="secondary" size="full">Edit Team</Button> */}
+                <Separator />
             </div>
         )
     }

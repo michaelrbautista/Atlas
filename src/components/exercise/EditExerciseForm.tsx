@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Tables } from "../../../database.types";
+import { useToast } from "../ui/use-toast";
 
 const EditExerciseForm = ({
     workoutExercise,
@@ -24,7 +25,7 @@ const EditExerciseForm = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log(workoutExercise);
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof ExistingExerciseSchema>>({
         resolver: zodResolver(ExistingExerciseSchema),
@@ -50,7 +51,10 @@ const EditExerciseForm = ({
         let { data: resultData, error: resultError } = await editExercise(workoutExercise, formData);
 
         if (resultError || !resultData) {
-            console.log(resultError);
+            toast({
+                title: "An error occurred.",
+                description: resultError
+            })
             return
         }
 

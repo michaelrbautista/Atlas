@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { createProgram } from '@/server-actions/program';
 import { Tables } from '../../../database.types';
+import { useToast } from '../ui/use-toast';
 
 const ProgramForm = ({
     setIsOpen,
@@ -21,6 +22,8 @@ const ProgramForm = ({
     addProgram: (program: Tables<"programs">) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof ProgramSchema>>({
         resolver: zodResolver(ProgramSchema),
@@ -61,7 +64,10 @@ const ProgramForm = ({
         let { data: programData, error: programError} = await createProgram(formData);
 
         if (programError && !programData) {
-            console.log(programError);
+            toast({
+                title: "An error occurred.",
+                description: programError
+            })
             return
         }
 

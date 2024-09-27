@@ -12,42 +12,18 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
-} from "@/components/ui/sheet";
 import { Tables } from "../../../../database.types";
-import { Dumbbell, Ellipsis } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import EditProgramForm from "@/components/program/EditProgramForm";
 import Image from "next/image";
-import { Rethink_Sans } from "next/font/google";
-import EditProgramButton from "@/components/program/EditProgramButton";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
-import SignInForm from "@/components/auth/SignInForm";
 import { deleteProgram } from "@/server-actions/program";
 import ProgramOptions from "@/components/program/ProgramOptions";
+import { useToast } from "@/components/ui/use-toast";
 
 const MyPrograms = () => {
     const [programs, setPrograms] = useState<Tables<"programs">[]>([]);
+    const { toast } = useToast();
 
     useEffect(() => {
         const getTeamPrograms = async () => {
@@ -56,7 +32,10 @@ const MyPrograms = () => {
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get the current user."
+                })
                 return
             }
 
@@ -67,12 +46,18 @@ const MyPrograms = () => {
                 .single()
 
             if (userError && !userData) {
-                console.log(userError);
+                toast({
+                    title: "An error occurred.",
+                    description: userError.message
+                })
                 return
             }
 
             if (!userData.team_id) {
-                console.log("User has not created a team yet.");
+                toast({
+                    title: "An error occurred.",
+                    description: "The user has not created a team yet."
+                })
                 redirectToHome();
                 return
             }
@@ -86,7 +71,11 @@ const MyPrograms = () => {
             if (data && !error) {
                 setPrograms(data);
             } else {
-                console.log("Couldnt get team's programs.");
+                toast({
+                    title: "An error occurred.",
+                    description: error.message
+                })
+                return
             }
         }
 

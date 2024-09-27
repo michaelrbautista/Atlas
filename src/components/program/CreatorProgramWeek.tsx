@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../database.types";
 import CreatorProgramDay from "./CreatorProgramDay";
 import { createClient } from "@/utils/supabase/client";
+import { useToast } from "../ui/use-toast";
 
 const CreatorProgramWeek = ({
     programId,
@@ -14,6 +15,8 @@ const CreatorProgramWeek = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [workouts, setWorkouts] = useState<Tables<"workouts">[]>([] as Tables<"workouts">[])
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getWeeksWorkouts = async () => {
@@ -26,9 +29,11 @@ const CreatorProgramWeek = ({
                 .eq("week", week)
 
             if (weekError && !weekData) {
-                return {
-                    error: weekError.message
-                }
+                toast({
+                    title: "An error occurred.",
+                    description: weekError.message
+                })
+                return
             }
 
             setWorkouts(weekData);

@@ -13,14 +13,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useToast } from "../ui/use-toast";
 
 const CreateAccountForm = ({ 
+    fromLandingPage,
     setIsOpen
 }: { 
+    fromLandingPage: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof CreateAccountSchema>>({
         resolver: zodResolver(CreateAccountSchema),
@@ -35,10 +39,12 @@ const CreateAccountForm = ({
 
     async function onSubmit(data: z.infer<typeof CreateAccountSchema>) {
         setIsLoading(true);
-        setError("");
 
         if (data.password !== data.confirmPassword) {
-            setError("Passwords must match.");
+            toast({
+                title: "An error occurred.",
+                description: "Passwords must match."
+            })
             setIsLoading(false);
             return
         }
@@ -47,11 +53,15 @@ const CreateAccountForm = ({
             data.fullName, 
             data.email, 
             data.username, 
-            data.password
+            data.password,
+            fromLandingPage
         );
 
         if (error) {
-            setError(error.errorMessage);
+            toast({
+                title: "An error occurred.",
+                description: error.errorMessage
+            })
             setIsLoading(false);
             return
         }
@@ -166,9 +176,6 @@ const CreateAccountForm = ({
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             {isLoading ? "Creating account" : "Create account"}
                         </Button>
-                        {(error != "") && (
-                            <p className="text-destructive">{error}</p>
-                        )}
                     </div>
                 </form>
             </Form>

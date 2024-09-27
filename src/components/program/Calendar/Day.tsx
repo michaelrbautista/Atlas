@@ -16,6 +16,7 @@ import Link from "next/link"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { deleteWorkout } from "@/server-actions/workout"
+import { useToast } from "@/components/ui/use-toast"
 
 const Day = ({
     programId,
@@ -37,6 +38,8 @@ const Day = ({
     const [isOpen, setIsOpen] = useState(false);
     const [deleteIsOpen, setDeleteIsOpen] = useState(false);
 
+    const { toast } = useToast();
+
     const addWorkout = (workout: Tables<"workouts">) => {
         workouts.push(workout);
     }
@@ -45,7 +48,11 @@ const Day = ({
         const error = await deleteWorkout(workoutId);
 
         if (error) {
-            console.log(error);
+            toast({
+                title: "An error occurred.",
+                description: error.error
+            })
+            return
             setDeleteIsOpen(false);
             return
         }

@@ -6,13 +6,9 @@ import { Tables } from "../../../../../database.types";
 import { useEffect, useState } from "react";
 import { Dumbbell, Loader2 } from "lucide-react";
 import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
-import Calendar from "@/components/program/Calendar/Calendar";
-import SignInButton from "@/components/auth/SignInButton";
-import CreateAccountButton from "@/components/auth/CreateAccountButton";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import LoggedOutPurchaseButton from "@/components/auth/LoggedOutPurchaseButton";
 import MobileCalendar from "@/components/program/MobileCalendar/MobileCalendar";
+import { useToast } from "@/components/ui/use-toast";
 
 const Program = ({ 
     params
@@ -28,6 +24,8 @@ const Program = ({
     const [creator, setCreator] = useState<Tables<"users">>();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const { toast } = useToast();
+
     useEffect(() => {
         const getProgram = async () => {
             const supabase = createClient();
@@ -40,8 +38,10 @@ const Program = ({
                 .single()
             
             if (programError || !programData) {
-                console.log(programError || "Error getting program.");
-                setIsLoading(false);
+                toast({
+                    title: "An error occurred.",
+                    description: programError.message
+                })
                 return
             }
 
@@ -60,8 +60,11 @@ const Program = ({
                 .single()
 
             if (creatorError || !creatorData) {
-                console.log(creatorError || "Error getting creator.");
-                setIsLoading(false);
+                toast({
+                    title: "An error occurred.",
+                    description: creatorError.message
+                })
+                return
                 return
             }
 
@@ -71,9 +74,11 @@ const Program = ({
             const { data: { user }} = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("No user is logged in or there was an error getting current auth user.");
-                setIsLoading(false);
-                return;
+                toast({
+                    title: "An error occurred.",
+                    description: "No user is logged in or there was an error getting current auth user."
+                })
+                return
             }
 
             const { data: currentUserData, error: currentUserError } = await supabase
@@ -83,9 +88,11 @@ const Program = ({
                 .single()
 
             if (currentUserError || !currentUserData) {
-                console.log(currentUserError || "Error getting current db user.");
-                setIsLoading(false);
-                return;
+                toast({
+                    title: "An error occurred.",
+                    description: currentUserError.message
+                })
+                return
             }
 
             setIsLoggedIn(true);
@@ -98,7 +105,10 @@ const Program = ({
                 .eq("purchased_by", currentUserData.id)
 
             if (purchasedError && !purchasedData) {
-                console.log(purchasedError);
+                toast({
+                    title: "An error occurred.",
+                    description: purchasedError.message
+                })
                 return
             }
 
@@ -121,7 +131,7 @@ const Program = ({
     } else {
         return (
             <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
-                <div className="flex flex-col lg:flex-row gap-5 w-full">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5 w-full">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">

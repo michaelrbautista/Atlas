@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const ViewExercise = ({ 
     params
@@ -14,6 +15,8 @@ const ViewExercise = ({
     const [workoutExercise, setWorkoutExercise] = useState<Tables<"workout_exercises"> | null>(null);
     const [exercise, setExercise] = useState<Tables<"exercises"> | null>(null);
 
+    const { toast } = useToast();
+
     useEffect(() => {
         const getExercise = async () => {
             const supabase = createClient();
@@ -21,7 +24,10 @@ const ViewExercise = ({
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("Couldn't get current user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
                 return
             }
 
@@ -32,7 +38,10 @@ const ViewExercise = ({
                 .single()
 
             if (workoutExerciseError || !workoutExerciseData) {
-                console.log(workoutExerciseError);
+                toast({
+                    title: "An error occurred.",
+                    description: workoutExerciseError.message
+                })
                 return
             }
 
@@ -45,7 +54,10 @@ const ViewExercise = ({
                 .single()
 
             if (exerciseError || !exerciseData) {
-                console.log(exerciseError);
+                toast({
+                    title: "An error occurred.",
+                    description: exerciseError.message
+                })
                 return
             }
 

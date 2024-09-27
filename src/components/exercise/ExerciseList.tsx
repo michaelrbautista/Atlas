@@ -1,8 +1,6 @@
 import Link from "next/link"
 import { Tables } from "../../../database.types"
 import { ChevronRight } from "lucide-react"
-import { Button } from "../ui/button"
-import ExerciseItem from "./ExerciseItem"
 
 const ExerciseList = ({
     exercises

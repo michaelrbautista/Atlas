@@ -12,7 +12,11 @@ import {
   } from "@/components/ui/dialog";
 import SignInForm from "@/components/auth/SignInForm";
 
-const SignInButton = () => {
+const SignInButton = ({
+    fromLandingPage
+}: {
+    fromLandingPage: boolean
+}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -25,7 +29,7 @@ const SignInButton = () => {
                     <DialogTitle hidden></DialogTitle>
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
-                <SignInForm setIsOpen={setIsOpen}></SignInForm>
+                <SignInForm fromLandingPage={fromLandingPage} setIsOpen={setIsOpen}></SignInForm>
             </DialogContent>
         </Dialog>
     );

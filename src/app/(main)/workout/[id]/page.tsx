@@ -6,6 +6,7 @@ import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import AddExerciseButton from "@/components/exercise/AddExerciseButton";
 import ExerciseList from "@/components/exercise/ExerciseList";
+import { useToast } from "@/components/ui/use-toast";
 
 const Workout = ({ 
     params
@@ -15,6 +16,8 @@ const Workout = ({
     const [isLoading, setIsLoading] = useState(false);
     const [workout, setWorkout] = useState<Tables<"workouts">>();
     const [exercises, setExercises] = useState<Tables<"workout_exercises">[]>([] as Tables<"workout_exercises">[]);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getWorkout = async () => {
@@ -30,8 +33,10 @@ const Workout = ({
                 .single()
             
             if (workoutError || !workoutData) {
-                console.log(workoutError || "Error getting workout.");
-                setIsLoading(false);
+                toast({
+                    title: "An error occurred.",
+                    description: workoutError.message
+                })
                 return
             }
 
@@ -45,8 +50,10 @@ const Workout = ({
                 .order("exercise_number", { ascending: true });
 
             if (exercisesError && !exercises) {
-                console.log("Couldn't get workout's exercises.");
-                setIsLoading(false);
+                toast({
+                    title: "An error occurred.",
+                    description: exercisesError.message
+                })
                 return
             }
 

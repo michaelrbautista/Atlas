@@ -16,6 +16,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const ViewCreatorProgram = ({ 
     params
@@ -26,6 +27,8 @@ const ViewCreatorProgram = ({
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
     const [creator, setCreator] = useState<Tables<"users">>();
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getProgram = async () => {
@@ -41,7 +44,10 @@ const ViewCreatorProgram = ({
                 .single()
             
             if (programError || !programData) {
-                console.log(programError || "Error getting program.");
+                toast({
+                    title: "An error occurred.",
+                    description: programError.message
+                })
                 setIsLoading(false);
                 return
             }
@@ -61,7 +67,10 @@ const ViewCreatorProgram = ({
                 .single()
 
             if (creatorError || !creatorData) {
-                console.log(creatorError || "Error getting creator.");
+                toast({
+                    title: "An error occurred.",
+                    description: creatorError.message
+                })
                 setIsLoading(false);
                 return
             }
@@ -72,7 +81,10 @@ const ViewCreatorProgram = ({
             const { data: { user }} = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("No user is logged in or there was an error getting current auth user.");
+                toast({
+                    title: "An error occurred.",
+                    description: "No user is logged in or there was an error getting current auth user."
+                })
                 setIsLoading(false);
                 return;
             }

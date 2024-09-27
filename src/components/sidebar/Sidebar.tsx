@@ -97,7 +97,7 @@ const Sidebar = async ({
     }
     
     return (
-        <aside className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 hidden sm:flex flex-col text-white bg-background border-r-[1px] pb-5">
+        <aside className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 hidden md:flex flex-col text-white bg-background border-r-[1px] pb-5">
             <Logo></Logo>
             <div className="flex flex-col justify-between h-full">
                 <SidebarRoutes routes={routes}></SidebarRoutes>

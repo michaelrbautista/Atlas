@@ -11,14 +11,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useToast } from "../ui/use-toast";
 
-const SignInForm = ({ 
+const SignInForm = ({
+    fromLandingPage,
     setIsOpen 
-}: { 
+}: {
+    fromLandingPage: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
@@ -30,15 +34,18 @@ const SignInForm = ({
 
     async function onSubmit(data: z.infer<typeof SignInSchema>) {
         setIsLoading(true);
-        setError("");
 
         let error = await signIn(
             data.email,
-            data.password
+            data.password,
+            fromLandingPage
         );
 
         if (error) {
-            setError(error.errorMessage);
+            toast({
+                title: "An error occurred.",
+                description: error.errorMessage
+            })
             setIsLoading(false);
             return
         }
@@ -96,9 +103,6 @@ const SignInForm = ({
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             {isLoading ? "Signing in" : "Sign in"}
                         </Button>
-                        {(error != "") && (
-                            <p className="text-destructive">{error}</p>
-                        )}
                     </div>
                 </form>
             </Form>

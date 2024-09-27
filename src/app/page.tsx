@@ -47,7 +47,7 @@ export default function Home() {
               </DialogTrigger>
               <DialogContent className="bg-background max-w-96 sm:max-w-md">
                   <DialogTitle hidden></DialogTitle>
-                  <SignInForm setIsOpen={setShowSignIn}></SignInForm>
+                  <SignInForm fromLandingPage={true} setIsOpen={setShowSignIn}></SignInForm>
               </DialogContent>
           </Dialog>
         </div>
@@ -66,7 +66,7 @@ export default function Home() {
                   </DialogTrigger>
                   <DialogContent className="max-w-96 sm:max-w-md">
                     <DialogTitle hidden></DialogTitle>
-                    <CreateAccountForm setIsOpen={setShowCreateAccount}></CreateAccountForm>
+                    <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                   </DialogContent>
               </Dialog>
             </div>

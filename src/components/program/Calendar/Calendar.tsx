@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Calendar = ({
     programId,
@@ -23,6 +24,8 @@ const Calendar = ({
     const [weeksLoop, setWeeksLoop] = useState<number[]>([]);
 
     const [workouts, setWorkouts] = useState<Tables<"workouts">[]>([] as Tables<"workouts">[]);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const setWeeks = () => {
@@ -52,7 +55,10 @@ const Calendar = ({
                 .lte("week", calculateEndWeek())
                 
             if (workoutsError && !workoutsData) {
-                console.log(workoutsData);
+                toast({
+                    title: "An error occurred.",
+                    description: workoutsError.message
+                })
                 return
             }
 
