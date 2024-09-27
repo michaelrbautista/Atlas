@@ -63,14 +63,12 @@ export async function signIn(email: string, password: string, fromLandingPage: b
     }
 
     if (fromLandingPage) {
-        return redirect("/home");
+        if (userData.payments_enabled) {
+            return redirect("/creator/team");
+        } else {
+            return redirect("/home");
+        }
     }
-
-    // if (userData.payments_enabled) {
-    //     return redirect("/creator/team");
-    // } else {
-    //     return redirect("/home");
-    // }
 }
 
 export async function createAccount(fullName: string, email: string, username: string, password: string, fromLandingPage: boolean) {
