@@ -29,7 +29,7 @@ const AddWorkoutButton = ({
                         Day: {day.charAt(0).toUpperCase() + day.slice(1)}
                     </SheetDescription>
                 </SheetHeader>
-                <WorkoutForm programId={programId} week={week} day={day} setIsOpen={setIsOpen} />
+
             </SheetContent>
         </Sheet>
     )

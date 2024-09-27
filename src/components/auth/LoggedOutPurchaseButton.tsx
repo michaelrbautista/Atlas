@@ -41,7 +41,7 @@ const LoggedOutPurchaseButton = ({
                 </DialogHeader>
                 {isSignIn ? (
                     <div className="flex flex-col">
-                        <SignInForm setIsOpen={setIsOpen}/>
+                        <SignInForm fromLandingPage={false} setIsOpen={setIsOpen}/>
                         <Button onClick={() => {
                             setIsSignIn(false);
                         }} variant="link">
@@ -50,7 +50,7 @@ const LoggedOutPurchaseButton = ({
                     </div>
                 ) : (
                     <div className="flex flex-col items-center">
-                        <CreateAccountForm setIsOpen={setIsOpen}/>
+                        <CreateAccountForm fromLandingPage={false} setIsOpen={setIsOpen}/>
                         <Button onClick={() => {
                             setIsSignIn(true);
                         }} variant="link">
