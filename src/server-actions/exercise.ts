@@ -1,10 +1,126 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
-export async function editExercise(workoutExercise: Tables<"workout_exercises">, formData: FormData) {
+export async function editExercise(exercise: Tables<"exercises">, formData: FormData) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get user from auth."
+        }
+    }
+
+    // Add to exercises table
+    let newExercise: any;
+
+    const video = formData.get("video") as File;
+
+    if (video) {
+        let videoPath;
+        let videoUrl;
+
+        if (exercise.video_path) {
+            const { data: storageData, error: storageError } = await supabase
+                .storage
+                .from("program_images")
+                .update(exercise.video_path, video, {
+                    cacheControl: '3600',
+                    upsert: true
+                });
+
+            if (storageError && !storageData) {
+                return {
+                    error: storageError.message
+                }
+            }
+
+            videoPath = storageData.path
+
+            // Get public url for image
+            const { data: storageUrl } = supabase
+                .storage
+                .from("exercise_videos")
+                .getPublicUrl(storageData.path);
+
+            if (!storageUrl) {
+                return {
+                    error: "Couldn't get public image url from storage."
+                }
+            }
+        } else {
+            const videoExt = video.name.split(".").pop();
+            let date = new Date()
+            const videoName = `/${user.id}/${date.toISOString()}.${videoExt}`
+
+            // Add image to storage
+            const { data: storageData, error: storageError } = await supabase
+                .storage
+                .from("exercise_videos")
+                .upload(videoName, video, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (storageError && !storageData) {
+                return {
+                    error: storageError.message
+                }
+            }
+
+            videoPath = storageData.path
+
+            // Get public url for image
+            const { data: storageUrl } = supabase
+                .storage
+                .from("exercise_videos")
+                .getPublicUrl(storageData.path);
+
+            if (!storageUrl) {
+                return {
+                    error: "Couldn't get public image url from storage."
+                }
+            }
+
+            videoUrl = storageUrl.publicUrl
+        }
+
+        newExercise = {
+            title: formData.get("title") as string,
+            instructions: formData.get("instructions") as string,
+            video_url: videoUrl,
+            video_path: videoPath
+        }
+    } else {
+        newExercise = {
+            title: formData.get("title") as string,
+            instructions: formData.get("instructions") as string
+        }
+    }
+
+    // Add to programs
+    const { data: exerciseData, error: exerciseError } = await supabase
+        .from("exercises")
+        .update(newExercise)
+        .eq("id", exercise.id)
+        .select()
+        .single()
+
+    if (exerciseError && !exerciseData) {
+        return {
+            error: exerciseError.message
+        }
+    }
+
+    return {
+        data: exerciseData
+    }
+}
+
+export async function editWorkoutExercise(workoutExercise: Tables<"workout_exercises">, formData: FormData) {
     const supabase = createClient();
 
     let newExercise = {
@@ -64,7 +180,8 @@ export async function addExercise(formData: FormData) {
         exercise_number: parseInt(formData.get("exerciseNumber") as string),
         title: formData.get("title") as string,
         sets: parseInt(formData.get("sets") as string),
-        reps: parseInt(formData.get("reps") as string)
+        reps: parseInt(formData.get("reps") as string),
+        other: formData.get("other") as string
     }
 
     const { data: workoutExerciseData, error: workoutExerciseError } = await supabase

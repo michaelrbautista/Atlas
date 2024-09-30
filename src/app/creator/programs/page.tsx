@@ -125,22 +125,22 @@ const MyPrograms = () => {
                         return (
                             <TableRow key={program.id}>
                                 <TableCell>
-                                {(!program.image_url || program.image_url == "") ? (
-                                    // Replace with placeholder image
-                                    <div className="bg-systemGray5 shrink-0 h-[60px] w-[100px] rounded-xl flex items-center justify-center">
-                                        <Dumbbell className="text-secondaryText" />
-                                    </div>
-                                ) : (
-                                    <Image
-                                        className="h-[60px] w-[100px] rounded-md"
-                                        height={60}
-                                        width={100}
-                                        src={program.image_url}
-                                        alt="programImage"
-                                        style={{objectFit: "cover"}}
-                                        priority
-                                    />
-                                )}
+                                    {(!program.image_url || program.image_url == "") ? (
+                                        // Replace with placeholder image
+                                        <div className="bg-systemGray5 shrink-0 h-[60px] w-[100px] rounded-xl flex items-center justify-center">
+                                            <Dumbbell className="text-secondaryText" />
+                                        </div>
+                                    ) : (
+                                        <Image
+                                            className="h-[60px] w-[100px] rounded-md"
+                                            height={60}
+                                            width={100}
+                                            src={program.image_url}
+                                            alt="programImage"
+                                            style={{objectFit: "cover"}}
+                                            priority
+                                        />
+                                    )}
                                 </TableCell>
                                 <TableCell>{program.title}</TableCell>
                                 <TableCell>{program.description}</TableCell>
@@ -159,7 +159,6 @@ const MyPrograms = () => {
                                 <TableCell>
                                     <ProgramOptions
                                         program={program}
-                                        programIndex={index}
                                         updateProgram={updateProgram}
                                         deleteProgramClient={deleteProgramClient}
                                     />

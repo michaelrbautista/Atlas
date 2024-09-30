@@ -57,7 +57,10 @@ export const ExistingExerciseSchema = z.object({
         message: "Reps must be a number."
     }).min(1, {
         message: "There must be at least 1 rep."
-    })
+    }),
+    other: z.string().max(400, {
+        message: "Please enter less than 400 characters."
+    }).optional()
 })
 
 export const NewExerciseSchema = z.object({

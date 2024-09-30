@@ -86,7 +86,7 @@ const EditProgramForm = ({
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Image</FormLabel>
+                                <FormLabel>Replace Image</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="image"

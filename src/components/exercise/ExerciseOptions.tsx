@@ -5,16 +5,14 @@ import {
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "@/components/ui/dialog";
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
-    SheetTitle,
-    SheetTrigger
+    SheetTitle
 } from "@/components/ui/sheet";
 import {
     DropdownMenu,
@@ -26,25 +24,27 @@ import { Tables } from "../../../database.types";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Ellipsis, Loader2 } from "lucide-react";
-import EditProgramForm from "./EditProgramForm";
+import { deleteExercise } from "@/server-actions/exercise";
+import EditExerciseForm from "./EditExerciseForm";
 
-const ProgramOptions = ({
-    program,
-    updateProgram,
-    deleteProgramClient
+
+const ExerciseOptions = ({
+    exercise,
+    updateExercise,
+    deleteExerciseClient
 }: {
-    program: Tables<"programs">,
-    updateProgram: (program: Tables<"programs">) => void,
-    deleteProgramClient: (programId: string) => void
+    exercise: Tables<"exercises">,
+    updateExercise: (exercise: Tables<"exercises">) => void,
+    deleteExerciseClient: (exerciseId: string) => void
 }) => {
     const [editIsOpen, setEditIsOpen] = useState(false);
     const [deleteIsOpen, setDeleteIsOpen] = useState(false);
     const [deleteIsLoading, setDeleteIsLoading] = useState(false);
 
-    const deleteProgram = (programId: string) => {
+    const deleteProgram = (exerciseId: string) => {
         setDeleteIsLoading(true);
 
-        deleteProgramClient(programId);
+        deleteExerciseClient(exerciseId);
 
         setDeleteIsOpen(false);
         setDeleteIsLoading(false);
@@ -59,18 +59,18 @@ const ProgramOptions = ({
                         <DialogDescription hidden></DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col gap-5 pt-5">
-                        <p className="text-primaryText font-base">Are you sure you want to delete this program?
+                        <p className="text-primaryText font-base">Are you sure you want to delete this exercise?
                         </p>
                         <Button
                             variant={deleteIsLoading ? "disabled" : "destructive"}
                             size="full"
                             disabled={deleteIsLoading}
                             onClick={() => {
-                                deleteProgram(program.id)
+                                deleteExercise(exercise.id)
                             }}
                         >
                             {deleteIsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {deleteIsLoading ? "Deleting program" : "Delete Program"}
+                            {deleteIsLoading ? "Deleting Exercise" : "Delete Exercise"}
                         </Button>
                     </div>
                 </DialogContent>
@@ -106,16 +106,17 @@ const ProgramOptions = ({
             </Dialog>
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Edit Program</SheetTitle>
+                    <SheetTitle>Edit Exercise</SheetTitle>
                     <SheetDescription hidden></SheetDescription>
                 </SheetHeader>
-                <EditProgramForm
-                    program={program}
-                    updateProgram={updateProgram}
+                {/* Edit Exercise Form */}
+                <EditExerciseForm
+                    exercise={exercise}
+                    updateExercise={updateExercise}
                     setIsOpen={setEditIsOpen}
                 />
             </SheetContent>
         </Sheet>
     )
 }
-export default ProgramOptions
+export default ExerciseOptions

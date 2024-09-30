@@ -22,6 +22,7 @@ const SelectExerciseList = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [exercises, setExercises] = useState<Tables<"exercises">[] | null>(null);
+    
     const [selectedExercise, setSelectedExercise] = useState<Tables<"exercises"> | null>(null);
 
     const { toast } = useToast();
@@ -96,25 +97,24 @@ const SelectExerciseList = ({
                     ) : exercises?.length == 0 ? (
                         <div className="text-secondaryText text-sm pt-5">You haven't created any exercises yet.</div>
                     ) : 
-                    <div className="flex flex-col gap-5 pb-32 overflow-scroll">
-                        {exercises?.map((exercise) => {
-                            return (
-                                <div className="flex flex-col gap-5 bg-systemGray6 p-5 rounded-lg" key={exercise.id}>
-                                    <div>
-                                        <p className="text-primaryText font-semibold">{exercise.title}</p>
-                                        <p className="text-secondaryText text-sm">{exercise.instructions}</p>
+                        <div className="flex flex-col gap-5 pb-32 overflow-scroll">
+                            {exercises?.map((exercise) => {
+                                return (
+                                    <div className="flex flex-col gap-5 bg-systemGray6 p-5 rounded-lg" key={exercise.id}>
+                                        <div>
+                                            <p className="text-primaryText font-semibold">{exercise.title}</p>
+                                            <p className="text-secondaryText text-sm">{exercise.instructions}</p>
+                                        </div>
+                                        <Button onClick={() => {selectExercise(exercise)}} variant="systemBlue" size="full">Select</Button>
                                     </div>
-                                    <Button onClick={() => {selectExercise(exercise)}} variant="systemBlue" size="full">Select</Button>
-                                </div>
-                            )
-                        })}
-                    </div>
+                                )
+                            })}
+                        </div>
                 }
                 <div className="p-5 absolute inset-x-0 bottom-0 border-t-[1px] bg-systemGray6">
                     <CreateExerciseButton
-                        workoutId={workoutId}
-                        exerciseNumber={exerciseNumber}
-                        selectExercise={selectExercise}
+                        buttonSize="full"
+                        exerciseCreated={selectExercise}
                     />
                 </div>
             </div>

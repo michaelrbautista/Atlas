@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import AddExerciseButton from "@/components/exercise/AddExerciseButton";
-import ExerciseList from "@/components/exercise/ExerciseList";
 import {
     Table,
     TableBody,
@@ -27,8 +26,7 @@ import {
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "@/components/ui/dialog";
 import {
     DropdownMenu,
@@ -41,7 +39,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { deleteExercise } from "@/server-actions/exercise";
 import EditWorkoutForm from "@/components/workout/EditWorkoutForm";
-import EditExerciseForm from "@/components/exercise/EditExerciseForm";
+import EditWorkoutExerciseForm from "@/components/exercise/EditWorkoutExerciseForm";
 import { useToast } from "@/components/ui/use-toast";
 
 const ViewCreatorWorkout = ({ 
@@ -248,7 +246,7 @@ const ViewCreatorWorkout = ({
                                                     <SheetTitle>Edit Exercise</SheetTitle>
                                                     <SheetDescription hidden></SheetDescription>
                                                 </SheetHeader>
-                                                <EditExerciseForm workoutExercise={exercise} setIsOpen={setEditExerciseIsOpen} updateExercise={updateExercise} />
+                                                <EditWorkoutExerciseForm workoutExercise={exercise} setIsOpen={setEditExerciseIsOpen} updateExercise={updateExercise} />
                                             </SheetContent>
                                         </Sheet>
                                     </TableCell>

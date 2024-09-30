@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useState } from "react";
-import { createProgram } from "@/server-actions/program";
-import { ProgramSchema } from "@/app/schema";
 import ProgramForm from "./ProgramForm";
 import { Tables } from "../../../database.types";
 

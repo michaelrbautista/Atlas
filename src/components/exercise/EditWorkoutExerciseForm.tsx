@@ -4,7 +4,7 @@ import { ExistingExerciseSchema } from "@/app/schema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addExercise } from "@/server-actions/exercise";
+import { editWorkoutExercise } from "@/server-actions/exercise";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
@@ -13,20 +13,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Tables } from "../../../database.types";
 import { useToast } from "../ui/use-toast";
-import { Textarea } from "../ui/textarea";
 
-const ExistingExerciseForm = ({
-    exercise,
-    workoutId,
-    exerciseNumber,
+const EditWorkoutExerciseForm = ({
+    workoutExercise,
     setIsOpen,
-    addNewExercise
+    updateExercise
 }: {
-    exercise: Tables<"exercises">,
-    workoutId: string,
-    exerciseNumber: number,
+    workoutExercise: Tables<"workout_exercises">,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addNewExercise: (exercise: Tables<"workout_exercises">) => void
+    updateExercise: (exercise: Tables<"workout_exercises">, exerciseNumber: number) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -35,9 +30,8 @@ const ExistingExerciseForm = ({
     const form = useForm<z.infer<typeof ExistingExerciseSchema>>({
         resolver: zodResolver(ExistingExerciseSchema),
         defaultValues: {
-            sets: 1,
-            reps: 1,
-            other: ""
+            sets: workoutExercise.sets,
+            reps: workoutExercise.reps
         }
     })
 
@@ -45,18 +39,6 @@ const ExistingExerciseForm = ({
         setIsLoading(true);
 
         const formData = new FormData();
-
-        // workout id
-        formData.append("workoutId", workoutId);
-
-        // exercise id
-        formData.append("exerciseId", exercise.id);
-
-        // exercise number
-        formData.append("exerciseNumber", exerciseNumber.toString());
-
-        // title
-        formData.append("title", exercise.title);
 
         if (data.sets) {
             formData.append("sets", data.sets.toString());
@@ -66,11 +48,7 @@ const ExistingExerciseForm = ({
             formData.append("reps", data.reps.toString());
         }
 
-        if (data.other) {
-            formData.append("other", data.other.toString());
-        }
-
-        let { data: resultData, error: resultError } = await addExercise(formData);
+        let { data: resultData, error: resultError } = await editWorkoutExercise(workoutExercise, formData);
 
         if (resultError || !resultData) {
             toast({
@@ -80,8 +58,8 @@ const ExistingExerciseForm = ({
             return
         }
 
-        addNewExercise(resultData);
         setIsOpen(false);
+        updateExercise(resultData, workoutExercise.exercise_number);
     }
 
     return (
@@ -122,26 +100,9 @@ const ExistingExerciseForm = ({
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="other"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Other Instructions</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        {...field}
-                                        id="other"
-                                        name="other"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Adding Exercise" : "Add Exercise"}
+                        {isLoading ? "Saving exercise" : "Save exercise"}
                     </Button>
                 </div>
             </form>
@@ -149,4 +110,4 @@ const ExistingExerciseForm = ({
     )
 }
 
-export default ExistingExerciseForm
+export default EditWorkoutExerciseForm

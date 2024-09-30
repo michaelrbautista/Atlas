@@ -14,20 +14,18 @@ import CreateExerciseForm from "./CreateExerciseForm";
 import { Tables } from "../../../database.types";
 
 const CreateExerciseButton = ({
-    workoutId,
-    exerciseNumber,
-    selectExercise
+    buttonSize,
+    exerciseCreated
 }: {
-    workoutId: string,
-    exerciseNumber: number,
-    selectExercise: (exercise: Tables<"exercises">) => void
+    buttonSize: "default" | "sm" | "lg" | "icon" | "smallIcon" | "full",
+    exerciseCreated: (exercise: Tables<"exercises">) => void
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="hidden sm:flex" asChild>
-                <Button variant="secondary" size="full">Create new exercise</Button>
+                <Button variant="systemBlue" size={buttonSize}>Create Exercise</Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background">
                 <SheetHeader>
@@ -35,10 +33,8 @@ const CreateExerciseButton = ({
                     <SheetDescription hidden></SheetDescription>
                 </SheetHeader>
                 <CreateExerciseForm
-                    workoutId={workoutId}
-                    exerciseNumber={exerciseNumber}
                     setIsOpen={setIsOpen}
-                    selectExercise={selectExercise}
+                    exerciseCreated={exerciseCreated}
                 />
             </SheetContent>
         </Sheet>

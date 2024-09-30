@@ -16,15 +16,11 @@ import { Tables } from "../../../database.types";
 import { useToast } from "../ui/use-toast";
 
 const CreateExerciseForm = ({
-    workoutId,
-    exerciseNumber,
     setIsOpen,
-    selectExercise
+    exerciseCreated
 }: {
-    workoutId: string,
-    exerciseNumber: number,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
-    selectExercise: (exercise: Tables<"exercises">) => void
+    exerciseCreated: (exercise: Tables<"exercises">) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,12 +40,6 @@ const CreateExerciseForm = ({
 
         const formData = new FormData();
 
-        // workout id
-        formData.append("workoutId", workoutId);
-
-        // exercise number
-        formData.append("exerciseNumber", exerciseNumber.toString());
-
         if (data.video && data.video.size > 0) {
             formData.append("video", data.video);
         }
@@ -64,8 +54,7 @@ const CreateExerciseForm = ({
             formData.append("instructions", data.instructions);
         }
 
-        // Create workout
-
+        // Create exercise
         let { data: exerciseData, error: exerciseError } = await createExercise(formData);
 
         if (exerciseError || !exerciseData) {
@@ -76,7 +65,7 @@ const CreateExerciseForm = ({
             return
         }
 
-        selectExercise(exerciseData);
+        exerciseCreated(exerciseData);
         setIsOpen(false);
     }
 
@@ -133,7 +122,6 @@ const CreateExerciseForm = ({
                                         {...field}
                                         id="instructions"
                                         name="instructions"
-                                        // placeholder="Enter instructions"
                                     />
                                 </FormControl>
                                 <FormMessage />

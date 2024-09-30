@@ -36,6 +36,10 @@ const creatorRoutes = [
     {
         label: "My Programs",
         href: "/creator/programs"
+    },
+    {
+        label: "My Exercises",
+        href: "/creator/exercises"
     }
 ]
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { ExistingExerciseSchema } from "@/app/schema";
+import { NewExerciseSchema } from "@/app/schema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { editExercise } from "@/server-actions/exercise";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -15,51 +16,59 @@ import { Tables } from "../../../database.types";
 import { useToast } from "../ui/use-toast";
 
 const EditExerciseForm = ({
-    workoutExercise,
-    setIsOpen,
-    updateExercise
+    exercise,
+    updateExercise,
+    setIsOpen
 }: {
-    workoutExercise: Tables<"workout_exercises">,
-    setIsOpen: Dispatch<SetStateAction<boolean>>,
-    updateExercise: (exercise: Tables<"workout_exercises">, exerciseNumber: number) => void
+    exercise: Tables<"exercises">,
+    updateExercise: (exercise: Tables<"exercises">) => void,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { toast } = useToast();
 
-    const form = useForm<z.infer<typeof ExistingExerciseSchema>>({
-        resolver: zodResolver(ExistingExerciseSchema),
+    const form = useForm<z.infer<typeof NewExerciseSchema>>({
+        resolver: zodResolver(NewExerciseSchema),
         defaultValues: {
-            sets: workoutExercise.sets,
-            reps: workoutExercise.reps
+            video: new File([], ""),
+            title: exercise.title,
+            instructions: exercise.instructions ?? ""
         }
     })
 
-    async function onSubmit(data: z.infer<typeof ExistingExerciseSchema>) {
+    async function onSubmit(data: z.infer<typeof NewExerciseSchema>) {
         setIsLoading(true);
 
         const formData = new FormData();
 
-        if (data.sets) {
-            formData.append("sets", data.sets.toString());
+        if (data.video && data.video.size > 0) {
+            formData.append("video", data.video);
         }
 
-        if (data.reps) {
-            formData.append("reps", data.reps.toString());
+        // title
+        if (data.title) {
+            formData.append("title", data.title);
         }
 
-        let { data: resultData, error: resultError } = await editExercise(workoutExercise, formData);
+        // description
+        if (data.instructions) {
+            formData.append("instructions", data.instructions);
+        }
 
-        if (resultError || !resultData) {
+        // Create exercise
+        let { data: exerciseData, error: exerciseError } = await editExercise(exercise, formData);
+
+        if (exerciseError || !exerciseData) {
             toast({
                 title: "An error occurred.",
-                description: resultError
+                description: exerciseError
             })
             return
         }
 
+        updateExercise(exerciseData);
         setIsOpen(false);
-        updateExercise(resultData, workoutExercise.exercise_number);
     }
 
     return (
@@ -68,15 +77,18 @@ const EditExerciseForm = ({
                 <div className="flex flex-col gap-3">
                     <FormField
                         control={form.control}
-                        name="sets"
+                        name="video"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Sets</FormLabel>
+                                <FormLabel>Replace Video</FormLabel>
                                 <FormControl>
                                     <Input
-                                        {...field}
-                                        id="sets"
-                                        name="sets"
+                                        id="video"
+                                        type="file"
+                                        accept=".mp4"
+                                        onChange={(event) => {
+                                            field.onChange(event.target.files ? event.target.files[0] : null)
+                                        }}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -85,15 +97,33 @@ const EditExerciseForm = ({
                     />
                     <FormField
                         control={form.control}
-                        name="reps"
+                        name="title"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Reps</FormLabel>
+                                <FormLabel>Title</FormLabel>
                                 <FormControl>
-                                <Input
+                                    <Input
                                         {...field}
-                                        id="reps"
-                                        name="reps"
+                                        id="title"
+                                        name="title"
+                                        // placeholder="Enter title"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="instructions"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Instructions</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        {...field}
+                                        id="instructions"
+                                        name="instructions"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -102,7 +132,7 @@ const EditExerciseForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Saving exercise" : "Save exercise"}
+                        {isLoading ? "Saving Exercise" : "Save Exercise"}
                     </Button>
                 </div>
             </form>
