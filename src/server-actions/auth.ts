@@ -31,14 +31,14 @@ export async function checkAuth() {
     }
 }
 
-export async function signIn(email: string, password: string, fromLandingPage: boolean) {
+export async function signIn(email: string, password: string) {
     const supabase = createClient()
 
     const { error } = await supabase.auth.signInWithPassword({ email: email, password: password })
 
     if (error) {
         return {
-            errorMessage: error.message
+            error: error.message
         }
     }
 
@@ -46,7 +46,7 @@ export async function signIn(email: string, password: string, fromLandingPage: b
 
     if (!user) {
         return {
-            errorMessage: "Couldn't get current user."
+            error: "Couldn't get current user."
         }
     }
 
@@ -58,16 +58,20 @@ export async function signIn(email: string, password: string, fromLandingPage: b
 
     if (userError && !userData) {
         return {
-            errorMessage: userError.message
+            error: userError.message
         }
     }
 
-    if (fromLandingPage) {
-        if (userData.payments_enabled) {
-            return redirect("/creator/team");
-        } else {
-            return redirect("/home");
-        }
+    return {
+        data: userData
+    }
+}
+
+export async function redirectAfterLogin(createdTeam: boolean) {
+    if (createdTeam) {
+        return redirect("/creator/team");
+    } else {
+        return redirect("/home");
     }
 }
 
@@ -82,13 +86,13 @@ export async function createAccount(fullName: string, email: string, username: s
 
     if (usernameError) {
         return {
-            errorMessage: usernameError.message
+            error: usernameError.message
         }
     }
 
     if (usernameData.length > 0) {
         return {
-            errorMessage: "Username is already taken."
+            error: "Username is already taken."
         }
     }
 
@@ -98,33 +102,37 @@ export async function createAccount(fullName: string, email: string, username: s
         password: password,
     })
 
-    if (authError) {
+    if (authError && !authData) {
         return {
-            errorMessage: authError.message
+            error: authError.message
         }
     }
 
-    if (authData.user !== null) {
-        // Create user in db
-        const { data: userData, error: userError } = await supabase
-            .from('users')
-            .insert({
-                id: authData.user.id,
-                email: email,
-                full_name: fullName,
-                username: username
-            })
-            .select()
-
-        if (userError && !userData) {
-            return {
-                errorMessage: userError.message
-            }
+    if (!authData.user) {
+        return {
+            error: "Couldn't get user from auth."
         }
+    }
 
-        if (fromLandingPage) {
-            return redirect("/home");
+    // Create user in db
+    const { data: userData, error: userError } = await supabase
+        .from('users')
+        .insert({
+            id: authData.user.id,
+            email: email,
+            full_name: fullName,
+            username: username
+        })
+        .select()
+
+    if (userError && !userData) {
+        return {
+            error: userError.message
         }
+    }
+
+    return {
+        data: userData
     }
 }
 

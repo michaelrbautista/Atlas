@@ -1,12 +1,16 @@
+"use client";
+
 import Logo from "@/components/misc/Logo";
 import SidebarRoutes from "./SidebarRoutes";
 import SignInButton from "../auth/SignInButton";
 import CreateAccountButton from "../auth/CreateAccountButton";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import UserInfo from "../auth/UserInfo";
 import UserDropdown from "./UserDropdown";
 import CreateTeamSidebarButton from "./CreateTeamSidebarButton";
 import { updateStripePaymentsEnabled } from "@/server-actions/creator";
+import { useUserContext } from "@/context";
+import { useEffect } from "react";
 
 export type UserRole = "user" | "creator";
 
@@ -50,50 +54,18 @@ if (process.env.NODE_ENV === "production") {
     url = process.env.TEST_URL as string
 }
 
-const Sidebar = async ({
+const Sidebar = ({
     userRole
 }: {
     userRole: UserRole
 }) => {
-    // Get user ifo
-    const supabase = createClient();
+    // Get user from context
+    const { user: contextUser, team: contextTeam } = useUserContext();
 
-    const { data: { user } } = await supabase.auth.getUser();
-
-    let currentUser = null
     let routes = anonRoutes;
 
-    if (user) {
-        const { data: userData, error: userError } = await supabase
-            .from("users")
-            .select()
-            .eq("id", user.id)
-            .single()
-
-        if (userData && !userError) {
-            currentUser = userData
-
-            if (userData.stripe_account_id) {
-                fetch(`${url}/api/get-stripe-account`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ stripeAccountId: userData.stripe_account_id })
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                    // Check if payments are enabled/disabled from stripe, updating db accordingly
-                    const stripeResponse = data.charges_enabled && data.details_submitted && data.payouts_enabled;
-
-                    if (stripeResponse != userData.payments_enabled && userData.stripe_account_id) {
-                        updateStripePaymentsEnabled(userData.stripe_account_id, stripeResponse);
-                    }
-                });
-            }
-        }
-
-        if (userRole == "creator") {
+    if (contextUser) {
+        if (contextTeam) {
             routes = creatorRoutes
         } else {
             routes = userRoutes
@@ -105,14 +77,14 @@ const Sidebar = async ({
             <Logo></Logo>
             <div className="flex flex-col justify-between h-full">
                 <SidebarRoutes routes={routes}></SidebarRoutes>
-                {(currentUser) ? (
+                {(contextUser) ? (
                     <div className="w-full flex flex-col px-5 gap-5">
-                        {(!currentUser.team_id &&
+                        {(!contextUser.team_id &&
                             <CreateTeamSidebarButton></CreateTeamSidebarButton>
                         )}
                         <div className="flex flex-row justify-between items-center">
-                            <UserInfo fullName={currentUser.full_name} username={currentUser.username}></UserInfo>
-                            <UserDropdown teamId={currentUser.team_id != null} userRole={userRole}></UserDropdown>
+                            <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
+                            <UserDropdown teamId={contextUser.team_id != null} userRole={userRole}></UserDropdown>
                         </div>
                     </div>
                 ) : (

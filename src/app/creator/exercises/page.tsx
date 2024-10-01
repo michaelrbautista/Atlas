@@ -16,8 +16,7 @@ import {
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "@/components/ui/dialog"
 import { Tables } from "../../../../database.types";
 import { Button } from "@/components/ui/button";
@@ -82,7 +81,6 @@ const MyExercises = () => {
                     title: "An error occurred.",
                     description: error.message
                 })
-                return
             }
         }
 
@@ -103,11 +101,6 @@ const MyExercises = () => {
 
         setExercises(exercises => exercises.filter(exercise => exercise.id !== exerciseId));
     }
-
-    const formatter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-    });
 
     return (
         <div className="h-full w-full px-5 py-20 sm:py-10">
@@ -136,7 +129,7 @@ const MyExercises = () => {
                                     ) : (
                                         <Dialog open={viewVideoIsOpen} onOpenChange={setViewVideoIsOpen}>
                                             <Button onClick={() => {setViewVideoIsOpen(true)}} variant="secondary">
-                                                View Video
+                                                Play Video
                                             </Button>
                                             <DialogContent>
                                                 <DialogHeader>

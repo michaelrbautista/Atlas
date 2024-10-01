@@ -6,7 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createAccount } from "../../server-actions/auth";
+import { createAccount, redirectAfterLogin } from "../../server-actions/auth";
 import { CreateAccountSchema } from "@/app/schema";
 import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
@@ -49,7 +49,7 @@ const CreateAccountForm = ({
             return
         }
 
-        let error = await createAccount(
+        const { data: createAccountData, error: createAccountError } = await createAccount(
             data.fullName, 
             data.email, 
             data.username, 
@@ -57,13 +57,17 @@ const CreateAccountForm = ({
             fromLandingPage
         );
 
-        if (error) {
+        if (createAccountError && !createAccountData) {
             toast({
                 title: "An error occurred.",
-                description: error.errorMessage
+                description: createAccountError
             })
             setIsLoading(false);
             return
+        }
+
+        if (fromLandingPage) {
+            redirectAfterLogin(false);
         }
 
         setIsOpen(false);

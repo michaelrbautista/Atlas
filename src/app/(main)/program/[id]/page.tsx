@@ -74,10 +74,7 @@ const Program = ({
             const { data: { user }} = await supabase.auth.getUser();
 
             if (!user) {
-                toast({
-                    title: "An error occurred.",
-                    description: "No user is logged in or there was an error getting current auth user."
-                })
+                setIsLoading(false);
                 return
             }
 

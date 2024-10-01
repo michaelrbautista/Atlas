@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { signIn } from "../../server-actions/auth";
+import { redirectAfterLogin, signIn } from "../../server-actions/auth";
 import { SignInSchema } from "@/app/schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { useToast } from "../ui/use-toast";
+import { useUserContext } from "@/context";
 
 const SignInForm = ({
     fromLandingPage,
@@ -21,6 +22,8 @@ const SignInForm = ({
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+
+    const { login } = useUserContext();
 
     const { toast } = useToast();
 
@@ -35,19 +38,24 @@ const SignInForm = ({
     async function onSubmit(data: z.infer<typeof SignInSchema>) {
         setIsLoading(true);
 
-        let error = await signIn(
+        let { data: loginData, error: loginError } = await signIn(
             data.email,
-            data.password,
-            fromLandingPage
+            data.password
         );
 
-        if (error) {
+        if (loginError && !loginData) {
             toast({
                 title: "An error occurred.",
-                description: error.errorMessage
+                description: loginError
             })
             setIsLoading(false);
             return
+        }
+
+        login(loginData!.id);
+
+        if (fromLandingPage) {
+            redirectAfterLogin(loginData!.team_id !== null)
         }
 
         setIsOpen(false);

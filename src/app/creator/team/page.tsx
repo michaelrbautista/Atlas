@@ -10,9 +10,12 @@ import Image from "next/image";
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import EditTeamButton from "@/components/team/EditTeamButton";
+import { copyTeamUrl } from "@/server-actions/team";
 
 const TeamPage = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [copyButtonText, setCopyButtonText] = useState("Copy Link to Team");
     const [team, setTeam] = useState<Tables<"teams">>();
     const [teamImageUrl, setTeamImageUrl] = useState("");
 
@@ -83,6 +86,22 @@ const TeamPage = () => {
         getTeam();
     }, []);
 
+    const updateTeam = (updatedTeam: Tables<"teams">) => {
+        setTeam(updatedTeam);
+    }
+
+    const copyTeamLink = async () => {
+        const link = await copyTeamUrl(team!.id);
+
+        navigator.clipboard.writeText(link);
+
+        setCopyButtonText("Team Link Copied");
+
+        setTimeout(() => {
+            setCopyButtonText("Copy Link to Team");
+        }, 2000);
+    }
+
     if (isLoading || !team) {
         return (
             <div className="h-full w-full flex items-center justify-center">
@@ -95,14 +114,14 @@ const TeamPage = () => {
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(teamImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[200px] rounded-full flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[150px] w-[150px] rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            className="h-[200px] w-[200px] rounded-full"
-                            height={200}
-                            width={200}
+                            className="h-[150px] w-[150px] rounded-full"
+                            height={150}
+                            width={150}
                             src={teamImageUrl}
                             alt="programImage"
                             style={{objectFit: "cover"}}
@@ -114,7 +133,17 @@ const TeamPage = () => {
                         <p className="text-secondaryText text-base">{team.description}</p>
                     </div>
                 </div>
-                {/* <Button variant="secondary" size="full">Edit Team</Button> */}
+                <div className="flex flex-col lg:flex-row gap-5">
+                    <EditTeamButton team={team} updateTeam={updateTeam} />
+                    <Button
+                        onClick={async () => {
+                            copyTeamLink();
+                        }}
+                        variant="secondary"
+                        size="full">
+                        {copyButtonText}
+                    </Button>
+                </div>
                 <Separator />
             </div>
         )

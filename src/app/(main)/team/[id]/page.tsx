@@ -84,14 +84,14 @@ const Team = ({
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(teamImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[200px] rounded-full flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[150px] w-[150px] rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            className="h-[200px] w-[200px] rounded-full"
-                            height={200}
-                            width={200}
+                            className="h-[150px] w-[150px] rounded-full"
+                            height={150}
+                            width={150}
                             src={teamImageUrl}
                             alt="programImage"
                             style={{objectFit: "cover"}}
@@ -103,14 +103,16 @@ const Team = ({
                         <p className="text-secondaryText text-base">{team.description}</p>
                     </div>
                 </div>
-                <Button variant="secondary" size="full">Custom Program</Button>
+                {/* <Button variant="secondary" size="full">Custom Program</Button> */}
                 {/* <div className="flex flex-col lg:flex-row gap-3">
                     <Button variant="systemBlue" size="full">Join Team</Button>
                     <Button variant="secondary" size="full">Custom Program</Button>
                 </div> */}
-                <Separator />
-                <p className="w-full text-foreground text-2xl font-bold">Programs</p>
-                <ProgramList isCreator={false} programIds={programIds} />
+                {/* <Separator /> */}
+                <div className="flex flex-col gap-2 sm:gap-5">
+                    <p className="w-full text-foreground text-2xl font-bold">Programs</p>
+                    <ProgramList isCreator={false} programIds={programIds} />
+                </div>
             </div>
         )
     }

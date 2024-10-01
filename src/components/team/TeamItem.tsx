@@ -31,11 +31,11 @@ const TeamItem = ({
                         priority
                     />
                 ) : (
-                    <div className="w-full bg-systemGray5 flex items-center justify-center">
+                    <div className="h-24 w-24 rounded-full bg-systemGray5 flex items-center justify-center">
                         <Users className="text-secondaryText" />
                     </div>
                 )}
-                <div className="flex flex-col justify-center h-full w-full p-2 sm:p-3">
+                <div className="flex flex-col justify-center h-full p-2 sm:p-3">
                     <h1 className="text-primaryText font-bold text-xl">{team.name}</h1>
                     <h1 className="text-secondaryText font-medium text-base line-clamp-2">{team.description}</h1>
                 </div>

@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster";
+import UserContextProvider from "@/context";
 
 const fontSans = FontSans({
   subsets: ["latin"], 
@@ -26,8 +27,10 @@ export default function RootLayout({
         "bg-systemBackground h-full font-sans antialiased overscroll-none", 
         fontSans.variable
         )}>
-          {children}
-          <Toaster />
+          <UserContextProvider>
+            {children}
+            <Toaster />
+          </UserContextProvider>
       </body>
     </html>
   );

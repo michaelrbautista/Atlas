@@ -85,7 +85,7 @@ const ProgramItem = ({
 
             setCreatorId(creatorData.id);
             
-            setIsLoading(false);
+            setIsLoading(false); 
         }
 
         getProgram();
@@ -93,14 +93,14 @@ const ProgramItem = ({
 
     if (isLoading || !program) {
         return (
-            <div className="bg-systemGray4 rounded-xl">
-                <div className="flex flex-col h-full justify-end">
-                    <div className="relative rounded-t-xl h-full aspect-video overflow-hidden">
-                        <Skeleton className="w-full h-full" />
-                    </div>
-                    <div className="flex flex-col p-2 sm:p-3">
-                        <Skeleton className="w-full h-7"></Skeleton>
-                        <Skeleton className="w-full h-5 sm:h-6"></Skeleton>
+            <div className="flex flex-col gap-5 pb-5">
+                <Separator />
+                <div className="flex flex-col md:flex-row md:min-w-[918px] gap-5">
+                    <Skeleton className="h-[200px] w-[300px] rounded-xl shrink-0"/>
+                    <div className="flex flex-col w-full gap-2">
+                        <Skeleton className="h-7"></Skeleton>
+                        <Skeleton className="h-5 sm:h-6"></Skeleton>
+                        <Skeleton className="h-5 sm:h-6"></Skeleton>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@ const ProgramItem = ({
                 <Link href={`/program/${programId}`} className="flex flex-col md:flex-row md:min-w-[918px] gap-5">
                     {program.image_url ? (
                             <Image
-                                className="h-[200px] w-[300px] rounded-xl"
+                                className="h-[200px] w-[300px] rounded-xl shrink-0"
                                 height={200}
                                 width={300}
                                 src={program.image_url}
@@ -132,31 +132,6 @@ const ProgramItem = ({
                         </div>
                 </Link>
             </div>
-            // <Link
-            //     href={isCreator ? `/creator/program/${programId}` : `/program/${programId}`}
-            //     className="bg-systemGray6 aspect-video rounded-lg"
-            // >
-            //     <div className="relative h-full rounded-t-lg overflow-hidden">
-            //         {program.image_url ? (
-            //             <Image
-            //                 fill
-            //                 sizes="(max-width: 430px) 390px, (max-width: 830px) 241px, (max-width: 1190px) 418px"
-            //                 src={imageUrl}
-            //                 alt="programImage"
-            //                 style={{objectFit: "cover"}}
-            //                 priority
-            //             />
-            //         ) : (
-            //             <div className="w-full h-full bg-systemGray5 flex items-center justify-center">
-            //                 <Dumbbell className="text-secondaryText" />
-            //             </div>
-            //         )}
-            //     </div>
-            //     <div className="flex flex-col p-2 sm:p-3">
-            //         <h1 className="text-primaryText font-bold text-xl">{program.title}</h1>
-            //         <h1 className="text-secondaryText font-medium text-base">{`${teamName}`}</h1>
-            //     </div>
-            // </Link>
         )
     }
 };
