@@ -1,6 +1,6 @@
 import MobileSidebarItem from "./MobileSidebarItem";
 
-const MobileSidebarRoutes = async ({
+const MobileSidebarRoutes = ({
     routes
 }: {
     routes: {

@@ -149,7 +149,9 @@ export async function getAllTeams() {
             }
         }
 
-        return data
+        return {
+            data: data
+        }
     } else {
         const { data, error } = await supabase
             .from("teams")
@@ -161,7 +163,9 @@ export async function getAllTeams() {
             }
         }
 
-        return data
+        return {
+            data: data
+        }
     }
 }
 

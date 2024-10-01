@@ -65,7 +65,7 @@ const Sidebar = ({
     let routes = anonRoutes;
 
     if (contextUser) {
-        if (contextTeam) {
+        if (contextTeam && userRole == "creator") {
             routes = creatorRoutes
         } else {
             routes = userRoutes

@@ -1,8 +1,11 @@
+"use client";
+
 import { Ellipsis, Menu } from "lucide-react";
 
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
@@ -13,9 +16,10 @@ import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
 import { Button } from "@/components/ui/button";
 import UserInfo from "../../auth/UserInfo";
-import { createClient } from "@/utils/supabase/server";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import LogoutButton from "../../auth/LogoutButton";
+import { useUserContext } from "@/context";
+import UserDropdown from "../UserDropdown";
 
 type UserRole = "user" | "creator";
 
@@ -48,26 +52,18 @@ const creatorRoutes = [
     }
 ]
 
-const MobileSidebar = async ({
+const MobileSidebar = ({
     userRole
 }: {
     userRole: UserRole
 }) => {
-    const supabase = createClient();
+    // Get user from context
+    const { user: contextUser, team: contextTeam } = useUserContext();
 
-    const { data: { user }} = await supabase.auth.getUser();
-
-    let currentUser = null
     let routes = anonRoutes;
 
-    if (user) {
-        currentUser = await supabase
-            .from("users")
-            .select()
-            .eq("id", user.id)
-            .single()
-
-        if (userRole == "creator") {
+    if (contextUser) {
+        if (contextTeam && userRole == "creator") {
             routes = creatorRoutes
         } else {
             routes = userRoutes
@@ -81,30 +77,16 @@ const MobileSidebar = async ({
                     <Menu color="white"/>
                 </SheetTrigger>
                 <SheetTitle hidden>Menu</SheetTitle>
+                <SheetDescription hidden></SheetDescription>
                 <SheetContent side="left" className="p-0 border-0 w-80 bg-background border-r-[1px] flex flex-col justify-between">
                     <div className="flex flex-col h-full pb-5">
                         <Logo></Logo>
                         <div className="flex flex-col h-full justify-between">
                             <MobileSidebarRoutes routes={routes}></MobileSidebarRoutes>
-                            {(currentUser !== null && currentUser.data !== null) ? (
+                            {(contextUser !== null) ? (
                                 <div className="px-5 flex flex-row justify-between items-center">
-                                <UserInfo fullName={currentUser.data.full_name} username={currentUser.data.username}></UserInfo>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon">
-                                                <Ellipsis className="font-primaryText"></Ellipsis>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem className="p-0">
-                                                <button className="w-full h-full px-2 py-1.5 text-start">Switch to creator view</button>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator></DropdownMenuSeparator>
-                                            <DropdownMenuItem className="p-0">
-                                                <LogoutButton></LogoutButton>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
+                                <UserDropdown teamId={contextUser.team_id != null} userRole={userRole}></UserDropdown>
                                 </div>
                             ) : (
                                 <div className="px-5 flex flex-col gap-5">
