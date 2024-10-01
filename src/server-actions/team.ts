@@ -137,11 +137,30 @@ export async function copyTeamUrl(teamId: string) {
 export async function getAllTeams() {
     const supabase = createClient();
 
-    const { data } = await supabase
-        .from("teams")
-        .select()
+    if (process.env.NODE_ENV === "production") {
+        const { data, error } = await supabase
+            .from("teams")
+            .select()
+            .neq("id", "cd44e7f8-c584-4af3-abd2-870aa3fbc1be")
 
-    if (data) {
+        if (error && !data) {
+            return {
+                error: error.message
+            }
+        }
+
+        return data
+    } else {
+        const { data, error } = await supabase
+            .from("teams")
+            .select()
+
+        if (error && !data) {
+            return {
+                error: error.message
+            }
+        }
+
         return data
     }
 }
