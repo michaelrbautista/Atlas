@@ -109,26 +109,26 @@ const ProgramItem = ({
         return (
             <div className="flex flex-col gap-5 pb-5">
                 <Separator />
-                <Link href={`/program/${programId}`} className="flex flex-col md:flex-row md:min-w-[918px] gap-5">
+                <Link href={`/program/${programId}`} className="flex flex-col md:flex-row gap-5">
                     {program.image_url ? (
                             <Image
-                                className="h-[200px] w-[300px] rounded-xl shrink-0"
-                                height={200}
-                                width={300}
+                                className="h-[120px] w-[200px] rounded-xl shrink-0"
+                                height={120}
+                                width={200}
                                 src={program.image_url}
                                 alt="programImage"
                                 style={{objectFit: "cover"}}
                                 priority
                             />
                         ) : (
-                            <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
+                            <div className="bg-systemGray5 shrink-0 h-[120px] w-[200px] rounded-xl flex items-center justify-center">
                                 <Dumbbell className="text-secondaryText" />
                             </div>
                         )}
                         <div className="flex flex-col w-full">
                             <h1 className="text-primaryText font-bold text-xl">{program.title}</h1>
                             <h1 className="text-secondaryText font-medium text-base">{team?.name}</h1>
-                            <h1 className="text-secondaryText font-medium text-base line-clamp-4">{team?.description}</h1>
+                            <h1 className="text-secondaryText font-medium text-base line-clamp-4">{program.description}</h1>
                         </div>
                 </Link>
             </div>

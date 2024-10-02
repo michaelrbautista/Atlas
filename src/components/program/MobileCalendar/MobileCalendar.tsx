@@ -100,7 +100,7 @@ const MobileCalendar = ({
     }
 
     return (
-        <div className="flex flex-col lg:flex-row lg:gap-20">
+        <div className="flex flex-col">
             <div className="flex flex-col items-center gap-5 pb-10">
                 <div className="flex flex-row items-center justify-center gap-5">
                     <Button

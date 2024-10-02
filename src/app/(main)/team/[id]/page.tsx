@@ -80,7 +80,7 @@ const Team = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
+            <div className="flex flex-col w-full max-w-2xl px-5 py-10 gap-10 sm:gap-10">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(teamImageUrl == "") ? (
                         // Replace with placeholder image

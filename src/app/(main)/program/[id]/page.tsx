@@ -127,7 +127,7 @@ const Program = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-5xl px-5 py-10 gap-10 sm:gap-10">
+            <div className="flex flex-col w-full max-w-2xl px-5 py-10 gap-10 sm:gap-10">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5 w-full">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
@@ -150,16 +150,16 @@ const Program = ({
                         <div className="flex flex-col gap-2">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
                             <p className="text-primaryText text-sm">{program?.description}</p>
-                            {!isPurchased && (
-                                isLoggedIn ? (
-                                    <PurchaseProgramButton program={program}/>
-                                ) : (
-                                    <LoggedOutPurchaseButton program={program} />
-                                )
-                            )}
                         </div>
                     </div>
                 </div>
+                {!isPurchased && (
+                    isLoggedIn ? (
+                        <PurchaseProgramButton program={program}/>
+                    ) : (
+                        <LoggedOutPurchaseButton program={program} />
+                    )
+                )}
                 {isPurchased && (
                     <MobileCalendar
                         programId={program.id}
