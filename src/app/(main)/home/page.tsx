@@ -7,7 +7,7 @@ import { Tables } from "../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
-const Home = async () => {
+const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [teams, setTeams] = useState<Tables<"teams">[]>([]);
 
