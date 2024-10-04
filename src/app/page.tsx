@@ -69,6 +69,9 @@ export default function Home() {
                     <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                   </DialogContent>
               </Dialog>
+              <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
+                  <Image layout="intrinsic" src="/appstoreicon.svg" width={150} height={150} alt="web"></Image>
+              </a>
             </div>
           </div>
           <div className="flex flex-col md:flex-row py-20 justify-center items-center w-4/5 max-w-3xl">
