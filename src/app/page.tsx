@@ -54,7 +54,7 @@ export default function Home() {
         <div className="pt-40 pb-20 flex flex-col gap-2 justify-center items-center">
           <div className="flex flex-col items-center gap-4 w-4/5 sm:w-2/4 max-w-3xl">
             <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
-              Create your own training platform.
+              The platform for fitness communities.
             </p>
             <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
               Share health and fitness content with your community and grow your online fitness business.
@@ -79,9 +79,6 @@ export default function Home() {
               <Image layout="intrinsic" src="/landingPageImage.png" width={800} height={512} alt="web"></Image>
             </div>
           </div>
-          <p className="text-secondaryText text-xl sm:text-3xl font-bold text-center pb-20 w-4/5 sm:w-2/4 max-w-3xl">
-            <span className="text-primaryText">Atlas is a platform designed for fitness communities.</span> Give your community paid access to training programs, nutrition guidance, and more.
-          </p>
           <div className="flex flex-col lg:flex-row gap-5 w-4/5 sm:w-2/4 max-w-3xl">
               <div className="bg-systemGray5 p-4 rounded-xl flex flex-col gap-2 sm:gap-2 items-center">
                 <p className="min-w-10">🏃‍♂️ <span className="font-bold text-base">Training Programs</span></p>
