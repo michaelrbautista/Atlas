@@ -76,7 +76,7 @@ const Exercise = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-2xl px-5 py-20 sm:py-10 gap-3 sm:gap-10">
+            <div className="flex flex-col w-full sm:max-w-lg px-5 py-20 sm:py-10 gap-3 sm:gap-10">
                 <div className="flex flex-col gap-5">
                     {exercise.video_url &&
                     <div className="relative w-full aspect-video flex justify-center">

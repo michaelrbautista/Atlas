@@ -1,6 +1,4 @@
 import Image from "next/image"
-import Link from "next/link"
-
 
 const ReturnPage = async () => {
     return (

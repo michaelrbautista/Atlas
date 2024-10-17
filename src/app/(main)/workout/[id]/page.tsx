@@ -64,10 +64,6 @@ const Workout = ({
         getWorkout();
     }, []);
 
-    const addNewExercise = (exercise: Tables<"workout_exercises">) => {
-        setExercises(exercises => [...exercises, exercise]);
-    }
-
     if (isLoading) {
         return (
             <div className="h-full w-full flex items-center justify-center">
@@ -76,7 +72,7 @@ const Workout = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full sm:max-w-2xl px-5 py-20 sm:py-10 gap-3 sm:gap-10">
+            <div className="flex flex-col w-full sm:max-w-lg px-5 py-20 sm:py-10 gap-3 sm:gap-10">
                 <div>
                     <p className="text-primaryText text-3xl font-bold">{workout?.title}</p>
                     <p className="text-primaryText py-2">{workout?.description}</p>

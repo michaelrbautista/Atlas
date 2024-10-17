@@ -10,9 +10,9 @@ export default function UserLayout({
 }>) {
   return (
     <div className="flex">
-        <Sidebar userRole="creator"></Sidebar>
+        <Sidebar></Sidebar>
         <div className="flex flex-col w-full items-start sm:items-center">
-          <MobileSidebar userRole="creator"></MobileSidebar>
+          <MobileSidebar></MobileSidebar>
           {children}
         </div>
     </div>

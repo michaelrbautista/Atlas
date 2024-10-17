@@ -6,10 +6,9 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 import Logo from "@/components/misc/Logo";
 
-import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { checkAuth } from "@/server-actions/auth";
 
 export default function Home() {
@@ -51,44 +50,68 @@ export default function Home() {
               </DialogContent>
           </Dialog>
         </div>
-        <div className="pt-40 pb-20 flex flex-col gap-2 justify-center items-center">
-          <div className="flex flex-col items-center gap-4 w-4/5 sm:w-2/4 max-w-3xl">
-            <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
-              The platform for fitness communities.
-            </p>
-            <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
-              Share health and fitness content with your community and grow your online fitness business.
-            </p>
-            <div className="flex flex-col items-center justify-center w-full sm:max-w-lg pt-4 gap-5">
+        <div className="pt-40 pb-40 flex flex-col justify-center items-center">
+          <div className="flex flex-col items-center gap-24 w-4/5 sm:w-2/4 max-w-3xl">
+            <div className="flex flex-col items-center gap-5">
+              <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
+                The platform for fitness communities.
+              </p>
+              <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
+                Grow your online fitness business by giving your followers paid access to training programs.
+              </p>
               <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
-                  <DialogTrigger asChild>
-                    <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Create Account</Button>
+                  <DialogTrigger>
+                    <Button variant="systemBlue" size="default">Get Started For Free</Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-96 sm:max-w-md">
                     <DialogTitle hidden></DialogTitle>
                     <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                   </DialogContent>
               </Dialog>
+            </div>
+            <Image
+              layout="intrinsic"
+              src="/landingPageWeb.png"
+              width={800}
+              height={512}
+              alt="web"
+            />
+            <div className="flex flex-col items-center gap-5">
+              <p className="text-primaryText text-xl sm:text-3xl font-black text-center">
+                Let your community follow your training programs in the iOS app.
+              </p>
               <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
-                  <Image layout="intrinsic" src="/appstoreicon.svg" width={150} height={150} alt="web"></Image>
+                  <Image
+                    layout="intrinsic"
+                    src="/appstoreicon.svg"
+                    width={150}
+                    height={150}
+                    alt="web"
+                  />
               </a>
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row py-20 justify-center items-center w-4/5 max-w-3xl">
-            <div className="">
-              <Image layout="intrinsic" src="/landingPageImage.png" width={800} height={512} alt="web"></Image>
+            <Image
+              layout="intrinsic"
+              src="/landingPageMobile.png"
+              width={800}
+              height={512}
+              alt="web"
+            />
+            <div className="flex flex-col items-center gap-5">
+              <p className="text-primaryText text-xl sm:text-3xl font-black text-center">
+                Create an account and start selling your training programs for free.
+              </p>
+              <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
+                  <DialogTrigger asChild>
+                    <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Get Started For Free</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-96 sm:max-w-md">
+                    <DialogTitle hidden></DialogTitle>
+                    <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
+                  </DialogContent>
+              </Dialog>
             </div>
           </div>
-          <div className="flex flex-col lg:flex-row gap-5 w-4/5 sm:w-2/4 max-w-3xl">
-              <div className="bg-systemGray5 p-4 rounded-xl flex flex-col gap-2 sm:gap-2 items-center">
-                <p className="min-w-10">🏃‍♂️ <span className="font-bold text-base">Training Programs</span></p>
-                <p className="text-secondaryText font-medium text-sm sm:text-lg text-center">Sell structured training programs with detailed workouts and exercises.</p>
-              </div>
-              <div className="bg-systemGray5 p-4 rounded-xl flex flex-col gap-2 sm:gap-2 items-center">
-                <p className="min-w-10">📱 <span className="font-bold text-base">Easy Access</span></p>
-                <p className="text-secondaryText font-medium text-sm sm:text-lg text-center">Give your followers easy access to your content in the mobile app.</p>
-              </div>
-            </div>
         </div>
       </div>
     )

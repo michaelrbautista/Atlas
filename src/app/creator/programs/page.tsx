@@ -145,9 +145,11 @@ const MyPrograms = () => {
                                 <TableCell>{program.title}</TableCell>
                                 <TableCell>{program.description}</TableCell>
                                 <TableCell>{program.weeks}</TableCell>
-                                <TableCell>{formatter.format(program.price)}</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" size="sm" asChild>
+                                    {program.free ? "Free" : formatter.format(program.price)}
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="secondary" size="sm" asChild>
                                         <Link
                                             href={`/creator/program/${program.id}`}
                                             className="cursor-pointer"

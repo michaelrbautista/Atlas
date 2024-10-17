@@ -11,6 +11,7 @@ import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import ProgramList from "@/components/program/ProgramList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { joinTeam, leaveTeam } from "@/server-actions/team";
 
 const Team = ({ 
     params
@@ -18,7 +19,9 @@ const Team = ({
     params: { id: string }
 }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isJoining, setIsJoining] = useState(false);
     const [team, setTeam] = useState<Tables<"teams">>();
+    const [isJoined, setIsJoined] = useState(false);
     const [teamImageUrl, setTeamImageUrl] = useState("");
     const [programIds, setProgramIds] = useState<string[]>([]);
 
@@ -27,6 +30,16 @@ const Team = ({
     useEffect(() => {
         const getTeam = async () => {
             const supabase = createClient();
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get current user."
+                })
+                return
+            }
 
             const { data: teamData, error: teamError } = await supabase
                 .from("teams")
@@ -50,6 +63,25 @@ const Team = ({
                 setTeamImageUrl(teamImage);
             }
 
+            // Check if user joined team
+            const { data: joinedData, error: joinedError } = await supabase
+                .from("joined_teams")
+                .select()
+                .eq("user_id", user.id)
+                .eq("team_id", teamData.id)
+
+            if (joinedError && !joinedData) {
+                toast({
+                    title: "An error occurred.",
+                    description: joinedError.message
+                })
+                return
+            }
+
+            if (joinedData.length > 0) {
+                setIsJoined(true);
+            }
+
             // Get team programs
             const { data: programsData, error: programsError } = await supabase
                 .from("programs")
@@ -71,6 +103,38 @@ const Team = ({
 
         getTeam();
     }, []);
+
+    const joinTeamClient = async () => {
+        setIsJoining(true);
+
+        let { data, error } = await joinTeam(team!.id);
+
+        if (error && !data) {
+            toast({
+                title: "An error occurred.",
+                description: error
+            })
+            return
+        }
+
+        setIsJoined(true);
+        setIsJoining(false);
+    }
+
+    const leaveTeamClient = async () => {
+        let response = await leaveTeam(team!.id);
+
+        if (response) {
+            console.log(response);
+            toast({
+                title: "An error occurred.",
+                description: "Couldn't leave team."
+            })
+            return
+        }
+
+        setIsJoined(false);
+    }
 
     if (isLoading || !team) {
         return (
@@ -103,11 +167,19 @@ const Team = ({
                         <p className="text-secondaryText text-base">{team.description}</p>
                     </div>
                 </div>
-                {/* <Button variant="secondary" size="full">Custom Program</Button> */}
-                {/* <div className="flex flex-col lg:flex-row gap-3">
-                    <Button variant="systemBlue" size="full">Join Team</Button>
-                    <Button variant="secondary" size="full">Custom Program</Button>
-                </div> */}
+                <div className="flex flex-col lg:flex-row gap-3">
+                    {isJoined ? 
+                        <Button onClick={leaveTeamClient} variant="secondary" size="full" className="mt-3">
+                            Joined
+                        </Button>
+                     : 
+                        <Button onClick={joinTeamClient} variant={isJoining ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isJoining}>
+                            {isJoining && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isJoining ? "Joining Team" : "Join Team"}
+                        </Button>
+                    }
+                    {/* <Button variant="secondary" size="full">Custom Program</Button> */}
+                </div>
                 {/* <Separator /> */}
                 <div className="flex flex-col gap-2 sm:gap-5">
                     <p className="w-full text-foreground text-2xl font-bold">Programs</p>

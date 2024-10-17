@@ -4,6 +4,64 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export async function leaveTeam(teamId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get current user."
+        }
+    }
+
+    // Leave team
+    const response = await supabase
+        .from("joined_teams")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("team_id", teamId)
+
+    if (response.error) {
+        return {
+            error: response.error
+        }
+    }
+}
+
+export async function joinTeam(teamId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get current user."
+        }
+    }
+
+    // Join team
+    const { data: teamData, error: teamError } = await supabase
+        .from("joined_teams")
+        .insert({
+            user_id: user.id,
+            team_id: teamId,
+            tier: "free"
+        })
+        .select()
+        .single()
+
+    if (teamError && !teamData) {
+        return {
+            error: teamError.message
+        }
+    }
+
+    return {
+        data: teamData
+    }
+}
+
 export async function editTeam(team: Tables<"teams">, formData: FormData) {
     const supabase = createClient();
 
@@ -240,7 +298,6 @@ export async function createTeam(formData: FormData) {
         .insert(newTeam)
         .select()
         .single()
-
     
     if (teamError && !teamData) {
         return {

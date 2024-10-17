@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       exercises: {
         Row: {
+          category: string | null
           created_at: string
           created_by: string
           id: string
@@ -20,6 +21,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           created_by?: string
           id?: string
@@ -29,6 +31,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           created_by?: string
           id?: string
@@ -47,12 +50,52 @@ export type Database = {
           },
         ]
       }
+      joined_teams: {
+        Row: {
+          created_at: string
+          id: string
+          team_id: string
+          tier: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          team_id?: string
+          tier: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          team_id?: string
+          tier?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "joined_teams_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "joined_teams_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       programs: {
         Row: {
           created_at: string
           created_by: string
           currency: string
           description: string | null
+          free: boolean
           id: string
           image_path: string | null
           image_url: string | null
@@ -66,10 +109,11 @@ export type Database = {
           created_by?: string
           currency?: string
           description?: string | null
+          free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
-          price: number
+          price?: number
           team_id: string
           title: string
           weeks?: number
@@ -79,6 +123,7 @@ export type Database = {
           created_by?: string
           currency?: string
           description?: string | null
+          free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
@@ -128,6 +173,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "purchased_programs_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "purchased_programs_purchased_by_fkey"
             columns: ["purchased_by"]
             isOneToOne: false
@@ -139,13 +191,6 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "saved_workouts_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "programs"
             referencedColumns: ["id"]
           },
         ]
@@ -249,6 +294,7 @@ export type Database = {
           exercise_id: string
           exercise_number: number
           id: string
+          other: string | null
           reps: number
           sets: number
           title: string
@@ -260,6 +306,7 @@ export type Database = {
           exercise_id?: string
           exercise_number?: number
           id?: string
+          other?: string | null
           reps?: number
           sets?: number
           title: string
@@ -271,6 +318,7 @@ export type Database = {
           exercise_id?: string
           exercise_number?: number
           id?: string
+          other?: string | null
           reps?: number
           sets?: number
           title?: string

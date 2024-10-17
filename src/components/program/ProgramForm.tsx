@@ -13,6 +13,8 @@ import { Loader2 } from 'lucide-react';
 import { createProgram } from '@/server-actions/program';
 import { Tables } from '../../../database.types';
 import { useToast } from '../ui/use-toast';
+import { Switch } from '../ui/switch';
+import { Separator } from '../ui/separator';
 
 const ProgramForm = ({
     setIsOpen,
@@ -31,6 +33,7 @@ const ProgramForm = ({
             image: new File([], ""),
             title: "",
             weeks: 1,
+            free: false,
             price: 1.00,
             description: ""
         }
@@ -53,15 +56,17 @@ const ProgramForm = ({
             formData.append("weeks", data.weeks.toString());
         }
 
-        if (data.price) {
-            formData.append("price", data.price.toString());
-        }
-
         if (data.description) {
             formData.append("description", data.description);
         }
 
-        let { data: programData, error: programError} = await createProgram(formData);
+        formData.append("free", data.free.toString());
+
+        if (data.price) {
+            formData.append("price", data.price.toString());
+        }
+
+        let { data: programData, error: programError } = await createProgram(formData);
 
         if (programError && !programData) {
             toast({
@@ -136,25 +141,6 @@ const ProgramForm = ({
                     />
                     <FormField
                         control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Price ($)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        id="price"
-                                        name="price"
-                                        type="number"
-                                        step={0.01}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
                         name="description"
                         render={({ field }) => (
                             <FormItem>
@@ -164,6 +150,43 @@ const ProgramForm = ({
                                         {...field}
                                         id="description"
                                         name="description"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Separator />
+                    <FormField
+                        control={form.control}
+                        name="free"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                                <FormLabel className="mt-2">Free</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className={form.getValues("free") ? "text-secondaryText" : ""}>Price ($)</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        id="price"
+                                        name="price"
+                                        type="number"
+                                        step={0.01}
+                                        disabled={form.getValues("free")}
                                     />
                                 </FormControl>
                                 <FormMessage />

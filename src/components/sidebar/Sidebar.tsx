@@ -4,13 +4,11 @@ import Logo from "@/components/misc/Logo";
 import SidebarRoutes from "./SidebarRoutes";
 import SignInButton from "../auth/SignInButton";
 import CreateAccountButton from "../auth/CreateAccountButton";
-import { createClient } from "@/utils/supabase/client";
 import UserInfo from "../auth/UserInfo";
 import UserDropdown from "./UserDropdown";
 import CreateTeamSidebarButton from "./CreateTeamSidebarButton";
-import { updateStripePaymentsEnabled } from "@/server-actions/creator";
 import { useUserContext } from "@/context";
-import { useEffect } from "react";
+import { Separator } from "../ui/separator";
 
 export type UserRole = "user" | "creator";
 
@@ -47,36 +45,23 @@ const creatorRoutes = [
     }
 ]
 
-let url: string;
-if (process.env.NODE_ENV === "production") {
-    url = process.env.PROD_URL as string
-} else {
-    url = process.env.TEST_URL as string
-}
-
-const Sidebar = ({
-    userRole
-}: {
-    userRole: UserRole
-}) => {
+const Sidebar = () => {
     // Get user from context
     const { user: contextUser, team: contextTeam } = useUserContext();
-
-    let routes = anonRoutes;
-
-    if (contextUser) {
-        if (contextTeam && userRole == "creator") {
-            routes = creatorRoutes
-        } else {
-            routes = userRoutes
-        }
-    }
     
     return (
         <aside className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 hidden lg:flex flex-col text-white bg-background border-r-[1px] pb-5">
             <Logo></Logo>
             <div className="flex flex-col justify-between h-full">
-                <SidebarRoutes routes={routes}></SidebarRoutes>
+                <div className="flex flex-col gap-10 pt-5">
+                    <SidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></SidebarRoutes>
+                    {contextUser?.team_id && (
+                        <div className="flex flex-col gap-2">
+                            <p className="text-secondaryText text-xs font-bold px-5">Creator</p>
+                            <SidebarRoutes routes={creatorRoutes}></SidebarRoutes>
+                        </div>
+                    )}
+                </div>
                 {(contextUser) ? (
                     <div className="w-full flex flex-col px-5 gap-5">
                         {(!contextUser.team_id &&
@@ -84,7 +69,7 @@ const Sidebar = ({
                         )}
                         <div className="flex flex-row justify-between items-center">
                             <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
-                            <UserDropdown teamId={contextUser.team_id != null} userRole={userRole}></UserDropdown>
+                            <UserDropdown />
                         </div>
                     </div>
                 ) : (

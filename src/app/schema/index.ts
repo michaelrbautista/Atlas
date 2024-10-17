@@ -26,6 +26,7 @@ export const ProgramSchema = z.object({
     }).max(56, {
         message: "Number of weeks should be between 1 and 56."
     }),
+    free: z.boolean().default(false),
     price: z.coerce.number({
         message: "Price must be a number."
     }).min(1, {

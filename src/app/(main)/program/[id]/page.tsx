@@ -127,18 +127,18 @@ const Program = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full max-w-2xl px-5 py-10 gap-10 sm:gap-10">
-                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5 w-full">
+            <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
+                <div className="flex flex-col items-center gap-5 w-full">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[250px] w-[400px] rounded-xl flex items-center justify-center">
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            className="h-[200px] w-[300px] rounded-xl"
-                            height={200}
-                            width={300}
+                            className="h-[250px] w-[400px] rounded-xl"
+                            height={250}
+                            width={400}
                             src={programImageUrl}
                             alt="programImage"
                             style={{objectFit: "cover"}}

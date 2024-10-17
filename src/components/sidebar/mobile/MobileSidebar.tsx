@@ -21,8 +21,6 @@ import LogoutButton from "../../auth/LogoutButton";
 import { useUserContext } from "@/context";
 import UserDropdown from "../UserDropdown";
 
-type UserRole = "user" | "creator";
-
 const anonRoutes = [
     {
         label: "Home",
@@ -41,34 +39,9 @@ const userRoutes = [
     }
 ]
 
-const creatorRoutes = [
-    {
-        label: "My Team",
-        href: "/creator/team"
-    },
-    {
-        label: "My Programs",
-        href: "/creator/programs"
-    }
-]
-
-const MobileSidebar = ({
-    userRole
-}: {
-    userRole: UserRole
-}) => {
+const MobileSidebar = () => {
     // Get user from context
     const { user: contextUser, team: contextTeam } = useUserContext();
-
-    let routes = anonRoutes;
-
-    if (contextUser) {
-        if (contextTeam && userRole == "creator") {
-            routes = creatorRoutes
-        } else {
-            routes = userRoutes
-        }
-    }
 
     return (
         <div className="bg-systemBackground sticky top-0 w-full z-50 flex lg:hidden h-16 text-white">
@@ -82,11 +55,11 @@ const MobileSidebar = ({
                     <div className="flex flex-col h-full pb-5">
                         <Logo></Logo>
                         <div className="flex flex-col h-full justify-between">
-                            <MobileSidebarRoutes routes={routes}></MobileSidebarRoutes>
+                            <MobileSidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></MobileSidebarRoutes>
                             {(contextUser !== null) ? (
                                 <div className="px-5 flex flex-row justify-between items-center">
-                                <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
-                                <UserDropdown teamId={contextUser.team_id != null} userRole={userRole}></UserDropdown>
+                                    <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
+                                    <UserDropdown />
                                 </div>
                             ) : (
                                 <div className="px-5 flex flex-col gap-5">
