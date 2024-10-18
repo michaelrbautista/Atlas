@@ -65,7 +65,12 @@ const Sidebar = () => {
                 {(contextUser) ? (
                     <div className="w-full flex flex-col px-5 gap-5">
                         {(!contextUser.team_id &&
+                        <div>
                             <CreateTeamSidebarButton></CreateTeamSidebarButton>
+                            <p className="text-secondaryText text-sm p-2">
+                                Create a team to start selling training programs.
+                            </p>
+                        </div>
                         )}
                         <div className="flex flex-row justify-between items-center">
                             <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
