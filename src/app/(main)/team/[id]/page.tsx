@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { joinTeam, leaveTeam } from "@/server-actions/team";
 import LoggedOutJoinButton from "@/components/team/LoggedOutJoinButton";
+import { useUserContext } from "@/context";
 
 const Team = ({ 
     params
@@ -26,6 +27,8 @@ const Team = ({
     const [isJoined, setIsJoined] = useState(false);
     const [teamImageUrl, setTeamImageUrl] = useState("");
     const [programIds, setProgramIds] = useState<string[]>([]);
+
+    const { user: contextUser, team: contextTeam } = useUserContext();
 
     const { toast } = useToast();
 
@@ -103,7 +106,7 @@ const Team = ({
         }
 
         getTeam();
-    }, []);
+    }, [contextUser]);
 
     const joinTeamClient = async () => {
         setIsJoining(true);
