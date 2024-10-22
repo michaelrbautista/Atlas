@@ -12,6 +12,7 @@ import ProgramList from "@/components/program/ProgramList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { joinTeam, leaveTeam } from "@/server-actions/team";
+import LoggedOutJoinButton from "@/components/team/LoggedOutJoinButton";
 
 const Team = ({ 
     params
@@ -19,6 +20,7 @@ const Team = ({
     params: { id: string }
 }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isJoining, setIsJoining] = useState(false);
     const [team, setTeam] = useState<Tables<"teams">>();
     const [isJoined, setIsJoined] = useState(false);
@@ -30,16 +32,6 @@ const Team = ({
     useEffect(() => {
         const getTeam = async () => {
             const supabase = createClient();
-
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) {
-                toast({
-                    title: "An error occurred.",
-                    description: "Couldn't get current user."
-                })
-                return
-            }
 
             const { data: teamData, error: teamError } = await supabase
                 .from("teams")
@@ -62,6 +54,15 @@ const Team = ({
                 const teamImage = loadImage(teamData?.image_path ?? "", "team_images");
                 setTeamImageUrl(teamImage);
             }
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                setIsLoading(false);
+                return
+            }
+
+            setIsLoggedIn(true);
 
             // Check if user joined team
             const { data: joinedData, error: joinedError } = await supabase
@@ -168,7 +169,15 @@ const Team = ({
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-3">
-                    {isJoined ? 
+                    {isLoggedIn ?
+                        <Button onClick={joinTeamClient} variant={isJoining ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isJoining}>
+                            {isJoining && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isJoining ? "Joining Team" : "Join Team"}
+                        </Button>
+                    :
+                        <LoggedOutJoinButton />
+                    }
+                    {/* {isJoined ? 
                         <Button onClick={leaveTeamClient} variant="secondary" size="full" className="mt-3">
                             Joined
                         </Button>
@@ -177,10 +186,8 @@ const Team = ({
                             {isJoining && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             {isJoining ? "Joining Team" : "Join Team"}
                         </Button>
-                    }
-                    {/* <Button variant="secondary" size="full">Custom Program</Button> */}
+                    } */}
                 </div>
-                {/* <Separator /> */}
                 <div className="flex flex-col gap-2 sm:gap-5">
                     <p className="w-full text-foreground text-2xl font-bold">Programs</p>
                     <ProgramList isCreator={false} programIds={programIds} />
