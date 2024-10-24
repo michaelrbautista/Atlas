@@ -10,8 +10,6 @@ const PurchaseProgram = async ({
 }) => {
     const { programId = "", creatorId = "", userId = "" } = await searchParams
 
-    console.log(userId)
-
     // Get program
     const program = await getProgram(programId)
 

@@ -30,8 +30,6 @@ Deno.serve(async (request) => {
             cryptoProvider
         )
 
-        console.log("RECEIVED EVENT");
-
         const supabaseClient = createClient(
             Deno.env.get("SUPABASE_URL")!,
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
@@ -39,11 +37,7 @@ Deno.serve(async (request) => {
 
         if (receivedEvent.type === "checkout.session.completed") {
 
-            console.log("CHECKOUT SESSION COMPLETED");
-
             let requestMetadata = receivedEvent.data.object.metadata;
-
-            console.log(requestMetadata);
 
             let purchasedProgram = {
                 program_id: requestMetadata.programId,
