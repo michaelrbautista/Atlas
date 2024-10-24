@@ -3,6 +3,50 @@
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
 
+export async function getWorkoutExercise(workoutExerciseId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("workout_exercises")
+        .select()
+        .eq("id", workoutExerciseId)
+        .single()
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
+export async function getExercise(exerciseId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("exercises")
+        .select()
+        .eq("id", exerciseId)
+        .single()
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function editExercise(exercise: Tables<"exercises">, formData: FormData) {
     const supabase = createClient();
 

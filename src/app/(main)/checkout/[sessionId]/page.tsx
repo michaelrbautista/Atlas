@@ -7,6 +7,7 @@ const ReturnPage = async ({
 } : {
     searchParams: Promise<{ [key: string]: string | undefined }>
 }) => {
+    
     const { programId = "" } = await searchParams
 
     return (

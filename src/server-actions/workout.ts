@@ -6,6 +6,49 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Tables } from "../../database.types";
 
+export async function getWorkoutExercises(workoutId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("workout_exercises")
+        .select()
+        .eq("workout_id", workoutId)
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
+export async function getWorkout(workoutId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("workouts")
+        .select()
+        .eq("id", workoutId)
+        .single()
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function editWorkout(workout: Tables <"workouts">, formData: FormData) {
     const supabase = createClient();
 

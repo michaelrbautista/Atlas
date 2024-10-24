@@ -1,5 +1,3 @@
-"use client";
-
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
@@ -7,84 +5,33 @@ import { createClient } from "@/utils/supabase/client";
 import AddExerciseButton from "@/components/exercise/AddExerciseButton";
 import ExerciseList from "@/components/exercise/ExerciseList";
 import { useToast } from "@/components/ui/use-toast";
+import { getWorkout, getWorkoutExercises } from "@/server-actions/workout";
 
-const Workout = ({ 
+const Workout = async ({ 
     params
 }: {
     params: { id: string }
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [workout, setWorkout] = useState<Tables<"workouts">>();
-    const [exercises, setExercises] = useState<Tables<"workout_exercises">[]>([] as Tables<"workout_exercises">[]);
+    
+    // Get workout
+    const workout = await getWorkout(params.id);
 
-    const { toast } = useToast();
+    // Get workout exercises
+    const exercises = await getWorkoutExercises(params.id);
 
-    useEffect(() => {
-        const getWorkout = async () => {
-            setIsLoading(true);
-
-            const supabase = createClient();
-
-            // Get workout
-            const { data: workoutData, error: workoutError } = await supabase
-                .from("workouts")
-                .select()
-                .eq("id", params.id)
-                .single()
-            
-            if (workoutError || !workoutData) {
-                toast({
-                    title: "An error occurred.",
-                    description: workoutError.message
-                })
-                return
-            }
-
-            setWorkout(workoutData);
-
-            // Get exercises
-            const { data: exercises, error: exercisesError } = await supabase
-                .from("workout_exercises")
-                .select()
-                .eq("workout_id", workoutData.id)
-                .order("exercise_number", { ascending: true });
-
-            if (exercisesError && !exercises) {
-                toast({
-                    title: "An error occurred.",
-                    description: exercisesError.message
-                })
-                return
-            }
-
-            setExercises(exercises);
-            setIsLoading(false);
-        }
-
-        getWorkout();
-    }, []);
-
-    if (isLoading) {
-        return (
-            <div className="h-full w-full flex items-center justify-center">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+    return (
+        <div className="flex flex-col w-full sm:max-w-lg px-5 py-20 sm:py-10 gap-3 sm:gap-10">
+            <div>
+                <p className="text-primaryText text-3xl font-bold">{workout?.title}</p>
+                <p className="text-primaryText py-2">{workout?.description}</p>
             </div>
-        )
-    } else {
-        return (
-            <div className="flex flex-col w-full sm:max-w-lg px-5 py-20 sm:py-10 gap-3 sm:gap-10">
-                <div>
-                    <p className="text-primaryText text-3xl font-bold">{workout?.title}</p>
-                    <p className="text-primaryText py-2">{workout?.description}</p>
+            <div className="flex flex-col gap-2">
+                <div className="flex flex-row justify-between items-center">
+                    <p className="text-foreground text-xl sm:text-2xl font-bold">Exercises</p>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-foreground text-xl sm:text-2xl font-bold">Exercises</p>
-                    </div>
-                    <ExerciseList exercises={exercises} />
-                </div>
+                <ExerciseList exercises={exercises} />
             </div>
-        )
-    }
+        </div>
+    )
 }
 export default Workout
