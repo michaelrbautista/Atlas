@@ -1,5 +1,3 @@
-"use client";
-
 import { Tables } from "../../../database.types";
 import { Separator } from "../ui/separator";
 import TeamItem from "./TeamItem";

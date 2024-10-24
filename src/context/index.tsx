@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/client';
 type UserContextType = {
     user: Tables<"users"> | null,
     team: Tables<"teams"> | null,
+    isLoading: boolean,
     login: (userId: string) => void,
     logout: () => void
 }
@@ -14,6 +15,7 @@ type UserContextType = {
 export const UserContext = createContext<UserContextType>({
     user: null,
     team: null,
+    isLoading: true,
     login: () => {},
     logout: () => {}
 });
@@ -21,6 +23,7 @@ export const UserContext = createContext<UserContextType>({
 export default function UserContextProvider({ children }: Readonly<{
     children: React.ReactNode
 }>) {
+    const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [team, setTeam] = useState<Tables<"teams"> | null>(null);
 
@@ -31,7 +34,8 @@ export default function UserContextProvider({ children }: Readonly<{
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                console.log("No user is logged in.")
+                console.log("No user is logged in.");
+                setIsLoading(false);
                 return
             }
 
@@ -42,14 +46,15 @@ export default function UserContextProvider({ children }: Readonly<{
                 .single()
 
             if (userError && !userData) {
-                console.log("Couldn't get logged in user.")
+                console.log("Couldn't get logged in user.");
+                setIsLoading(false);
                 return
             }
 
             setUser(userData);
 
             if (!userData.team_id) {
-                console.log("Couldn't get logged in user.")
+                setIsLoading(false);
                 return
             }
 
@@ -60,17 +65,21 @@ export default function UserContextProvider({ children }: Readonly<{
                 .single()
 
             if (teamError && !teamData) {
-                console.log("Couldn't get logged in user's team.")
+                console.log("Couldn't get logged in user's team.");
+                setIsLoading(false);
                 return
             }
 
             setTeam(teamData);
+            setIsLoading(false);
         }
 
         checkAuth();
     }, []);
 
     const login = async (userId: string) => {
+        setIsLoading(true);
+
         const supabase = createClient();
 
         const { data: userData, error: userError } = await supabase
@@ -80,14 +89,16 @@ export default function UserContextProvider({ children }: Readonly<{
             .single()
 
         if (userError && !userData) {
-            console.log("Couldn't get logged in user.")
+            console.log("Couldn't get logged in user.");
+            setIsLoading(false);
             return
         }
 
         setUser(userData);
 
         if (!userData.team_id) {
-            console.log("Couldn't get logged in user.")
+            console.log("Couldn't get logged in user.");
+            setIsLoading(false);
             return
         }
 
@@ -98,11 +109,13 @@ export default function UserContextProvider({ children }: Readonly<{
             .single()
 
         if (teamError && !teamData) {
-            console.log("Couldn't get logged in user's team.")
+            console.log("Couldn't get logged in user's team.");
+            setIsLoading(false);
             return
         }
 
         setTeam(teamData);
+        setIsLoading(false);
     }
 
     const logout = () => {
@@ -114,6 +127,7 @@ export default function UserContextProvider({ children }: Readonly<{
         <UserContext.Provider value={{
             user,
             team,
+            isLoading,
             login,
             logout
         }}>

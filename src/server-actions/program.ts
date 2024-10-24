@@ -5,6 +5,53 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export async function checkIfProgramIsPurchased(programId: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data: programsData, error: programsError } = await supabase
+        .from("purchased_programs")
+        .select()
+        .eq("program_id", programId)
+        .eq("purchased_by", user.id)
+
+    if (programsError && !programsData) {
+        throw new Error(programsError.message)
+    }
+
+    if (programsData.length > 0) {
+        return true
+    } else {
+        return false
+    }
+}
+
+export async function getUsersPrograms() {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data: programsData, error: programsError } = await supabase
+        .from("purchased_programs")
+        .select()
+        .eq("purchased_by", user.id)
+
+    if (programsError && !programsData) {
+        throw new Error(programsError.message)
+    }
+
+    return programsData.map(program => program.program_id)
+}
+
 export async function redirectToCheckoutUrl(url: string) {
     return redirect(url);
 }
@@ -287,7 +334,7 @@ export const getAllPrograms = cache(async () => {
     const supabase = createClient();
 
     const { data } = await supabase
-        .from('programs')
+        .from("programs")
         .select()
 
     if (data) {
@@ -298,13 +345,15 @@ export const getAllPrograms = cache(async () => {
 export const getProgram = cache(async (programId: string) => {
     const supabase = createClient();
 
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from("programs")
         .select()
         .eq("id", programId)
         .single()
     
-    if (data) {
-        return data
+    if (error && !data) {
+        throw new Error(error.message);
     }
+
+    return data
 })

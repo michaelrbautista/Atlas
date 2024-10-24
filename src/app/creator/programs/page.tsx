@@ -1,6 +1,6 @@
 "use client";
 
-import CreateProgramButton from "../../../components/program/CreateProgramButton";
+import CreateProgramButton from "../../../components/program/Buttons/CreateProgramButton";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { redirectToHome } from "@/server-actions/creator";

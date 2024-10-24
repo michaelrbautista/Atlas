@@ -4,24 +4,26 @@ import { ProgramSchema } from '@/app/schema';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { Textarea } from '../../ui/textarea';
+import { Button } from '../../ui/button';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { createProgram } from '@/server-actions/program';
-import { Tables } from '../../../database.types';
-import { useToast } from '../ui/use-toast';
-import { Switch } from '../ui/switch';
-import { Separator } from '../ui/separator';
+import { editProgram } from '@/server-actions/program';
+import { Tables } from '../../../../database.types';
+import { useToast } from '../../ui/use-toast';
+import { Separator } from '../../ui/separator';
+import { Switch } from '../../ui/switch';
 
-const ProgramForm = ({
-    setIsOpen,
-    addProgram
+const EditProgramForm = ({
+    program,
+    updateProgram,
+    setIsOpen
 }: {
-    setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addProgram: (program: Tables<"programs">) => void
+    program: Tables<"programs">,
+    updateProgram: (program: Tables<"programs">) => void
+    setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -31,11 +33,11 @@ const ProgramForm = ({
         resolver: zodResolver(ProgramSchema),
         defaultValues: {
             image: new File([], ""),
-            title: "",
-            weeks: 1,
-            free: false,
-            price: 1.00,
-            description: ""
+            title: program.title,
+            weeks: program.weeks,
+            free: program.free,
+            price: program.price,
+            description: program.description ?? ""
         }
     })
 
@@ -66,7 +68,7 @@ const ProgramForm = ({
             formData.append("price", data.price.toString());
         }
 
-        let { data: programData, error: programError } = await createProgram(formData);
+        let { data: programData, error: programError } = await editProgram(program, formData);
 
         if (programError && !programData) {
             toast({
@@ -76,8 +78,8 @@ const ProgramForm = ({
             return
         }
 
+        updateProgram(programData!);
         setIsOpen(false);
-        addProgram(programData!);
     }
 
     return (
@@ -89,7 +91,7 @@ const ProgramForm = ({
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Image</FormLabel>
+                                <FormLabel>Replace Image</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="image"
@@ -195,7 +197,7 @@ const ProgramForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating program" : "Create Program"}
+                        {isLoading ? "Saving program" : "Save Program"}
                     </Button>
                 </div>
             </form>
@@ -203,4 +205,4 @@ const ProgramForm = ({
     )
 }
 
-export default ProgramForm
+export default EditProgramForm

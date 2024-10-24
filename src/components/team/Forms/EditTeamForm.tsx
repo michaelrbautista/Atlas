@@ -4,18 +4,23 @@ import { TeamSchema } from '@/app/schema';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { Textarea } from '../../ui/textarea';
+import { Button } from '../../ui/button';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { createTeam } from '@/server-actions/team';
-import { useToast } from '../ui/use-toast';
+import { createTeam, editTeam } from '@/server-actions/team';
+import { useToast } from '../../ui/use-toast';
+import { Tables } from '../../../../database.types';
 
-const TeamForm = ({
+const EditTeamForm = ({
+    team,
+    updateTeam,
     setIsOpen
 }: {
+    team: Tables<"teams">,
+    updateTeam: (program: Tables<"teams">) => void,
     setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +31,8 @@ const TeamForm = ({
         resolver: zodResolver(TeamSchema),
         defaultValues: {
             image: new File([], ""),
-            name: "",
-            description: ""
+            name: team.name,
+            description: team.description ?? ""
         }
     })
 
@@ -48,16 +53,17 @@ const TeamForm = ({
             formData.append("description", data.description);
         }
 
-        let error = await createTeam(formData);
+        let { data: teamData, error: teamError} = await editTeam(team, formData);
 
-        if (error) {
+        if (teamError && !teamData) {
             toast({
                 title: "An error occurred.",
-                description: error.error
+                description: teamError
             })
             return
         }
 
+        updateTeam(teamData!);
         setIsOpen(false);
     }
 
@@ -70,7 +76,7 @@ const TeamForm = ({
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Image</FormLabel>
+                                <FormLabel>Replace Image</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="image"
@@ -121,11 +127,11 @@ const TeamForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating team" : "Create team"}
+                        {isLoading ? "Saving team" : "Save team"}
                     </Button>
                 </div>
             </form>
         </Form>
     )
 }
-export default TeamForm
+export default EditTeamForm

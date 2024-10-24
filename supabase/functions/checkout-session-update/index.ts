@@ -4,10 +4,10 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import  "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@16.10.0?target=deno";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_API_TEST_KEY"), {
+const stripe = new Stripe(Deno.env.get("STRIPE_API_KEY"), {
     apiVersion: "2024-06-20",
     httpClient: Stripe.createFetchHttpClient()
 })
@@ -30,12 +30,17 @@ Deno.serve(async (request) => {
             cryptoProvider
         )
 
+        console.log("RECEIVED EVENT");
+
         const supabaseClient = createClient(
-            Deno.env.get("NEXT_PUBLIC_SUPABASE_TEST_URL"),
-            Deno.env.get("TEST_SUPABASE_SERVICE_ROLE_KEY")
+            Deno.env.get("SUPABASE_URL")!,
+            Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
         );
 
         if (receivedEvent.type === "checkout.session.completed") {
+
+            console.log("CHECKOUT SESSION COMPLETED");
+
             let requestMetadata = receivedEvent.data.object.metadata;
 
             console.log(requestMetadata);

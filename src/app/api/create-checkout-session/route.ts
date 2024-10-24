@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
                     creatorId: creatorId,
                     userId: userId
                 },
-                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}`
+                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?programId=${programId}`
             },
             {
                 stripeAccount: destinationAccountId

@@ -15,7 +15,7 @@ import { createProgram } from "@/server-actions/program";
 import { useFormStatus } from "react-dom";
 import { ProgramSchema } from "@/app/schema";
 import EditProgramForm from "./EditProgramForm";
-import { Tables } from "../../../database.types";
+import { Tables } from "../../../../database.types";
 
 const EditProgramButton = ({
     program,

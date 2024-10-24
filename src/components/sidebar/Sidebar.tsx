@@ -8,7 +8,7 @@ import UserInfo from "../auth/UserInfo";
 import UserDropdown from "./UserDropdown";
 import CreateTeamSidebarButton from "./CreateTeamSidebarButton";
 import { useUserContext } from "@/context";
-import { Separator } from "../ui/separator";
+import { Loader2 } from "lucide-react";
 
 export type UserRole = "user" | "creator";
 
@@ -47,7 +47,11 @@ const creatorRoutes = [
 
 const Sidebar = () => {
     // Get user from context
-    const { user: contextUser, team: contextTeam } = useUserContext();
+    const {
+        user: contextUser,
+        team: contextTeam,
+        isLoading: contextIsLoading    
+    } = useUserContext();
     
     return (
         <aside className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 hidden lg:flex flex-col text-white bg-background border-r-[1px] pb-5">
@@ -62,26 +66,28 @@ const Sidebar = () => {
                         </div>
                     )}
                 </div>
-                {(contextUser) ? (
-                    <div className="w-full flex flex-col px-5 gap-5">
-                        {(!contextUser.team_id &&
-                        <div>
-                            <CreateTeamSidebarButton></CreateTeamSidebarButton>
-                            <p className="text-secondaryText text-sm p-2">
-                                Create a team to start selling training programs.
-                            </p>
+                {(!contextIsLoading) && (
+                    (contextUser) ? (
+                        <div className="w-full flex flex-col px-5 gap-5">
+                            {(!contextUser.team_id &&
+                            <div>
+                                <CreateTeamSidebarButton></CreateTeamSidebarButton>
+                                <p className="text-secondaryText text-sm p-2">
+                                    Create a team to start selling training programs.
+                                </p>
+                            </div>
+                            )}
+                            <div className="flex flex-row justify-between items-center">
+                                <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
+                                <UserDropdown />
+                            </div>
                         </div>
-                        )}
-                        <div className="flex flex-row justify-between items-center">
-                            <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
-                            <UserDropdown />
+                    ) : (
+                        <div className="px-5 flex flex-col gap-5">
+                            <SignInButton fromLandingPage={false}></SignInButton>
+                            <CreateAccountButton fromLandingPage={false}></CreateAccountButton>
                         </div>
-                    </div>
-                ) : (
-                    <div className="px-5 flex flex-col gap-5">
-                        <SignInButton fromLandingPage={false}></SignInButton>
-                        <CreateAccountButton fromLandingPage={false}></CreateAccountButton>
-                    </div>
+                    )
                 )}
             </div>
         </aside>

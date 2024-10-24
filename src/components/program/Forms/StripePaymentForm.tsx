@@ -6,16 +6,16 @@ import {
     EmbeddedCheckout
 } from "@stripe/react-stripe-js";
 import { useCallback } from "react";
-import { Tables } from "../../../database.types";
+import { Tables } from "../../../../database.types";
 
 const StripePaymentForm = ({
     program,
-    currentUserId,
-    connectedAccountId
+    connectedAccountId,
+    userId
 }: {
-    program: Tables<"programs">,
-    currentUserId: string,
-    connectedAccountId: string
+    program: Tables<"programs">
+    connectedAccountId: string,
+    userId: string
 }) => {
     const stripePromise = loadStripe(
         process.env.NODE_ENV === "production" ? 
@@ -38,7 +38,7 @@ const StripePaymentForm = ({
                 programName: program.title,
                 price: program.price,
                 creatorId: program.created_by,
-                userId: currentUserId,
+                userId: userId,
                 destinationAccountId: connectedAccountId
             })
         })

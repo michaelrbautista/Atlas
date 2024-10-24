@@ -6,13 +6,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
-let webhookSecret: string;
-
-if (process.env.NODE_ENV === "production") {
-    webhookSecret = process.env.STRIPE_LIVE_WEBHOOK_SECRET as string
-} else {
-    webhookSecret = process.env.STRIPE_TEST_WEBHOOK_SECRET as string
-}
+let webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string
 
 export async function POST(req: Request) {
     const body = await req.text();
@@ -36,9 +30,6 @@ export async function POST(req: Request) {
     switch (event.type) {
         case "checkout.session.completed":
             // Add to purchased_programs table
-            console.log("Session: ", session);
-            console.log("Checkout session completed.");
-
             const supabase = createClient();
 
             if (session.metadata) {
@@ -51,8 +42,10 @@ export async function POST(req: Request) {
                     })
                 
                 if (purchaseError) {
-                    console.log(purchaseError);
+                    console.log("Couldn't add purchased program to db", purchaseError);
                 }
+
+                console.log("Added purchased program")
             }
 
             break;

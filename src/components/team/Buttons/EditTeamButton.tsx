@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Tables } from "../../../database.types";
-import EditTeamForm from "./EditTeamForm";
+import { Tables } from "../../../../database.types";
+import EditTeamForm from "../Forms/EditTeamForm";
 
 const EditTeamButton = ({
     team,

@@ -1,7 +1,7 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
-import SignInForm from "../auth/SignInForm";
+import { useState } from "react";
+import SignInForm from "../../auth/SignInForm";
 import {
     Dialog,
     DialogContent,
@@ -10,19 +10,28 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { Tables } from "../../../database.types";
-import CreateAccountForm from "../auth/CreateAccountForm";
+import { Button } from "../../ui/button";
+import { Tables } from "../../../../database.types";
+import CreateAccountForm from "../../auth/CreateAccountForm";
 
-const LoggedOutJoinButton = () => {
+const LoggedOutPurchaseButton = ({
+    program
+}: {
+    program: Tables<"programs">
+}) => {
     const [isSignIn, setIsSignIn] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
+    
+    const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger className="w-full" asChild>
                 <Button variant="systemBlue" size="full">
-                    Join Team
+                    Purchase Program - {formatter.format(program.price)}
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -53,4 +62,4 @@ const LoggedOutJoinButton = () => {
         </Dialog>
     )
 }
-export default LoggedOutJoinButton
+export default LoggedOutPurchaseButton

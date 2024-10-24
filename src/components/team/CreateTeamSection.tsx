@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, buttonVariants } from "../ui/button";
-import CreateTeamButton from "./CreateTeamButton";
+import CreateTeamButton from "./Buttons/CreateTeamButton";
 
 interface CreateTeamButtonProps {
     paymentsEnabled: boolean

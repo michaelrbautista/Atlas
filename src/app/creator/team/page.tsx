@@ -10,7 +10,7 @@ import Image from "next/image";
 import { loadImage } from "@/utils/supabase/hooks/loadImage";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import EditTeamButton from "@/components/team/EditTeamButton";
+import EditTeamButton from "@/components/team/Buttons/EditTeamButton";
 import { copyTeamUrl } from "@/server-actions/team";
 
 const TeamPage = () => {
