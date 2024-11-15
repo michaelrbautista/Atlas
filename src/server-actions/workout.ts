@@ -6,6 +6,27 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Tables } from "../../database.types";
 
+export async function getUsersWorkouts() {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("workouts")
+        .select()
+        .eq("created_by", user.id)
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function getWorkoutExercises(workoutId: string) {
     const supabase = createClient();
 
@@ -138,7 +159,4 @@ export async function createWorkout(formData: FormData) {
     return {
         data: workoutData
     }
-
-    // revalidatePath("/creator/programs");
-    // return redirect(`/creator/workout/${workoutData.id}`);
 }

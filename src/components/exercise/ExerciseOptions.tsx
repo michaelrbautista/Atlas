@@ -25,7 +25,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Ellipsis, Loader2 } from "lucide-react";
 import { deleteExercise } from "@/server-actions/exercise";
-import EditExerciseForm from "./EditExerciseForm";
+import EditExerciseForm from "./Forms/EditExerciseForm";
 
 
 const ExerciseOptions = ({

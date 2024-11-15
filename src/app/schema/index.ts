@@ -1,14 +1,8 @@
 import { z } from "zod";
 
-export const TeamSchema = z.object({
-    image: z.instanceof(File).optional(),
-    name: z.string().trim().min(1, {
-        message: "Please enter a team name."
-    }).max(100, {
-        message: "Please enter a name that is under 100 characters."
-    }),
-    description: z.string().max(400, {
-        message: "Please enter a description that is under 400 characters."
+export const PostSchema = z.object({
+    text: z.string().max(400, {
+        message: "Please enter less than 400 characters."
     }).optional()
 })
 
@@ -73,6 +67,19 @@ export const NewExerciseSchema = z.object({
     }),
     instructions: z.string().max(400, {
         message: "Please enter instructions that are under 400 characters."
+    }).optional()
+})
+
+export const UserSchema = z.object({
+    profilePicture: z.instanceof(File).optional(),
+    fullName: z.string().min(1, {
+        message: "Full name must be at least 1 character."
+    }),
+    username: z.string().min(6, {
+        message: "Username must be at least 6 characters."
+    }),
+    bio: z.string().max(400,{
+        message: "Your bio must be less than 400 characters."
     }).optional()
 })
 

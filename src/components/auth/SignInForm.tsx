@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { redirectAfterLogin, signIn } from "../../server-actions/auth";
+import { redirectToHome, signIn } from "../../server-actions/auth";
 import { SignInSchema } from "@/app/schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -54,9 +54,7 @@ const SignInForm = ({
 
         login(loginData!.id);
 
-        if (fromLandingPage) {
-            redirectAfterLogin(loginData!.team_id !== null)
-        }
+        redirectToHome();
 
         setIsOpen(false);
     }

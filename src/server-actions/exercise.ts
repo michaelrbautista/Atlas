@@ -3,6 +3,27 @@
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
 
+export async function getCreatorsExercises() {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("exercises")
+        .select()
+        .eq("created_by", user.id)
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function getWorkoutExercise(workoutExerciseId: string) {
     const supabase = createClient();
 
@@ -95,6 +116,8 @@ export async function editExercise(exercise: Tables<"exercises">, formData: Form
                     error: "Couldn't get public image url from storage."
                 }
             }
+
+            videoUrl = storageUrl.publicUrl
         } else {
             const videoExt = video.name.split(".").pop();
             let date = new Date()

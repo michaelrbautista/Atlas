@@ -50,41 +50,87 @@ export type Database = {
           },
         ]
       }
-      joined_teams: {
+      likes: {
         Row: {
           created_at: string
           id: string
-          team_id: string
-          tier: string
-          user_id: string
+          liked_by: string
+          post_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          team_id?: string
-          tier: string
-          user_id?: string
+          liked_by?: string
+          post_id?: string
         }
         Update: {
           created_at?: string
           id?: string
-          team_id?: string
-          tier?: string
-          user_id?: string
+          liked_by?: string
+          post_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "joined_teams_team_id_fkey"
-            columns: ["team_id"]
+            foreignKeyName: "likes_liked_by_fkey"
+            columns: ["liked_by"]
             isOneToOne: false
-            referencedRelation: "teams"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "joined_teams_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          program_id: string | null
+          text: string | null
+          workout_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          program_id?: string | null
+          text?: string | null
+          workout_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          program_id?: string | null
+          text?: string | null
+          workout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
             referencedColumns: ["id"]
           },
         ]
@@ -100,7 +146,6 @@ export type Database = {
           image_path: string | null
           image_url: string | null
           price: number
-          team_id: string
           title: string
           weeks: number
         }
@@ -114,7 +159,6 @@ export type Database = {
           image_path?: string | null
           image_url?: string | null
           price?: number
-          team_id: string
           title: string
           weeks?: number
         }
@@ -128,7 +172,6 @@ export type Database = {
           image_path?: string | null
           image_url?: string | null
           price?: number
-          team_id?: string
           title?: string
           weeks?: number
         }
@@ -138,13 +181,6 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "programs_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
@@ -195,46 +231,9 @@ export type Database = {
           },
         ]
       }
-      teams: {
-        Row: {
-          created_at: string
-          created_by: string
-          description: string | null
-          id: string
-          image_path: string | null
-          image_url: string | null
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string
-          description?: string | null
-          id?: string
-          image_path?: string | null
-          image_url?: string | null
-          name: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          description?: string | null
-          id?: string
-          image_path?: string | null
-          image_url?: string | null
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "teams_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       users: {
         Row: {
+          bio: string | null
           created_at: string
           email: string
           full_name: string
@@ -243,10 +242,10 @@ export type Database = {
           profile_picture_path: string | null
           profile_picture_url: string | null
           stripe_account_id: string | null
-          team_id: string | null
           username: string
         }
         Insert: {
+          bio?: string | null
           created_at?: string
           email: string
           full_name: string
@@ -255,10 +254,10 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
-          team_id?: string | null
           username: string
         }
         Update: {
+          bio?: string | null
           created_at?: string
           email?: string
           full_name?: string
@@ -267,25 +266,9 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
-          team_id?: string | null
           username?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: true
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       workout_exercises: {
         Row: {
@@ -505,4 +488,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

@@ -6,7 +6,6 @@ import { createClient } from '@/utils/supabase/client';
 
 type UserContextType = {
     user: Tables<"users"> | null,
-    team: Tables<"teams"> | null,
     isLoading: boolean,
     login: (userId: string) => void,
     logout: () => void
@@ -14,7 +13,6 @@ type UserContextType = {
 
 export const UserContext = createContext<UserContextType>({
     user: null,
-    team: null,
     isLoading: true,
     login: () => {},
     logout: () => {}
@@ -25,7 +23,6 @@ export default function UserContextProvider({ children }: Readonly<{
 }>) {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
-    const [team, setTeam] = useState<Tables<"teams"> | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -53,24 +50,11 @@ export default function UserContextProvider({ children }: Readonly<{
 
             setUser(userData);
 
-            if (!userData.team_id) {
+            if (!userData.payments_enabled) {
                 setIsLoading(false);
                 return
             }
 
-            const { data: teamData, error: teamError } = await supabase
-                .from("teams")
-                .select()
-                .eq("id", userData.team_id)
-                .single()
-
-            if (teamError && !teamData) {
-                console.log("Couldn't get logged in user's team.");
-                setIsLoading(false);
-                return
-            }
-
-            setTeam(teamData);
             setIsLoading(false);
         }
 
@@ -96,37 +80,16 @@ export default function UserContextProvider({ children }: Readonly<{
 
         setUser(userData);
 
-        if (!userData.team_id) {
-            console.log("Couldn't get logged in user.");
-            setIsLoading(false);
-            return
-        }
-
-        const { data: teamData, error: teamError } = await supabase
-            .from("teams")
-            .select()
-            .eq("id", userData.team_id)
-            .single()
-
-        if (teamError && !teamData) {
-            console.log("Couldn't get logged in user's team.");
-            setIsLoading(false);
-            return
-        }
-
-        setTeam(teamData);
         setIsLoading(false);
     }
 
     const logout = () => {
         setUser(null);
-        setTeam(null);
     }
 
     return (
         <UserContext.Provider value={{
             user,
-            team,
             isLoading,
             login,
             logout

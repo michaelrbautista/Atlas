@@ -25,6 +25,10 @@ const anonRoutes = [
     {
         label: "Home",
         href: "/home"
+    },
+    {
+        label: "Explore",
+        href: "/explore"
     }
 ]
 
@@ -34,6 +38,10 @@ const userRoutes = [
         href: "/home"
     },
     {
+        label: "Explore",
+        href: "/explore"
+    },
+    {
         label:"Programs",
         href: "/programs"
     }
@@ -41,7 +49,7 @@ const userRoutes = [
 
 const MobileSidebar = () => {
     // Get user from context
-    const { user: contextUser, team: contextTeam } = useUserContext();
+    const { user: contextUser } = useUserContext();
 
     return (
         <div className="bg-systemBackground sticky top-0 w-full z-50 flex lg:hidden h-16 text-white">
@@ -58,7 +66,7 @@ const MobileSidebar = () => {
                             <MobileSidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></MobileSidebarRoutes>
                             {(contextUser !== null) ? (
                                 <div className="px-5 flex flex-row justify-between items-center">
-                                    <UserInfo fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
+                                    <UserInfo id={contextUser.id} fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
                                     <UserDropdown />
                                 </div>
                             ) : (

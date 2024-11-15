@@ -1,25 +1,25 @@
-import { Tables } from "../../../database.types";
-import ProgramItem from "./ProgramItem";
+import ProgramItem, { FetchedProgram } from "./ProgramItem";
 
 const ProgramList = ({
-    isCreator,
-    programs,
-    programIds
+    programs
 }: {
-    isCreator: boolean,
-    programs?: Tables<"programs">[],
-    programIds?: string[]
+    programs: FetchedProgram[]
 }) => {
     return (
         <div className="relative w-full gap-5 pb-10">
-            {(programs && !programIds) ? 
-                programs?.map((program) => {
-                    return <ProgramItem isCreator={isCreator} programId={program.id} key={program.id} />
-                }) : 
-                programIds?.map((programId) => {
-                    return <ProgramItem isCreator={isCreator} programId={programId} key={programId} />
-                })
-            }
+            {programs?.map((program) => {
+                return (
+                    <ProgramItem
+                        id={program.programs?.id ?? ""}
+                        title={program.programs?.title ?? "Error getting program."}
+                        imageUrl={program.programs?.image_url ?? undefined}
+                        price={program.programs?.price ?? 0}
+                        description={program.programs?.description ?? undefined}
+                        userFullName={program.created_by?.full_name ?? ""}
+                        key={program.programs?.id ?? ""}
+                    />
+                )
+            })}
         </div>
     );
 }

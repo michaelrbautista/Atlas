@@ -26,7 +26,7 @@ import { Tables } from "../../../database.types";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Ellipsis, Loader2 } from "lucide-react";
-import EditProgramForm from "./Buttons/EditProgramForm";
+import EditProgramForm from "./Forms/EditProgramForm";
 
 const ProgramOptions = ({
     program,

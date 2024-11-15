@@ -28,6 +28,7 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
         smallIcon: "h-8 w-8",
         full: "h-10 w-full",
+        userInfo: "h-16 w-full justify-start"
       },
     },
     defaultVariants: {

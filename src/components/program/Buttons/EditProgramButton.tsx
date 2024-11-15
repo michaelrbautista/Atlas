@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 import { createProgram } from "@/server-actions/program";
 import { useFormStatus } from "react-dom";
 import { ProgramSchema } from "@/app/schema";
-import EditProgramForm from "./EditProgramForm";
+import EditProgramForm from "../Forms/EditProgramForm";
 import { Tables } from "../../../../database.types";
 
 const EditProgramButton = ({

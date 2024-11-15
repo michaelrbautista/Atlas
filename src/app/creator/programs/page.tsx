@@ -3,7 +3,6 @@
 import CreateProgramButton from "../../../components/program/Buttons/CreateProgramButton";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { redirectToHome } from "@/server-actions/creator";
 import {
     Table,
     TableBody,
@@ -23,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 const MyPrograms = () => {
     const [programs, setPrograms] = useState<Tables<"programs">[]>([]);
+    
     const { toast } = useToast();
 
     useEffect(() => {
@@ -39,33 +39,10 @@ const MyPrograms = () => {
                 return
             }
 
-            const { data: userData, error: userError } = await supabase
-                .from("users")
-                .select()
-                .eq("id", user.id)
-                .single()
-
-            if (userError && !userData) {
-                toast({
-                    title: "An error occurred.",
-                    description: userError.message
-                })
-                return
-            }
-
-            if (!userData.team_id) {
-                toast({
-                    title: "An error occurred.",
-                    description: "The user has not created a team yet."
-                })
-                redirectToHome();
-                return
-            }
-
             const { data, error } = await supabase
                 .from("programs")
                 .select()
-                .eq("team_id", userData.team_id)
+                .eq("created_by", user.id)
                 .order("created_at", { ascending: false })
 
             if (data && !error) {

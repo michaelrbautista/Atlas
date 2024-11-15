@@ -24,11 +24,7 @@ export async function checkAuth() {
         return true
     }
 
-    if (userData.team_id) {
-        return redirect("/creator/team");
-    } else {
-        return redirect("/home");
-    }
+    return redirect("/home");
 }
 
 export async function signIn(email: string, password: string) {
@@ -67,34 +63,12 @@ export async function signIn(email: string, password: string) {
     }
 }
 
-export async function redirectAfterLogin(createdTeam: boolean) {
-    if (createdTeam) {
-        return redirect("/creator/team");
-    } else {
-        return redirect("/home");
-    }
+export async function redirectToHome() {
+    return redirect("/home");
 }
 
-export async function createAccount(fullName: string, email: string, username: string, password: string, fromLandingPage: boolean) {
+export async function createAccount(fullName: string, email: string, username: string, password: string) {
     const supabase = createClient();
-
-    // Check username
-    const { data: usernameData, error: usernameError } = await supabase
-        .from("users")
-        .select()
-        .eq("username", username)
-
-    if (usernameError) {
-        return {
-            error: usernameError.message
-        }
-    }
-
-    if (usernameData.length > 0) {
-        return {
-            error: "Username is already taken."
-        }
-    }
 
     // Create user in auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -126,8 +100,14 @@ export async function createAccount(fullName: string, email: string, username: s
         .select()
 
     if (userError && !userData) {
-        return {
-            error: userError.message
+        if (userError.code === "23505") {
+            return {
+                error: "Username is already taken."
+            }
+        } else {
+            return {
+                error: userError.message
+            }
         }
     }
 

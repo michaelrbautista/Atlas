@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { logout } from "../../server-actions/auth";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";

@@ -1,10 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Tables } from "../../../../../database.types";
-import { createClient } from "@/utils/supabase/client";
-import AddExerciseButton from "@/components/exercise/AddExerciseButton";
 import ExerciseList from "@/components/exercise/ExerciseList";
-import { useToast } from "@/components/ui/use-toast";
 import { getWorkout, getWorkoutExercises } from "@/server-actions/workout";
 
 const Workout = async ({ 

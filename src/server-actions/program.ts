@@ -5,6 +5,23 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export async function getCreatorsPrograms(userId: string, offset: number) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("programs")
+        .select()
+        .eq("created_by", userId)
+        .order("created_at", { ascending: false })
+        .range(offset, offset + 9)
+    
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function checkIfProgramIsPurchased(programId: string) {
     const supabase = createClient();
 
@@ -42,14 +59,25 @@ export async function getUsersPrograms() {
 
     const { data: programsData, error: programsError } = await supabase
         .from("purchased_programs")
-        .select()
+        .select(`
+            created_by:users!saved_workouts_created_by_fkey(
+                full_name
+            ),
+            programs(
+                id,
+                title,
+                price,
+                description,
+                image_url
+            )
+        `)
         .eq("purchased_by", user.id)
 
     if (programsError && !programsData) {
         throw new Error(programsError.message)
     }
 
-    return programsData.map(program => program.program_id)
+    return programsData
 }
 
 export async function redirectToCheckoutUrl(url: string) {
@@ -160,7 +188,7 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
         } else {
             const imageExt = image.name.split(".").pop();
             let date = new Date()
-            const imageName = `/${userData.team_id}/${date.toISOString()}.${imageExt}`
+            const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
 
             // Add image to storage
             const { data: storageData, error: storageError } = await supabase
@@ -191,7 +219,7 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
                 }
             }
 
-            imageUrl = storageUrl;
+            imageUrl = storageUrl.publicUrl;
         }
 
         newProgram = {
@@ -262,7 +290,7 @@ export async function createProgram(formData: FormData) {
     if (image) {
         const imageExt = image.name.split(".").pop();
         let date = new Date()
-        const imageName = `/${userData.team_id}/${date.toISOString()}.${imageExt}`
+        const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
 
         // Update image
         const { data: storageData, error: storageError } = await supabase
@@ -297,7 +325,6 @@ export async function createProgram(formData: FormData) {
             description: formData.get("description") as string,
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
-            team_id: userData.team_id,
             image_url: storageUrl.publicUrl,
             image_path: storageData.path
         }
@@ -307,8 +334,7 @@ export async function createProgram(formData: FormData) {
             weeks: parseInt(formData.get("weeks") as string),
             description: formData.get("description") as string,
             free: (formData.get("free") === "true"),
-            price: parseFloat(formData.get("price") as string),
-            team_id: userData.team_id
+            price: parseFloat(formData.get("price") as string)
         }
     }
 

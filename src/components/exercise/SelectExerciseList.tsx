@@ -5,8 +5,8 @@ import { Tables } from "../../../database.types";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import CreateExerciseButton from "./CreateExerciseButton";
-import ExistingExerciseForm from "./ExistingExerciseForm";
+import CreateExerciseButton from "./Buttons/CreateExerciseButton";
+import ExistingExerciseForm from "./Forms/ExistingExerciseForm";
 import { useToast } from "../ui/use-toast";
 
 const SelectExerciseList = ({

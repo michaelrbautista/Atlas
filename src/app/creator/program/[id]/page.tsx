@@ -8,15 +8,16 @@ import { createClient } from "@/utils/supabase/client";
 import Calendar from "@/components/program/Calendar/Calendar";
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog";
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import EditProgramForm from "@/components/program/Forms/EditProgramForm";
 
 const ViewCreatorProgram = ({ 
     params
@@ -27,6 +28,7 @@ const ViewCreatorProgram = ({
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
     const [creator, setCreator] = useState<Tables<"users">>();
+    const [isOpen, setIsOpen] = useState(false);
 
     const { toast } = useToast();
 
@@ -95,6 +97,10 @@ const ViewCreatorProgram = ({
         getProgram();
     }, []);
 
+    const updateProgram = (updatedProgram: Tables<"programs">) => {
+        setProgram(updatedProgram);
+    }
+
     if (isLoading || !program) {
         return (
             <div className="h-full w-full flex items-center justify-center">
@@ -121,11 +127,29 @@ const ViewCreatorProgram = ({
                             priority
                         />
                     )}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-full">
                         <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
                         <div className="flex flex-col gap-5">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
                             <p className="text-primaryText text-sm">{program?.description}</p>
+                            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                                <SheetTrigger className="hidden sm:flex" asChild>
+                                    <Button variant="secondary" size="full">
+                                        Edit Program
+                                    </Button>
+                                </SheetTrigger>
+                                <SheetContent side="right" className="bg-background">
+                                    <SheetHeader>
+                                        <SheetTitle>Edit Program</SheetTitle>
+                                        <SheetDescription hidden></SheetDescription>
+                                    </SheetHeader>
+                                    <EditProgramForm
+                                        program={program}
+                                        updateProgram={updateProgram}
+                                        setIsOpen={setIsOpen}
+                                    />
+                                </SheetContent>
+                            </Sheet>
                         </div>
                     </div>
                 </div>

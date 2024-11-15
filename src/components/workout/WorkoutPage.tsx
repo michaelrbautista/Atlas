@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../database.types";
 import { createClient } from "@/utils/supabase/client";
-import AddExerciseButton from "@/components/exercise/AddExerciseButton";
+import AddExerciseButton from "@/components/exercise/Buttons/AddExerciseButton";
 import ExerciseList from "@/components/exercise/ExerciseList";
 
 const WorkoutPage = ({

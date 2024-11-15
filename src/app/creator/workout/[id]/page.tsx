@@ -4,7 +4,7 @@ import { Ellipsis, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
-import AddExerciseButton from "@/components/exercise/AddExerciseButton";
+import AddExerciseButton from "@/components/exercise/Buttons/AddExerciseButton";
 import {
     Table,
     TableBody,
@@ -39,7 +39,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { deleteExercise } from "@/server-actions/exercise";
 import EditWorkoutForm from "@/components/workout/EditWorkoutForm";
-import EditWorkoutExerciseForm from "@/components/exercise/EditWorkoutExerciseForm";
+import EditWorkoutExerciseForm from "@/components/exercise/Forms/EditWorkoutExerciseForm";
 import { useToast } from "@/components/ui/use-toast";
 
 const ViewCreatorWorkout = ({ 

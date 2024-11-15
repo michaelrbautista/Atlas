@@ -11,7 +11,7 @@ const ReturnPage = async ({
     const { programId = "" } = await searchParams
 
     return (
-        <div className="flex flex-col w-full max-w-2xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
+        <div className="flex flex-col w-full max-w-xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
             <div className="flex flex-col items-center gap-5">
                 <p className="text-primaryText text-3xl font-bold text-center">Payment has been submitted.</p>
                 <p className="text-secondaryText text-base font-semibold text-center">

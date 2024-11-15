@@ -2,8 +2,199 @@
 
 import { cache } from "react";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { Tables } from "../../database.types";
 
-export const getUser = cache(async (userId: string) => {
+export const getUserFromUsername = async (username: string) => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("users")
+        .select()
+        .eq("username", username)
+        .single()
+
+    if (error && !data) {
+        console.log(error)
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
+export const getCurrentUser = async () => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.");
+    }
+
+    const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select()
+        .eq("id", user.id)
+        .single()
+
+    if (userError && !userData) {
+        throw new Error(userError.message);
+    }
+
+    return userData
+}
+
+export const redirectToBecomeCreator = () => {
+    return redirect("/creator/onboard");
+}
+
+export const redirectToProfile = (username: string) => {
+    return redirect(`/${username}?isUser=true`)
+}
+
+export const redirectToEditProfile = () => {
+    return redirect("/profile/edit");
+}
+
+export const editUser = async (oldUser: Tables<"users">, formData: FormData) => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get user from auth."
+        }
+    }
+
+    const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select()
+        .eq("id", user.id)
+        .single()
+
+    if (userError && !userData) {
+        return {
+            error: "Couldn't get user from database."
+        }
+    }
+
+    let newUser: any;
+
+    const image = formData.get("profilePicture") as File;
+
+    if (image) {
+        let profilePicturePath;
+        let profilePictureUrl;
+
+        if (oldUser.profile_picture_path) {
+            const { data: storageData, error: storageError } = await supabase
+                .storage
+                .from("profile_pictures")
+                .update(oldUser.profile_picture_path, image, {
+                    cacheControl: '3600',
+                    upsert: true
+                });
+
+            if (storageError && !storageData) {
+                return {
+                    error: storageError.message
+                }
+            }
+
+            profilePictureUrl = oldUser.profile_picture_path;
+
+            // Get public url for image
+            const { data: storageUrl } = supabase
+                .storage
+                .from("profile_pictures")
+                .getPublicUrl(storageData.path);
+
+            if (!storageUrl) {
+                return {
+                    error: "Couldn't get public image url from storage."
+                }
+            }
+
+            profilePictureUrl = storageUrl.publicUrl;
+        } else {
+            const imageExt = image.name.split(".").pop();
+            let date = new Date()
+            const imageName = `/${user.id}/${date.toISOString()}.${imageExt}`
+
+            // Add image to storage
+            const { data: storageData, error: storageError } = await supabase
+                .storage
+                .from("profile_pictures")
+                .upload(imageName, image, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (storageError && !storageData) {
+                return {
+                    error: storageError.message
+                }
+            }
+
+            profilePictureUrl = storageData.path;
+
+            // Get public url for image
+            const { data: storageUrl } = supabase
+                .storage
+                .from("profile_pictures")
+                .getPublicUrl(storageData.path);
+
+            if (!storageUrl) {
+                return {
+                    error: "Couldn't get public image url from storage."
+                }
+            }
+
+            profilePictureUrl = storageUrl.publicUrl;
+        }
+
+        newUser = {
+            full_name: formData.get("fullName") as string,
+            username: formData.get("username") as string,
+            bio: formData.get("bio") as string,
+            profile_picture_url: profilePictureUrl,
+            profile_picture_path: profilePicturePath
+        }
+    } else {
+        newUser = {
+            full_name: formData.get("fullName") as string,
+            username: formData.get("username") as string,
+            bio: formData.get("bio") as string,
+        }
+    }
+
+    // Edit program
+    const { data: updatedUserData, error: updatedUserError } = await supabase
+        .from("users")
+        .update(newUser)
+        .eq("id", user.id)
+        .select()
+        .single()
+
+    if (updatedUserError && !updatedUserData) {
+        if (updatedUserError.code === "23505") {
+            return {
+                error: "Username is already taken."
+            }
+        } else {
+            return {
+                error: updatedUserError.message
+            }
+        }
+    }
+
+    return {
+        data: updatedUserData
+    }
+}
+
+export const getUser = async (userId: string) => {
     const supabase = createClient();
 
     const { data, error } = await supabase
@@ -17,4 +208,4 @@ export const getUser = cache(async (userId: string) => {
     }
 
     return data
-})
+}
