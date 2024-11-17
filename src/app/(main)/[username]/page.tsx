@@ -19,11 +19,9 @@ const User = ({
     params: { username: string }
 }) => {
     const [user, setUser] = useState<Tables<"users"> | null>(null);
-    const [isUser, setIsUser] = useState(false);
 
     const {
-        user: contextUser,
-        isLoading: contextIsLoading   
+        user: contextUser
     } = useUserContext();
 
     useEffect(() => {
@@ -31,16 +29,12 @@ const User = ({
             const user = await getUserFromUsername(params.username);
 
             setUser(user);
-
-            console.log(contextUser)
-
-            setIsUser(contextUser?.id == user.id)
         }
 
         getUser();
     }, []);
 
-    if (!user || contextIsLoading) {
+    if (!user || !contextUser) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
             <Spinner></Spinner>
@@ -72,7 +66,7 @@ const User = ({
                     </div>
                 </div>
                 <p className="text-primaryText text-base">{user.bio}</p>
-                {isUser && (
+                {contextUser?.id == user.id && (
                     <EditProfileButton />
                 )}
                 <Tabs defaultValue="posts" className="w-full">
