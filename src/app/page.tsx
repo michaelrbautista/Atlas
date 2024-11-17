@@ -50,7 +50,7 @@ export default function Home() {
               </DialogContent>
           </Dialog>
         </div>
-        <div className="pt-40 pb-40 flex flex-col justify-center items-center">
+        <div className="pt-40 flex flex-col gap-24 justify-center items-center">
           <div className="flex flex-col items-center gap-24 w-4/5 sm:w-2/4 max-w-3xl">
             <div className="flex flex-col items-center gap-5">
               <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
@@ -112,6 +112,10 @@ export default function Home() {
               </Dialog>
             </div>
           </div>
+          <div className="w-full h-20 flex items-center justify-between px-5 sm:px-10 border-t-[1px] border-systemGray6 bg-systemBackground">
+              <p className="text-primaryText font-bold text-xl">Atlas</p>
+              <p className="text-secondaryText">All rights reserved</p>
+            </div>
         </div>
       </div>
     )
