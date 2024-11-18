@@ -15,7 +15,7 @@ import MobileSidebarRoutes from "./MobileSidebarRoutes";
 import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
 import { Button } from "@/components/ui/button";
-import UserInfo from "../../auth/UserInfo";
+import UserInfo from "../UserInfo";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import LogoutButton from "../../auth/LogoutButton";
 import { useUserContext } from "@/context";

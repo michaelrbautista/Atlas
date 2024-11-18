@@ -118,6 +118,8 @@ export async function deleteProgram(programId: string) {
         .eq("id", programId)
 
     if (response.error) {
+        console.log(response.error);
+
         return {
             error: "Couldn't delete program."
         }
@@ -348,6 +350,22 @@ export async function createProgram(formData: FormData) {
     if (programError && !programData) {
         return {
             error: programError.message
+        }
+    }
+
+    const purchasedProgram = {
+        program_id: programData.id,
+        created_by: user.id,
+        purchased_by: user.id
+    };
+
+    const { error: purchasedProgramError } = await supabase
+        .from("purchased_programs")
+        .insert(purchasedProgram);
+
+    if (purchasedProgramError) {
+        return {
+            error: purchasedProgramError.message
         }
     }
 

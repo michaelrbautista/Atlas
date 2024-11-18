@@ -6,6 +6,7 @@ const SearchResultsList = async ({
 }: {
     query: string
 }) => {
+
     const results = await searchUsers(query);
 
     return (

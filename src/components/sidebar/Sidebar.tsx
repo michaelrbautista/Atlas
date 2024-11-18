@@ -4,7 +4,7 @@ import Logo from "@/components/misc/Logo";
 import SidebarRoutes from "./SidebarRoutes";
 import SignInButton from "../auth/SignInButton";
 import CreateAccountButton from "../auth/CreateAccountButton";
-import UserInfo from "../auth/UserInfo";
+import UserInfo from "./UserInfo";
 import { useUserContext } from "@/context";
 import { Loader2 } from "lucide-react";
 import PostButton from "../post/PostButton";
@@ -40,11 +40,11 @@ const userRoutes = [
 
 const creatorRoutes = [
     {
-        label: "My Programs",
+        label: "Programs",
         href: "/creator/programs"
     },
     {
-        label: "My Exercises",
+        label: "Exercises",
         href: "/creator/exercises"
     }
 ]

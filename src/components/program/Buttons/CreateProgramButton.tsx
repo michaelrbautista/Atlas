@@ -23,7 +23,7 @@ const CreateProgramButton = ({
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="hidden sm:flex" asChild>
-                <Button className={buttonVariants({ variant: "systemBlue", size: "sm"})}>Create Program</Button>
+                <Button  variant="systemBlue">Create Program</Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background">
                 <SheetHeader>

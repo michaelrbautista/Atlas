@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      collections: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          description: string
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collections_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercises: {
         Row: {
           category: string | null
@@ -46,42 +78,6 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      likes: {
-        Row: {
-          created_at: string
-          id: string
-          liked_by: string
-          post_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          liked_by?: string
-          post_id?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          liked_by?: string
-          post_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "likes_liked_by_fkey"
-            columns: ["liked_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "likes_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "posts"
             referencedColumns: ["id"]
           },
         ]

@@ -52,7 +52,6 @@ const MyPrograms = () => {
                     title: "An error occurred.",
                     description: error.message
                 })
-                return
             }
         }
 

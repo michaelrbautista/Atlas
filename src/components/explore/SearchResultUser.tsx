@@ -1,3 +1,5 @@
+"use client";
+
 import { Users } from "lucide-react"
 import { Tables } from "../../../database.types"
 import Image from "next/image"
@@ -9,7 +11,12 @@ const SearchResultUser = ({
     user: Tables<"users">
 }) => {
     return (
-        <Link href={`/${user.username}`} className="flex flex-row gap-5 p-5 border-b-[1px]">
+        <Link href={{
+            pathname: `/${user.username}`,
+            query: {
+                isUser: false
+            }
+        }} className="flex flex-row gap-5 p-5 border-b-[1px]">
             {(!user.profile_picture_url) ? (
                 // Replace with placeholder image
                 <div className="bg-systemGray5 shrink-0 h-12 w-12 rounded-full flex items-center justify-center">

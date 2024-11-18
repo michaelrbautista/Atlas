@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "../auth/LogoutButton";
 import { Ellipsis } from "lucide-react";
 import { logout } from "@/server-actions/auth";
 import { useToast } from "../ui/use-toast";
@@ -49,12 +49,7 @@ const UserInfo = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem className="p-0" asChild>
-                    <Link href={{
-                        pathname: `/${username}`,
-                        query: {
-                            isUser: true
-                        }
-                    }} className="w-full h-full px-2 py-1.5 text-start cursor-pointer">View profile</Link>
+                    <Link href={`/${username}`} className="w-full h-full px-2 py-1.5 text-start cursor-pointer">View profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="p-0" asChild>
                     <form action={clientLogout}>

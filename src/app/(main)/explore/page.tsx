@@ -8,7 +8,7 @@ const Home = async ({
         query?: string
     }
 }) => {
-    const query = searchParams?.query || "";
+    const query = searchParams?.query ?? "";
 
     return (
         <div className="h-full w-full max-w-xl px-5 sm:py-10">
