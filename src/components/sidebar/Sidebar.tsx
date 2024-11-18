@@ -40,12 +40,8 @@ const userRoutes = [
 
 const creatorRoutes = [
     {
-        label: "Programs",
-        href: "/creator/programs"
-    },
-    {
-        label: "Exercises",
-        href: "/creator/exercises"
+        label: "Library",
+        href: "/creator/library"
     }
 ]
 
