@@ -9,38 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      collections: {
-        Row: {
-          created_at: string
-          created_by: string
-          description: string
-          id: string
-          title: string
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string
-          description: string
-          id?: string
-          title: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          description?: string
-          id?: string
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "collections_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       exercises: {
         Row: {
           category: string | null
@@ -82,48 +50,45 @@ export type Database = {
           },
         ]
       }
-      posts: {
+      program_workouts: {
         Row: {
           created_at: string
           created_by: string
           id: string
-          program_id: string | null
-          text: string | null
-          workout_id: string | null
+          program_id: string
+          workout_id: string
         }
         Insert: {
           created_at?: string
           created_by?: string
           id?: string
-          program_id?: string | null
-          text?: string | null
-          workout_id?: string | null
+          program_id?: string
+          workout_id?: string
         }
         Update: {
           created_at?: string
           created_by?: string
           id?: string
-          program_id?: string | null
-          text?: string | null
-          workout_id?: string | null
+          program_id?: string
+          workout_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "posts_created_by_fkey"
+            foreignKeyName: "program_workouts_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "posts_program_id_fkey"
+            foreignKeyName: "program_workouts_program_id_fkey"
             columns: ["program_id"]
             isOneToOne: false
             referencedRelation: "programs"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "posts_workout_id_fkey"
+            foreignKeyName: "program_workouts_workout_id_fkey"
             columns: ["workout_id"]
             isOneToOne: false
             referencedRelation: "workouts"

@@ -4,7 +4,6 @@ import { Users } from "lucide-react";
 import Image from "next/image";
 import { getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CreatorPostList from "@/components/post/CreatorPostList";
 import EditProfileButton from "@/components/user/EditProfileButton";
 import CreatorProgramList from "@/components/program/CreatorProgramList";
 import { useEffect, useState } from "react";
@@ -69,15 +68,11 @@ const User = ({
                 {contextUser?.id == user.id && (
                     <EditProfileButton />
                 )}
-                <Tabs defaultValue="posts" className="w-full">
+                <Tabs defaultValue="programs" className="w-full">
                     <TabsList className="w-full">
-                        <TabsTrigger value="posts" className="w-full">Posts</TabsTrigger>
                         <TabsTrigger value="programs" className="w-full">Programs</TabsTrigger>
                         {/* <TabsTrigger value="likes" className="w-full">Likes</TabsTrigger> */}
                     </TabsList>
-                    <TabsContent value="posts">
-                        <CreatorPostList user={user} />
-                    </TabsContent>
                     <TabsContent value="programs">
                         <CreatorProgramList user={user} />
                     </TabsContent>

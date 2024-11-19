@@ -7,16 +7,15 @@ import CreateAccountButton from "../auth/CreateAccountButton";
 import UserInfo from "./UserInfo";
 import { useUserContext } from "@/context";
 import { Loader2 } from "lucide-react";
-import PostButton from "../post/PostButton";
 import BecomeCreatorButton from "./BecomeCreatorButton";
 
 export type UserRole = "user" | "creator";
 
 const anonRoutes = [
-    {
-        label: "Home",
-        href:"/home"
-    },
+    // {
+    //     label: "Home",
+    //     href:"/home"
+    // },
     {
         label: "Explore",
         href: "/explore"
@@ -24,10 +23,10 @@ const anonRoutes = [
 ]
 
 const userRoutes = [
-    {
-        label: "Home",
-        href: "/home"
-    },
+    // {
+    //     label: "Home",
+    //     href: "/home"
+    // },
     {
         label: "Explore",
         href: "/explore"
@@ -68,16 +67,12 @@ const Sidebar = () => {
                 {(!contextIsLoading) && (
                     (contextUser) ? (
                         <div className="w-full flex flex-col gap-5">
-                            {(!contextUser.payments_enabled ?
+                            {(!contextUser.payments_enabled &&
                                 <div className="px-5">
                                     <BecomeCreatorButton />
                                     <p className="text-secondaryText text-sm p-2">
                                         Become a creator to monetize your content.
                                     </p>
-                                </div>
-                             : 
-                                <div className="px-5">
-                                    <PostButton />
                                 </div>
                             )}
                             <div className="flex flex-row gap-2 px-2 justify-between items-center">
