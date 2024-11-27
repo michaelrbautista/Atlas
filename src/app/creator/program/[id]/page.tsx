@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
-import Calendar from "@/components/program/Calendar/Calendar";
+import Calendar from "@/components/creator/program/calendar/Calendar";
 
 import {
     Sheet,
@@ -17,7 +17,7 @@ import {
   } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import EditProgramForm from "@/components/program/Forms/EditProgramForm";
+import EditProgramForm from "@/components/creator/program/EditProgramForm";
 
 const ViewCreatorProgram = ({ 
     params
@@ -158,7 +158,6 @@ const ViewCreatorProgram = ({
                         programId={program.id}
                         weeks={program.weeks}
                         pages={Math.floor(program.weeks / 4) + 1}
-                        isCreator={true}
                     />
                 </div>
             </div>

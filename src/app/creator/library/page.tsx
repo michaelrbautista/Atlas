@@ -1,8 +1,8 @@
 "use client";
 
-import LibraryExercises from "@/components/creator/LibraryExercises";
-import LibraryPrograms from "@/components/creator/LibraryPrograms";
-import LibraryWorkouts from "@/components/creator/LibraryWorkouts";
+import LibraryExercises from "@/app/creator/library/exercises/LibraryExercises";
+import LibraryPrograms from "@/app/creator/library/programs/LibraryPrograms";
+import LibraryWorkouts from "@/app/creator/library/workouts/LibraryWorkouts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Library = () => {
@@ -12,21 +12,21 @@ const Library = () => {
                 <p className="text-foreground text-2xl sm:text-2xl font-bold">Library</p>
             </div>
             <Tabs defaultValue="programs">
-                    <TabsList>
-                        <TabsTrigger value="programs">Programs</TabsTrigger>
-                        <TabsTrigger value="workouts">Workouts</TabsTrigger>
-                        <TabsTrigger value="exercises">Exercises</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="programs">
-                        <LibraryPrograms />
-                    </TabsContent>
-                    <TabsContent value="workouts">
-                        <LibraryWorkouts />
-                    </TabsContent>
-                    <TabsContent value="exercises">
-                        <LibraryExercises />
-                    </TabsContent>
-                </Tabs>
+                <TabsList>
+                    <TabsTrigger value="programs">Programs</TabsTrigger>
+                    <TabsTrigger value="workouts">Workouts</TabsTrigger>
+                    <TabsTrigger value="exercises">Exercises</TabsTrigger>
+                </TabsList>
+                <TabsContent value="programs">
+                    <LibraryPrograms />
+                </TabsContent>
+                <TabsContent value="workouts">
+                    <LibraryWorkouts />
+                </TabsContent>
+                <TabsContent value="exercises">
+                    <LibraryExercises />
+                </TabsContent>
+            </Tabs>
         </div>
     )
 }

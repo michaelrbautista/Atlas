@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createWorkout } from "@/server-actions/workout";
+// import { createWorkout } from "@/server-actions/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
@@ -62,16 +62,15 @@ const WorkoutForm = ({
         }
 
         // Create workout
+        // let { data: workoutData, error: workoutError } = await createWorkout(formData);
 
-        let { data: workoutData, error: workoutError } = await createWorkout(formData);
+        // if (workoutError && !workoutData) {
+        //     console.log(workoutError);
+        //     return
+        // }
 
-        if (workoutError && !workoutData) {
-            console.log(workoutError);
-            return
-        }
-
+        // addWorkout(workoutData!);
         setIsOpen(false);
-        addWorkout(workoutData!);
     }
 
     return (
@@ -89,7 +88,6 @@ const WorkoutForm = ({
                                         {...field}
                                         id="title"
                                         name="title"
-                                        // placeholder="Enter title"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -107,7 +105,6 @@ const WorkoutForm = ({
                                         {...field}
                                         id="description"
                                         name="description"
-                                        // placeholder="Enter description"
                                     />
                                 </FormControl>
                                 <FormMessage />

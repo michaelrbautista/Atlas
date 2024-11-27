@@ -374,6 +374,10 @@ export async function createProgram(formData: FormData) {
     }
 }
 
+export const redirectToCreatorsProgram = async (redirectUrl: string) => {
+    redirect(`${redirectUrl}`);
+}
+
 export const getAllPrograms = cache(async () => {
     const supabase = createClient();
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getCreatorsPosts } from "@/server-actions/post";
 import { Skeleton } from "../ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { Tables } from "../../../database.types";

@@ -1,11 +1,11 @@
 import Link from "next/link"
-import { Tables } from "../../../database.types"
 import { ChevronRight } from "lucide-react"
+import { FetchedExercise } from "@/server-actions/fetch-types"
 
 const ExerciseList = ({
     exercises
 }: {
-    exercises: Tables<"workout_exercises">[]
+    exercises: FetchedExercise[]
 }) => {
     return (
         <div className="flex flex-col py-2 gap-3">
@@ -21,7 +21,7 @@ const ExerciseList = ({
                         // <ExerciseItem workoutExercise={exercise}/>
                         <Link href={`/exercise/${exercise.id}`} key={exercise.id} className="bg-systemGray5 flex flex-row w-full justify-between items-center p-3 rounded-lg">
                             <div className="">
-                                <p className="text-primaryText font-bold">{exercise.title}</p>
+                                <p className="text-primaryText font-bold">{exercise.exercises?.title}</p>
                                 <p className="text-secondaryText">{exercise.sets} {exercise.sets == 1 ? "set" : "sets"}</p>
                                 <p className="text-secondaryText">{exercise.reps} {exercise.reps == 1 ? "rep" : "reps"}</p>
                             </div>

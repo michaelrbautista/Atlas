@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
+import { FetchedExercise } from "./fetch-types";
 
 export async function getCreatorsExercises() {
     const supabase = createClient();
@@ -37,6 +38,25 @@ export async function getWorkoutExercise(workoutExerciseId: string) {
         .from("workout_exercises")
         .select()
         .eq("id", workoutExerciseId)
+        .single()
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
+export async function getProgramExercise(exerciseId: string) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("program_exercises")
+        .select(`
+            *,
+            exercises(*)
+        `)
+        .eq("id", exerciseId)
         .single()
 
     if (error && !data) {
@@ -187,7 +207,7 @@ export async function editExercise(exercise: Tables<"exercises">, formData: Form
     }
 }
 
-export async function editWorkoutExercise(workoutExercise: Tables<"workout_exercises">, formData: FormData) {
+export async function editProgramExercise(programExercise: FetchedExercise, formData: FormData) {
     const supabase = createClient();
 
     let newExercise = {
@@ -197,10 +217,21 @@ export async function editWorkoutExercise(workoutExercise: Tables<"workout_exerc
 
     // Update
     const { data: exerciseData, error: exerciseError } = await supabase
-        .from("workout_exercises")
+        .from("program_exercises")
         .update(newExercise)
-        .eq("id", workoutExercise.id)
-        .select()
+        .eq("id", programExercise.id)
+        .select(`
+            id,
+            exercise_number,
+            sets,
+            reps,
+            time,
+            exercises(
+                title,
+                instructions,
+                video_url
+            )
+        `)
         .single()
 
     if (exerciseError && !exerciseData) {
@@ -214,13 +245,13 @@ export async function editWorkoutExercise(workoutExercise: Tables<"workout_exerc
     }
 }
 
-export async function deleteExercise(workoutExerciseId: string) {
+export async function deleteProgramExercise(programExerciseId: string) {
     const supabase = createClient();
 
     const response = await supabase
-        .from("workout_exercises")
+        .from("program_exercises")
         .delete()
-        .eq("id", workoutExerciseId)
+        .eq("id", programExerciseId)
 
     if (response.error) {
         return {
@@ -229,8 +260,72 @@ export async function deleteExercise(workoutExerciseId: string) {
     }
 }
 
-// Add exercise to workout_exercises table
-export async function addExercise(formData: FormData) {
+export async function deleteLibraryExercise(exerciseId: string) {
+    const supabase = createClient();
+
+    const response = await supabase
+        .from("exercises")
+        .delete()
+        .eq("id", exerciseId)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete exercise."
+        }
+    }
+}
+
+// Add exercise to workout in program
+export async function addExerciseToWorkout(exercise: Tables<"exercises">, formData: FormData) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: "Couldn't get user from auth."
+        }
+    }
+
+    let newWorkoutExercise = {
+        workout_id: formData.get("workoutId") as string,
+        program_workout_id: formData.get("programWorkoutId") as string,
+        exercise_id: formData.get("exerciseId") as string,
+        exercise_number: parseInt(formData.get("exerciseNumber") as string),
+        sets: parseInt(formData.get("sets") as string),
+        reps: parseInt(formData.get("reps") as string),
+        time: formData.get("time") as string
+    }
+
+    const { data: programExerciseData, error: programExerciseError } = await supabase
+        .from("program_exercises")
+        .insert(newWorkoutExercise)
+        .select()
+        .single()
+
+    if (programExerciseError && !programExerciseData) {
+        return {
+            error: programExerciseError.message
+        }
+    }
+
+    return {
+        data: {
+            id: programExerciseData.id,
+            sets: programExerciseData.sets,
+            reps: programExerciseData.reps,
+            time: programExerciseData.time,
+            exercises: {
+                title: exercise.title,
+                instructions: exercise.instructions,
+                video_url: exercise.video_url
+            }
+        }
+    }
+}
+
+// Add exercise to workouts in creator's library
+export async function addExerciseToLibraryWorkout(formData: FormData) {
     const supabase = createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
@@ -248,11 +343,11 @@ export async function addExercise(formData: FormData) {
         title: formData.get("title") as string,
         sets: parseInt(formData.get("sets") as string),
         reps: parseInt(formData.get("reps") as string),
-        other: formData.get("other") as string
+        time: formData.get("time") as string
     }
 
     const { data: workoutExerciseData, error: workoutExerciseError } = await supabase
-        .from("workout_exercises")
+        .from("program_exercises")
         .insert(newWorkoutExercise)
         .select()
         .single()
@@ -268,7 +363,7 @@ export async function addExercise(formData: FormData) {
     }
 }
 
-// Add exercise to exercises table
+// Add exercise to exercises table (library)
 export async function createExercise(formData: FormData) {
     const supabase = createClient();
 

@@ -1,4 +1,5 @@
-import ProgramItem, { FetchedProgram } from "./ProgramItem";
+import { FetchedProgram } from "@/server-actions/fetch-types";
+import ProgramItem from "./ProgramItem";
 
 const ProgramList = ({
     programs

@@ -4,19 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell } from "lucide-react";
 
-export type FetchedProgram = {
-    created_by: {
-        full_name: string;
-    } | null;
-    programs: {
-        id: string;
-        title: string;
-        price: number;
-        description: string | null;
-        image_url: string | null;
-    } | null;
-}
-
 const ProgramItem = ({
     id,
     title,
