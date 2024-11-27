@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import AddExerciseButton from "@/components/creator/exercise/AddExerciseButton";
 import { Separator } from "@/components/ui/separator";
-import { deleteProgramExercise } from "@/server-actions/exercise";
 import { useToast } from "@/components/ui/use-toast";
 import EditLibraryWorkoutButton from "@/components/creator/workout/library/EditLibraryWorkoutButton";
 import { getLibraryWorkout } from "@/server-actions/workout";
@@ -20,6 +19,7 @@ const CreatorLibraryWorkout = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [workout, setWorkout] = useState<FetchedWorkout | null>(null);
+    const [editWorkout, setEditWorkout] = useState<Tables<"workouts"> | null>(null);
     const [exercises, setExercises] = useState<FetchedExercise[]>([]);
 
     const { toast } = useToast();
@@ -39,7 +39,10 @@ const CreatorLibraryWorkout = ({
                 return
             }
 
+            const { program_exercises, ...editWorkout } = data!
+
             setWorkout(data!);
+            setEditWorkout(editWorkout)
             setExercises(data!.program_exercises)
             setIsLoading(false);
         }
@@ -47,7 +50,7 @@ const CreatorLibraryWorkout = ({
         getWorkout();
     }, []);
 
-    const updateWorkout = (updatedWorkout: FetchedWorkout) => {
+    const updateWorkout = (updatedWorkout: Tables<"workouts">) => {
         setWorkout({
             ...workout!,
             title: updatedWorkout.title,
@@ -72,7 +75,7 @@ const CreatorLibraryWorkout = ({
                     <div className="flex gap-5 items-center justify-between">
                         <p className="text-foreground text-2xl sm:text-2xl font-bold">{workout.title}</p>
                         <EditLibraryWorkoutButton
-                            workout={workout}
+                            workout={editWorkout!}
                             updateWorkout={updateWorkout}
                         />
                     </div>
@@ -91,7 +94,7 @@ const CreatorLibraryWorkout = ({
                     columns={columns}
                     data={exercises}
                     setData={setExercises}
-                    libraryType={null}
+                    libraryType={"exercise"}
                     enableOnClick={true}
                 />
             </div>

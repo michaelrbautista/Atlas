@@ -89,7 +89,7 @@ const ExistingExerciseForm = ({
             return
         }
 
-        addNewExercise(resultData);
+        addNewExercise(resultData!);
         setIsOpen(false);
     }
 

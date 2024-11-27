@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { deleteWorkoutFromProgram } from "@/server-actions/workout"
+import { deleteProgramWorkout } from "@/server-actions/workout"
 import { useToast } from "@/components/ui/use-toast"
 import NewProgramWorkoutButton from "@/components/creator/workout/program/NewProgramWorkoutButton"
 
@@ -34,7 +34,7 @@ const Day = ({
     const { toast } = useToast();
 
     const deleteWorkoutClient = async (workoutId: string) => {
-        const error = await deleteWorkoutFromProgram(workoutId);
+        const error = await deleteProgramWorkout(workoutId);
 
         if (error) {
             toast({

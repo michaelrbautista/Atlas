@@ -312,6 +312,7 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
     return {
         data: {
             id: programExerciseData.id,
+            exercise_number: programExerciseData.exercise_number,
             sets: programExerciseData.sets,
             reps: programExerciseData.reps,
             time: programExerciseData.time,

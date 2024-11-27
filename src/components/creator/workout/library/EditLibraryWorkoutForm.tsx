@@ -12,8 +12,8 @@ import { Loader2 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Tables } from "../../../../../database.types";
 import { FetchedWorkout } from "@/server-actions/fetch-types";
+import { Tables } from "../../../../../database.types";
 
 const EditLibraryWorkoutForm = ({
     workout,

@@ -24,7 +24,6 @@ import { Tables } from "../../../../database.types";
 import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Ellipsis, Loader2 } from "lucide-react";
-import { deleteExercise } from "@/server-actions/exercise";
 import EditExerciseForm from "./EditExerciseForm";
 
 
@@ -66,7 +65,7 @@ const ExerciseOptions = ({
                             size="full"
                             disabled={deleteIsLoading}
                             onClick={() => {
-                                deleteExercise(exercise.id)
+
                             }}
                         >
                             {deleteIsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -110,11 +109,6 @@ const ExerciseOptions = ({
                     <SheetDescription hidden></SheetDescription>
                 </SheetHeader>
                 {/* Edit Exercise Form */}
-                <EditExerciseForm
-                    exercise={exercise}
-                    updateExercise={updateExercise}
-                    setIsOpen={setEditIsOpen}
-                />
             </SheetContent>
         </Sheet>
     )

@@ -160,16 +160,16 @@ export function DataTable<TData, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => {
-                                        switch(libraryType) {
-                                            case "program":
-                                                const redirectProgram = row.original as Tables<"programs">
-                                                redirectToCreatorsProgram(`/creator/program/${redirectProgram.id}`);
-                                            case "workout":
-                                                const redirectWorkout = row.original as Tables<"workouts">
-                                                redirectToCreatorsProgram(`/creator/workout/${redirectWorkout.id}`);
+                                        console.log(row.original)
+                                        if (libraryType == "program") {
+                                            const redirectProgram = row.original as Tables<"programs">
+                                            redirectToCreatorsProgram(`/creator/program/${redirectProgram.id}`);
+                                        } else if (libraryType == "workout") {
+                                            const redirectWorkout = row.original as Tables<"workouts">
+                                            redirectToCreatorsProgram(`/creator/workout/${redirectWorkout.id}`);
                                         }
                                     }}
-                                    className={cn(libraryType == "program" || libraryType == "workout" && "cursor-pointer")}
+                                    className={cn(libraryType == "program" && "cursor-pointer", libraryType == "workout" && "cursor-pointer")}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

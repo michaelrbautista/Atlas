@@ -2,23 +2,11 @@
 
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Tables } from "../../../../../../database.types";
 import AddExerciseButton from "@/components/creator/exercise/AddExerciseButton";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator";
-import { deleteProgramExercise } from "@/server-actions/exercise";
 import { useToast } from "@/components/ui/use-toast";
 import { FetchedExercise, FetchedWorkout } from "@/server-actions/fetch-types";
 import { getProgramWorkout } from "@/server-actions/workout";
-import PlayExerciseVideoButton from "@/components/exercise/PlayExerciseVideoButton";
-import EditExerciseButton from "@/components/creator/exercise/EditExerciseButton";
 import EditProgramWorkoutButton from "@/components/creator/workout/program/EditProgramWorkoutButton";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
@@ -102,6 +90,8 @@ const CreatorProgramWorkout = ({
                     columns={columns}
                     data={exercises}
                     setData={setExercises}
+                    libraryType="exercise"
+                    enableOnClick={false}
                 />
             </div>
         )

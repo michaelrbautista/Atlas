@@ -91,6 +91,8 @@ export async function getLibraryWorkout(workoutId: string) {
         .from("workouts")
         .select(`
             id,
+            created_at,
+            created_by,
             title,
             description,
             program_exercises(

@@ -12,13 +12,14 @@ import { useState } from "react";
 import { Button } from "../../../ui/button";
 import EditLibraryWorkoutForm from "./EditLibraryWorkoutForm";
 import { FetchedWorkout } from "@/server-actions/fetch-types";
+import { Tables } from "../../../../../database.types";
 
 const EditLibraryWorkoutButton = ({
     workout,
     updateWorkout
 }: {
-    workout: FetchedWorkout,
-    updateWorkout: (workout: FetchedWorkout) => void
+    workout: Tables<"workouts">,
+    updateWorkout: (workout: Tables<"workouts">) => void
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
