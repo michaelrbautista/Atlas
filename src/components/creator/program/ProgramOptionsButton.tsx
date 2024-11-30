@@ -1,3 +1,5 @@
+"use client";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,24 +8,27 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import React, { useState } from "react"
-import { Tables } from "../../../../../database.types"
-import EditProgramForm from "@/components/creator/program/EditProgramForm"
-import Image from "next/image"
-import { Table } from "@tanstack/react-table"
-import EditExerciseForm from "@/components/creator/exercise/EditExerciseForm"
+import { Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog"
+import { useState } from "react";
+import { Tables } from "../../../../database.types";
+import EditProgramForm from "./EditProgramForm";
 
-const ExerciseOptionsDialog = ({
-    exercise,
-    table
+const ProgramOptionsButton = ({
+    program,
+    updateProgram
 }: {
-    exercise: Tables<"exercises">,
-    table: Table<Tables<"exercises">>
+    program: Tables<"programs">,
+    updateProgram: (updatedProgram: Tables<"programs">) => void
 }) => {
     const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
     const [isOpen, setIsOpen] = useState(false);
-
+    
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenu>
@@ -40,7 +45,7 @@ const ExerciseOptionsDialog = ({
                                 setIsOpen(true);
                             }}
                         >
-                            Edit exercise
+                            Edit program
                         </DialogTrigger>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -51,7 +56,7 @@ const ExerciseOptionsDialog = ({
                                 setIsOpen(true);
                             }}
                         >
-                            Delete exercise
+                            Delete program
                         </DialogTrigger>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -59,24 +64,24 @@ const ExerciseOptionsDialog = ({
             <DialogContent>
                 <DialogHeader>
                     {dialogType == "edit" ? (
-                        <DialogTitle>Edit Exercise</DialogTitle>
+                        <DialogTitle>Edit Program</DialogTitle>
                     ) : (
-                        <DialogTitle>Delete Exercise</DialogTitle>
+                        <DialogTitle>Delete Program</DialogTitle>
                     )}
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
                 {dialogType == "edit" ? (
-                    <EditExerciseForm
-                        exercise={exercise}
+                    <EditProgramForm
+                        program={program}
+                        updateProgram={updateProgram}
                         setIsOpen={setIsOpen}
-                        updateLibraryExercise={table.options.meta?.updateLibraryExercise!}
                     />
                 ) : (
                     <div className="flex flex-col gap-5 pt-5">
-                        <p>Are you sure you want to delete this exercise?</p>
+                        <p>Are you sure you want to delete this program?</p>
                         <Button
                             onClick={() => {
-                                table.options.meta?.deleteLibraryExercise!(exercise.id);
+                                // Delete program
                                 setIsOpen(false);
                             }}
                             variant="destructive"
@@ -89,4 +94,4 @@ const ExerciseOptionsDialog = ({
         </Dialog>
     )
 }
-export default ExerciseOptionsDialog
+export default ProgramOptionsButton

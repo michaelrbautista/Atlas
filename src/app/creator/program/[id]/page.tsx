@@ -1,6 +1,6 @@
 "use client";
 
-import { Dumbbell, Loader2 } from "lucide-react";
+import { Dumbbell, Loader2, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import EditProgramForm from "@/components/creator/program/EditProgramForm";
+import ProgramOptionsButton from "@/components/creator/program/ProgramOptionsButton";
 
 const ViewCreatorProgram = ({ 
     params
@@ -110,7 +111,7 @@ const ViewCreatorProgram = ({
     } else {
         return (
             <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
-                <div className="flex flex-col sm:flex-row gap-5 w-full sm:px-16">
+                <div className="flex flex-row gap-5 w-full sm:px-16">
                     {(programImageUrl == "") ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
@@ -132,7 +133,7 @@ const ViewCreatorProgram = ({
                         <div className="flex flex-col gap-5">
                             <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
                             <p className="text-primaryText text-sm">{program?.description}</p>
-                            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                            {/* <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger className="hidden sm:flex" asChild>
                                     <Button variant="secondary" size="full">
                                         Edit Program
@@ -149,8 +150,14 @@ const ViewCreatorProgram = ({
                                         setIsOpen={setIsOpen}
                                     />
                                 </SheetContent>
-                            </Sheet>
+                            </Sheet> */}
                         </div>
+                    </div>
+                    <div className="shrink-0">
+                        <ProgramOptionsButton
+                            program={program}
+                            updateProgram={(program) => {}}
+                        />
                     </div>
                 </div>
                 <div className="flex overflow-scroll">
