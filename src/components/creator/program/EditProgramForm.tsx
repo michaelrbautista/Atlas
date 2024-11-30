@@ -34,10 +34,11 @@ const EditProgramForm = ({
         defaultValues: {
             image: new File([], ""),
             title: program.title,
+            description: program.description ?? "",
             weeks: program.weeks,
             free: program.free,
             price: program.price,
-            description: program.description ?? ""
+            private: program.private
         }
     })
 
@@ -158,7 +159,6 @@ const EditProgramForm = ({
                             </FormItem>
                         )}
                     />
-                    <Separator />
                     <FormField
                         control={form.control}
                         name="free"
@@ -189,6 +189,22 @@ const EditProgramForm = ({
                                         type="number"
                                         step={0.01}
                                         disabled={form.getValues("free")}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="private"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                                <FormLabel className="mt-2">Private</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <FormMessage />

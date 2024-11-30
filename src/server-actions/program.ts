@@ -226,20 +226,22 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
 
         newProgram = {
             title: formData.get("title") as string,
-            weeks: parseInt(formData.get("weeks") as string),
             description: formData.get("description") as string,
+            weeks: parseInt(formData.get("weeks") as string),
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
+            private: (formData.get("free") === "true"),
             image_url: imageUrl,
             image_path: imagePath
         }
     } else {
         newProgram = {
             title: formData.get("title") as string,
-            weeks: parseInt(formData.get("weeks") as string),
             description: formData.get("description") as string,
+            weeks: parseInt(formData.get("weeks") as string),
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
+            private: (formData.get("free") === "true"),
         }
     }
 
@@ -323,20 +325,22 @@ export async function createProgram(formData: FormData) {
 
         newProgram = {
             title: formData.get("title") as string,
-            weeks: parseInt(formData.get("weeks") as string),
             description: formData.get("description") as string,
+            weeks: parseInt(formData.get("weeks") as string),
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
+            private: (formData.get("free") === "true"),
             image_url: storageUrl.publicUrl,
             image_path: storageData.path
         }
     } else {
         newProgram = {
             title: formData.get("title") as string,
-            weeks: parseInt(formData.get("weeks") as string),
             description: formData.get("description") as string,
+            weeks: parseInt(formData.get("weeks") as string),
             free: (formData.get("free") === "true"),
-            price: parseFloat(formData.get("price") as string)
+            price: parseFloat(formData.get("price") as string),
+            private: (formData.get("free") === "true"),
         }
     }
 

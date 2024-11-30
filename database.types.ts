@@ -174,6 +174,7 @@ export type Database = {
           image_path: string | null
           image_url: string | null
           price: number
+          private: boolean
           title: string
           weeks: number
         }
@@ -187,6 +188,7 @@ export type Database = {
           image_path?: string | null
           image_url?: string | null
           price?: number
+          private?: boolean
           title: string
           weeks?: number
         }
@@ -200,6 +202,7 @@ export type Database = {
           image_path?: string | null
           image_url?: string | null
           price?: number
+          private?: boolean
           title?: string
           weeks?: number
         }

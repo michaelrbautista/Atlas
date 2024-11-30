@@ -13,6 +13,9 @@ export const ProgramSchema = z.object({
     }).max(100, {
         message: "Please enter a title that is under 100 characters."
     }),
+    description: z.string().max(300, {
+        message: "Please enter a description that is under 400 characters."
+    }).optional(),
     weeks: z.coerce.number({
         message: "Number of weeks must be a number."
     }).min(1, {
@@ -26,9 +29,7 @@ export const ProgramSchema = z.object({
     }).min(1, {
         message: "Price must be at least 1.00."
     }),
-    description: z.string().max(300, {
-        message: "Please enter a description that is under 400 characters."
-    }).optional()
+    private: z.boolean().default(false)
 })
 
 export const WorkoutSchema = z.object({

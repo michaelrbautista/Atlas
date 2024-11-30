@@ -32,10 +32,11 @@ const NewProgramForm = ({
         defaultValues: {
             image: new File([], ""),
             title: "",
+            description: "",
             weeks: 1,
             free: false,
             price: 1.00,
-            description: ""
+            private: false
         }
     })
 
@@ -65,6 +66,8 @@ const NewProgramForm = ({
         if (data.price) {
             formData.append("price", data.price.toString());
         }
+
+        formData.append("private", data.private.toString());
 
         let { data: programData, error: programError } = await createProgram(formData);
 
@@ -156,7 +159,6 @@ const NewProgramForm = ({
                             </FormItem>
                         )}
                     />
-                    <Separator />
                     <FormField
                         control={form.control}
                         name="free"
@@ -187,6 +189,22 @@ const NewProgramForm = ({
                                         type="number"
                                         step={0.01}
                                         disabled={form.getValues("free")}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="private"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                                <FormLabel className="mt-2">Private</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <FormMessage />
