@@ -12,6 +12,7 @@ export async function getCreatorsPrograms(userId: string, offset: number) {
         .from("programs")
         .select()
         .eq("created_by", userId)
+        .eq("private", false)
         .order("created_at", { ascending: false })
         .range(offset, offset + 9)
     
