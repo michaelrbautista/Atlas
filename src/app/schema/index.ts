@@ -23,13 +23,13 @@ export const ProgramSchema = z.object({
     }).max(56, {
         message: "Number of weeks should be between 1 and 56."
     }),
+    private: z.boolean().default(false),
     free: z.boolean().default(false),
     price: z.coerce.number({
         message: "Price must be a number."
     }).min(1, {
         message: "Price must be at least 1.00."
-    }),
-    private: z.boolean().default(false)
+    })
 })
 
 export const WorkoutSchema = z.object({

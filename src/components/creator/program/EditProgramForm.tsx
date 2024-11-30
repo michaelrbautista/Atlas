@@ -161,6 +161,22 @@ const EditProgramForm = ({
                     />
                     <FormField
                         control={form.control}
+                        name="private"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                                <FormLabel className="mt-2">Private</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
                         name="free"
                         render={({ field }) => (
                             <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
@@ -189,22 +205,6 @@ const EditProgramForm = ({
                                         type="number"
                                         step={0.01}
                                         disabled={form.getValues("free")}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="private"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
-                                <FormLabel className="mt-2">Private</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <FormMessage />
