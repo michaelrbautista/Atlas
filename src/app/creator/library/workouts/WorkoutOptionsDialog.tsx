@@ -35,6 +35,7 @@ const WorkoutOptionsDialog = ({
                         <DialogTrigger
                             className="w-full"
                             onClick={() => {
+                                setDialogType("edit");
                                 setIsOpen(true);
                             }}
                         >

@@ -19,6 +19,14 @@ import { useState } from "react";
 import { Tables } from "../../../../database.types";
 import EditProgramForm from "./EditProgramForm";
 
+let copyUrl: string;
+
+if (process.env.NODE_ENV === "development") {
+    copyUrl = "http://localhost:3000"
+} else {
+    copyUrl = "https://www.useatlas.xyz"
+}
+
 const ProgramOptionsButton = ({
     program,
     updateProgram
@@ -26,7 +34,7 @@ const ProgramOptionsButton = ({
     program: Tables<"programs">,
     updateProgram: (updatedProgram: Tables<"programs">) => void
 }) => {
-    const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
+    const [dialogType, setDialogType] = useState<"share" | "edit" | "delete">("share");
     const [isOpen, setIsOpen] = useState(false);
     
     return (
@@ -38,10 +46,18 @@ const ProgramOptionsButton = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                        onClick={() => {
+                            navigator.clipboard.writeText(`${copyUrl}/program/${program.id}`)
+                        }}
+                    >
+                        Copy link to program
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <DialogTrigger
                             className="w-full"
                             onClick={() => {
+                                setDialogType("edit");
                                 setIsOpen(true);
                             }}
                         >
@@ -63,7 +79,9 @@ const ProgramOptionsButton = ({
             </DropdownMenu>
             <DialogContent>
                 <DialogHeader>
-                    {dialogType == "edit" ? (
+                    {dialogType == "share" ? (
+                        <DialogTitle>Share Program</DialogTitle>
+                    ) : dialogType == "edit" ? (
                         <DialogTitle>Edit Program</DialogTitle>
                     ) : (
                         <DialogTitle>Delete Program</DialogTitle>

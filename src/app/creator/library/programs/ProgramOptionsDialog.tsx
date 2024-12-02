@@ -41,6 +41,7 @@ const ProgramOptionsDialog = ({
                         <DialogTrigger
                             className="w-full"
                             onClick={() => {
+                                setDialogType("edit");
                                 setIsOpen(true);
                             }}
                         >
