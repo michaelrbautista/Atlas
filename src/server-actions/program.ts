@@ -5,6 +5,27 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export async function getNewPrograms() {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("programs")
+        .select(`
+        *,
+        created_by:users!programs_created_by_fkey(
+            full_name
+        )
+    `)
+        .eq("private", false)
+        .order("created_at", { ascending: false })
+    
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function getCreatorsPrograms(userId: string, offset: number) {
     const supabase = createClient();
 

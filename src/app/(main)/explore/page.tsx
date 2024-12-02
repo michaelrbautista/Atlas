@@ -1,3 +1,4 @@
+import NewPrograms from "@/components/explore/NewPrograms";
 import Search from "@/components/explore/Search";
 import SearchResultsList from "@/components/explore/SearchResultsList";
 
@@ -16,7 +17,22 @@ const Home = async ({
                 <p className="text-foreground text-3xl font-bold">Explore</p>
             </div>
             <Search />
-            <SearchResultsList query={query}/>
+            {query == "" ? (
+                <div>
+                    <div className="flex justify-between items-center pt-5 pb-2">
+                        <p className="text-foreground text-xl font-bold">New Programs</p>
+                    </div>
+                    <NewPrograms />
+                </div>
+            ) : (
+                <div>
+                    <div className="flex justify-between items-center pt-5 pb-2">
+                        <p className="text-foreground text-xl font-bold">Results</p>
+                    </div>
+                    <SearchResultsList query={query}/>
+                </div>
+            )}
+            {/* <SearchResultsList query={query}/> */}
         </div>
     );
 }

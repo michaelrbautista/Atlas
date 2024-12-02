@@ -7,7 +7,7 @@ const ProgramList = ({
     programs: FetchedProgram[]
 }) => {
     return (
-        <div className="relative w-full gap-5 pb-10">
+        <div className="relative w-full gap-5 pb-10 border-t-[1px]">
             {programs?.map((program) => {
                 return (
                     <ProgramItem

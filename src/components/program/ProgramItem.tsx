@@ -25,7 +25,7 @@ const ProgramItem = ({
     });
 
     return (
-        <div className="flex flex-col gap-5 py-5">
+        <div className="flex flex-col gap-5 py-5 border-b-[1px]">
             <Link href={`/program/${id}`} className="flex flex-col md:flex-row gap-5">
                 {imageUrl ? (
                     <Image
@@ -46,7 +46,7 @@ const ProgramItem = ({
                     <h1 className="text-primaryText font-bold text-md line-clamp-1">{title}</h1>
                     <h1 className="text-secondaryText font-bold text-sm">{userFullName}</h1>
                     <h1 className="text-secondaryText font-bold text-sm">{formatter.format(price)}</h1>
-                    <h1 className="text-secondaryText font-medium text-sm line-clamp-3">{description}</h1>
+                    <h1 className="text-secondaryText font-medium text-sm line-clamp-2">{description}</h1>
                 </div>
             </Link>
         </div>

@@ -10,7 +10,7 @@ const SearchResultsList = async ({
     const results = await searchUsers(query);
 
     return (
-        <div className="mt-5 border-t-[1px]">
+        <div className="border-t-[1px]">
             {results?.map((result) => {
                 return <SearchResultUser user={result} key={result.id}/>
             })}
