@@ -11,11 +11,19 @@ export async function getNewPrograms() {
     const { data, error } = await supabase
         .from("programs")
         .select(`
-        *,
-        created_by:users!programs_created_by_fkey(
-            full_name
-        )
-    `)
+            id,
+            title,
+            description,
+            image_url,
+            price,
+            currency,
+            weeks,
+            free,
+            private,
+            created_by:users!programs_created_by_fkey(
+                full_name
+            )
+        `)
         .eq("private", false)
         .order("created_at", { ascending: false })
     
@@ -88,6 +96,7 @@ export async function getUsersPrograms() {
             programs(
                 id,
                 title,
+                free,
                 price,
                 description,
                 image_url
@@ -400,8 +409,8 @@ export async function createProgram(formData: FormData) {
     }
 }
 
-export const redirectToCreatorsProgram = async (redirectUrl: string) => {
-    redirect(`${redirectUrl}`);
+export const redirectToCreatorsProgram = async (id: string) => {
+    redirect(`/creator/program/${id}`);
 }
 
 export const getAllPrograms = cache(async () => {

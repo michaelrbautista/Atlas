@@ -1,21 +1,13 @@
 "use client"
 
-import { FetchedProgram } from "@/server-actions/fetch-types"
 import { ColumnDef, RowData } from "@tanstack/react-table"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { Dumbbell, MoreHorizontal } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import React, { useState } from "react"
+import { Dumbbell } from "lucide-react"
+import React from "react"
 import { Tables } from "../../../../../database.types"
-import EditProgramForm from "@/components/creator/program/EditProgramForm"
 import Image from "next/image"
 import ProgramOptionsDialog from "./ProgramOptionsDialog"
+import { redirectToCreatorsProgram } from "@/server-actions/program"
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -78,6 +70,24 @@ export const columns: ColumnDef<Tables<"programs">>[] = [
     {
         accessorKey: "weeks",
         header: "Weeks",
+    },
+    {
+        id: "view",
+        cell: ({ row, table }) => {
+            const program = row.original
+
+            return (
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                        redirectToCreatorsProgram(program.id);
+                    }}
+                >
+                    View
+                </Button>
+            )
+        }
     },
     {
         id: "actions",

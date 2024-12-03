@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { Dumbbell } from "lucide-react";
-import PurchaseProgramButton from "@/components/program/PurchaseProgramButton";
-import MobileCalendar from "@/components/program/calendar/MobileCalendar";
+import PurchaseProgramButton from "@/components/user/program/PurchaseProgramButton";
+import MobileCalendar from "@/components/user/program/calendar/MobileCalendar";
 import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
 import { getUser } from "@/server-actions/user";
-import LoggedOutPurchaseButton from "@/components/program/LoggedOutPurchaseButton";
+import LoggedOutPurchaseButton from "@/components/user/program/LoggedOutPurchaseButton";
 
 const Program = async ({ 
     params

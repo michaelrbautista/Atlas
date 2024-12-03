@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "../ui/button";
-import { Tables } from "../../../database.types";
+import { Button } from "../../ui/button";
+import { Tables } from "../../../../database.types";
 import Link from "next/link";
 import { useUserContext } from "@/context";
 import LoggedOutPurchaseButton from "./LoggedOutPurchaseButton";

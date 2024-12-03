@@ -12,8 +12,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Atlas",
-  description: "Unlock your athleticism.",
+  title: "Atlas"
 };
 
 export default function RootLayout({

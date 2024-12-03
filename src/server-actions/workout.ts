@@ -1,10 +1,11 @@
 "use server";
 
-import { cache } from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { Tables } from "../../database.types";
+
+export const redirectToCreatorsWorkout = async (id: string) => {
+    redirect(`/creator/workout/${id}`);
+}
 
 export async function getUsersWorkouts() {
     const supabase = createClient();

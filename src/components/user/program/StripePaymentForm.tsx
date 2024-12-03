@@ -6,7 +6,7 @@ import {
     EmbeddedCheckout
 } from "@stripe/react-stripe-js";
 import { useCallback } from "react";
-import { Tables } from "../../../database.types";
+import { Tables } from "../../../../database.types";
 
 const StripePaymentForm = ({
     program,

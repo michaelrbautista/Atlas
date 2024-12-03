@@ -22,21 +22,18 @@ import { deleteProgram, redirectToCreatorsProgram } from "@/server-actions/progr
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     setData: Dispatch<SetStateAction<TData[]>>
-    libraryType: "program" | "workout" | "exercise"
-    enableOnClick: boolean
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    setData,
-    libraryType,
-    enableOnClick
+    setData
 }: DataTableProps<TData, TValue>) {
     
     const table = useReactTable({
@@ -155,40 +152,16 @@ export function DataTable<TData, TValue>({
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
-                            enableOnClick ? (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => {
-                                        console.log(row.original)
-                                        if (libraryType == "program") {
-                                            const redirectProgram = row.original as Tables<"programs">
-                                            redirectToCreatorsProgram(`/creator/program/${redirectProgram.id}`);
-                                        } else if (libraryType == "workout") {
-                                            const redirectWorkout = row.original as Tables<"workouts">
-                                            redirectToCreatorsProgram(`/creator/workout/${redirectWorkout.id}`);
-                                        }
-                                    }}
-                                    className={cn(libraryType == "program" && "cursor-pointer", libraryType == "workout" && "cursor-pointer")}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ) : (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            )
+                            <TableRow
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
                         ))
                     ) : (
                         <TableRow>

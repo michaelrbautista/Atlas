@@ -1,4 +1,4 @@
-import ProgramList from "@/components/program/ProgramList";
+import PurchasedProgramList from "@/components/user/program/PurchasedProgramList";
 import { getUsersPrograms } from "@/server-actions/program";
 
 const Programs = async () => {
@@ -10,7 +10,7 @@ const Programs = async () => {
             <div className="flex justify-between items-center pb-5">
                 <p className="text-foreground text-2xl sm:text-3xl font-bold">Programs</p>
             </div>
-            <ProgramList programs={programs}/>
+            <PurchasedProgramList programs={programs}/>
         </div>
     );
 }

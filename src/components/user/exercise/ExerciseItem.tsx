@@ -8,12 +8,12 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "../ui/dialog"
-import { Tables } from "../../../database.types";
+} from "../../ui/dialog"
+import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { Ellipsis, Loader2 } from "lucide-react";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
+import { Button } from "../../ui/button";
+import { useToast } from "../../ui/use-toast";
 
 const ExerciseItem = ({
     workoutExercise

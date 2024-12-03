@@ -15,7 +15,7 @@ import Link from "next/link";
 import { deleteLibraryExercise, getCreatorsExercises } from "@/server-actions/exercise";
 import CreateExerciseButton from "@/components/creator/exercise/CreateExerciseButton";
 import ExerciseOptions from "@/components/creator/exercise/ExerciseOptions";
-import PlayExerciseVideoButton from "@/components/exercise/PlayExerciseVideoButton";
+import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 
@@ -48,7 +48,7 @@ const LibraryExercises = () => {
     }
 
     return (
-        <div className="h-full w-full">
+        <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
                 <CreateExerciseButton buttonSize="default" exerciseCreated={addExercise} />
             </div>
@@ -56,8 +56,6 @@ const LibraryExercises = () => {
                 columns={columns}
                 data={exercises}
                 setData={setExercises}
-                libraryType="exercise"
-                enableOnClick={true}
             />
         </div>
     );

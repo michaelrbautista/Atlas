@@ -5,7 +5,7 @@ import Image from "next/image";
 import { getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditProfileButton from "@/components/user/EditProfileButton";
-import CreatorProgramList from "@/components/program/CreatorProgramList";
+import CreatorProgramList from "@/components/creator/program/CreatorProgramList";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";

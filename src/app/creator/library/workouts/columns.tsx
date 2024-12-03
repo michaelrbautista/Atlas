@@ -1,19 +1,11 @@
 "use client"
 
 import { ColumnDef, RowData } from "@tanstack/react-table"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import React, { useState } from "react"
+import React from "react"
 import { Tables } from "../../../../../database.types"
-import EditLibraryWorkoutForm from "@/components/creator/workout/library/EditLibraryWorkoutForm"
 import WorkoutOptionsDialog from "./WorkoutOptionsDialog"
+import { redirectToCreatorsWorkout } from "@/server-actions/workout"
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -30,6 +22,24 @@ export const columns: ColumnDef<Tables<"workouts">>[] = [
     {
         accessorKey: "description",
         header: "Description",
+    },
+    {
+        id: "view",
+        cell: ({ row, table }) => {
+            const workout = row.original
+
+            return (
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                        redirectToCreatorsWorkout(workout.id);
+                    }}
+                >
+                    View
+                </Button>
+            )
+        }
     },
     {
         id: "actions",

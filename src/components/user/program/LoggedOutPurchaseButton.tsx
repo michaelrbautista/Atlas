@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import SignInForm from "../auth/SignInForm";
+import SignInForm from "../../auth/SignInForm";
 import {
     Dialog,
     DialogContent,
@@ -10,9 +10,9 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { Tables } from "../../../database.types";
-import CreateAccountForm from "../auth/CreateAccountForm";
+import { Button } from "../../ui/button";
+import { Tables } from "../../../../database.types";
+import CreateAccountForm from "../../auth/CreateAccountForm";
 
 const LoggedOutPurchaseButton = ({
     program

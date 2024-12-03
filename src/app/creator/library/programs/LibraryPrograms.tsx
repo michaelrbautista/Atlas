@@ -76,7 +76,7 @@ const LibraryPrograms = () => {
     }
 
     return (
-        <div className="h-full w-full">
+        <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
                 <NewProgramButton addProgram={addProgram}></NewProgramButton>
             </div>
@@ -84,8 +84,6 @@ const LibraryPrograms = () => {
                 columns={columns}
                 data={programs}
                 setData={setPrograms}
-                libraryType="program"
-                enableOnClick={true}
             />
         </div>
     );

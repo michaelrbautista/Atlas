@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramExerciseForm"
 import React, { useState } from "react"
 import ProgramExerciseOptionsDialog from "./ProgramExerciseOptionsDialog"
+import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton"
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -24,8 +25,20 @@ declare module '@tanstack/react-table' {
 
 export const columns: ColumnDef<FetchedExercise>[] = [
     {
-        accessorKey: "exercises.video_url",
+        accessorKey: "video_url",
         header: "Video",
+        cell: ({ row }) => {
+            const exercise = row.original
+
+            return (
+                (!exercise.exercises?.video_url || exercise.exercises?.video_url == "") ? (
+                    // Replace with placeholder image
+                    <p className="text-secondaryText">No video</p>
+                ) : (
+                    <PlayExerciseVideoButton videoUrl={exercise.exercises?.video_url} />
+                )
+            )
+        }
     },
     {
         accessorKey: "exercises.title",

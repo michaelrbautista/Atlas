@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import MobileDay from "./MobileDay"
-import { Tables } from "../../../../database.types"
+import { Tables } from "../../../../../database.types"
 import { Dispatch, SetStateAction } from "react"
 
 const MobileWeek = ({

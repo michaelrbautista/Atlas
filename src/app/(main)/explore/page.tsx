@@ -32,7 +32,6 @@ const Home = async ({
                     <SearchResultsList query={query}/>
                 </div>
             )}
-            {/* <SearchResultsList query={query}/> */}
         </div>
     );
 }

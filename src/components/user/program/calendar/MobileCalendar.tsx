@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import MobileWeek from "./MobileWeek";
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Tables } from "../../../../database.types";
+import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";

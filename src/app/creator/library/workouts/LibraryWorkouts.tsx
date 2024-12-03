@@ -64,7 +64,7 @@ const LibraryWorkouts = () => {
     }
 
     return (
-        <div className="h-full w-full">
+        <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
                 <NewLibraryWorkoutButton addWorkout={addWorkout} />
             </div>
@@ -72,8 +72,6 @@ const LibraryWorkouts = () => {
                 columns={columns}
                 data={workouts}
                 setData={setWorkouts}
-                libraryType="workout"
-                enableOnClick={true}
             />
         </div>
     );

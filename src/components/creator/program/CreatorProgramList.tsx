@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 import { useInView } from "react-intersection-observer";
-import { Tables } from "../../../database.types";
+import { Tables } from "../../../../database.types";
 import { getCreatorsPrograms } from "@/server-actions/program";
-import ProgramItem from "./ProgramItem";
+import ProgramItem from "../../user/program/ProgramItem";
 
 const CreatorProgramList = ({
     user

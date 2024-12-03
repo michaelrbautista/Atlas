@@ -24,7 +24,7 @@ export async function checkAuth() {
         return true
     }
 
-    return redirect("/programs");
+    return redirect("/explore");
 }
 
 export async function signIn(email: string, password: string) {

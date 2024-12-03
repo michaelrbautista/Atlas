@@ -37,27 +37,25 @@ const ProgramOptionsDialog = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                        <DialogTrigger
-                            className="w-full"
-                            onClick={() => {
-                                setDialogType("edit");
-                                setIsOpen(true);
-                            }}
-                        >
-                            Edit program
-                        </DialogTrigger>
+                    <DropdownMenuItem
+                        className="w-full"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setDialogType("edit");
+                            setIsOpen(true);
+                        }}
+                    >
+                        Edit program
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <DialogTrigger
-                            className="w-full"
-                            onClick={() => {
-                                setDialogType("delete");
-                                setIsOpen(true);
-                            }}
-                        >
-                            Delete program
-                        </DialogTrigger>
+                    <DropdownMenuItem
+                        className="w-full"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setDialogType("delete");
+                            setIsOpen(true);
+                        }}
+                    >
+                        Delete program
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

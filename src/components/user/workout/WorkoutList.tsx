@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Tables } from "../../../database.types"
+import { Tables } from "../../../../database.types"
 import { ChevronRight } from "lucide-react"
 
 const WorkoutList = ({
