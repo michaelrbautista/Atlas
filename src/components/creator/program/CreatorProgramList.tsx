@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import { Tables } from "../../../../database.types";
 import { getCreatorsPrograms } from "@/server-actions/program";
 import ProgramItem from "../../user/program/ProgramItem";
+import { FetchedProgram } from "@/server-actions/fetch-types";
 
 const CreatorProgramList = ({
     user
@@ -13,7 +14,7 @@ const CreatorProgramList = ({
     user: Tables<"users">
 }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [programs, setPrograms] = useState<Tables<"programs">[]>([]);
+    const [programs, setPrograms] = useState<FetchedProgram[]>([]);
     const [offset, setOffset] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const [ref, inView] = useInView();
@@ -63,12 +64,7 @@ const CreatorProgramList = ({
                 {programs?.map((program) => {
                     return (
                         <ProgramItem
-                            id={program.id}
-                            title={program.title}
-                            imageUrl={program.image_url ?? undefined}
-                            price={program.price}
-                            description={program.description ?? undefined}
-                            userFullName={user.full_name}
+                            program={program}
                             key={program.id}
                         />
                     )

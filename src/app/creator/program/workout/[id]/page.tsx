@@ -90,8 +90,6 @@ const CreatorProgramWorkout = ({
                     columns={columns}
                     data={exercises}
                     setData={setExercises}
-                    libraryType="exercise"
-                    enableOnClick={false}
                 />
             </div>
         )

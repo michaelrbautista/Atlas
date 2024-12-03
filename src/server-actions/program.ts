@@ -39,7 +39,20 @@ export async function getCreatorsPrograms(userId: string, offset: number) {
 
     const { data, error } = await supabase
         .from("programs")
-        .select()
+        .select(`
+            id,
+            title,
+            description,
+            image_url,
+            price,
+            currency,
+            weeks,
+            free,
+            private,
+            created_by:users!programs_created_by_fkey(
+                full_name
+            )
+        `)
         .eq("created_by", userId)
         .eq("private", false)
         .order("created_at", { ascending: false })
