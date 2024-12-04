@@ -27,8 +27,8 @@ export default function RootLayout({
         fontSans.variable
         )}>
           <UserContextProvider>
-            {children}
             <Toaster />
+            {children}
           </UserContextProvider>
       </body>
     </html>

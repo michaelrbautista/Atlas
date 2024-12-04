@@ -45,14 +45,14 @@ const User = ({
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(!user.profile_picture_url) ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-28 w-28 rounded-full flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-20 w-20 rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
                         <Image
-                            className="h-28 w-28 rounded-full"
-                            height={112}
-                            width={112}
+                            className="h-20 w-20 rounded-full"
+                            height={80}
+                            width={80}
                             src={user.profile_picture_url}
                             alt="programImage"
                             style={{objectFit: "cover"}}
@@ -60,7 +60,7 @@ const User = ({
                         />
                     )}
                     <div className="flex flex-col w-full">
-                        <p className="text-primaryText text-xl font-bold">{user.full_name}</p>
+                        <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
                         <p className="text-secondaryText text-base">@{user.username}</p>
                     </div>
                 </div>
@@ -68,15 +68,10 @@ const User = ({
                 {contextUser?.id == user.id && (
                     <EditProfileButton />
                 )}
-                <Tabs defaultValue="programs" className="w-full">
-                    <TabsList className="w-full">
-                        <TabsTrigger value="programs" className="w-full">Programs</TabsTrigger>
-                        {/* <TabsTrigger value="likes" className="w-full">Likes</TabsTrigger> */}
-                    </TabsList>
-                    <TabsContent value="programs">
-                        <CreatorProgramList user={user} />
-                    </TabsContent>
-                </Tabs>
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-primaryText font-bold text-lg">Programs</h1>
+                    <CreatorProgramList user={user} />
+                </div>
             </div>
         )
     }
