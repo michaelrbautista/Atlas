@@ -1,24 +1,15 @@
 "use client";
 
-import { Dumbbell, Loader2, MoreHorizontal } from "lucide-react";
+import { Dumbbell, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 import Calendar from "@/components/creator/program/calendar/Calendar";
-
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import EditProgramForm from "@/components/creator/program/EditProgramForm";
 import ProgramOptionsButton from "@/components/creator/program/ProgramOptionsButton";
+import { BadgeList } from "@/components/user/program/BadgeList";
+import { InfoList } from "@/components/user/program/InfoList";
 
 const ViewCreatorProgram = ({ 
     params
@@ -29,7 +20,6 @@ const ViewCreatorProgram = ({
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
     const [creator, setCreator] = useState<Tables<"users">>();
-    const [isOpen, setIsOpen] = useState(false);
 
     const { toast } = useToast();
 
@@ -98,8 +88,9 @@ const ViewCreatorProgram = ({
         getProgram();
     }, []);
 
-    const updateProgram = (updatedProgram: Tables<"programs">) => {
-        setProgram(updatedProgram);
+    // TODO: update program function
+    const updateProgram = (newProgram: Tables<"programs">) => {
+        setProgram(newProgram);
     }
 
     if (isLoading || !program) {
@@ -111,54 +102,57 @@ const ViewCreatorProgram = ({
     } else {
         return (
             <div className="flex flex-col w-full sm:max-w-5xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
-                <div className="flex flex-row gap-5 w-full sm:px-16">
-                    {(programImageUrl == "") ? (
-                        // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-[200px] w-[300px] rounded-xl flex items-center justify-center">
-                            <Dumbbell className="text-secondaryText" />
-                        </div>
-                    ) : (
-                        <Image
-                            className="h-[200px] w-[300px] rounded-xl"
-                            height={200}
-                            width={300}
-                            src={programImageUrl}
-                            alt="programImage"
-                            style={{objectFit: "cover"}}
-                            priority
-                        />
-                    )}
-                    <div className="flex flex-col w-full">
-                        <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
-                        <div className="flex flex-col gap-5">
-                            <p className="text-secondaryText text-lg font-semibold">@{creator?.username}</p>
-                            <p className="text-primaryText text-sm">{program?.description}</p>
-                            {/* <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                                <SheetTrigger className="hidden sm:flex" asChild>
-                                    <Button variant="secondary" size="full">
-                                        Edit Program
-                                    </Button>
-                                </SheetTrigger>
-                                <SheetContent side="right" className="bg-background">
-                                    <SheetHeader>
-                                        <SheetTitle>Edit Program</SheetTitle>
-                                        <SheetDescription hidden></SheetDescription>
-                                    </SheetHeader>
-                                    <EditProgramForm
-                                        program={program}
-                                        updateProgram={updateProgram}
-                                        setIsOpen={setIsOpen}
-                                    />
-                                </SheetContent>
-                            </Sheet> */}
+                <div className="flex flex-col gap-5 px-10">
+                    <div className="flex flex-row justify-between w-full">
+                        {(programImageUrl == "") ? (
+                            // Replace with placeholder image
+                            <div className="bg-systemGray5 shrink-0 h-[120px] w-[120px] rounded-xl flex items-center justify-center">
+                                <Dumbbell className="text-secondaryText" />
+                            </div>
+                        ) : (
+                            <Image
+                                className="h-[120px] w-[120px] rounded-xl"
+                                height={120}
+                                width={120}
+                                src={programImageUrl}
+                                alt="programImage"
+                                style={{objectFit: "cover"}}
+                                priority
+                            />
+                        )}
+                        <div className="shrink-0">
+                            <ProgramOptionsButton
+                                program={program}
+                                updateProgram={updateProgram}
+                            />
                         </div>
                     </div>
-                    <div className="shrink-0">
-                        <ProgramOptionsButton
-                            program={program}
-                            updateProgram={(program) => {}}
-                        />
-                    </div>
+                    <p className="text-primaryText text-2xl font-bold">{program?.title}</p>
+                    <InfoList
+                        infoItems={program.description ? [
+                            {
+                                header: "Description",
+                                info: program.description
+                            },
+                            {
+                                header: "Duration",
+                                info: `${program.weeks} weeks`
+                            },
+                            {
+                                header: "Visibility",
+                                info: program.private ? "Private" : "Public"
+                            }
+                        ] : [
+                            {
+                                header: "Duration",
+                                info: `${program.weeks} weeks`
+                            },
+                            {
+                                header: "Visibility",
+                                info: program.private ? "Private" : "Public"
+                            }
+                        ]}
+                    />
                 </div>
                 <div className="flex overflow-scroll">
                     <Calendar

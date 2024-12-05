@@ -31,14 +31,14 @@ export const columns: ColumnDef<Tables<"programs">>[] = [
             return (
                 (!program.image_url) ? (
                     // Replace with placeholder image
-                    <div className="bg-systemGray5 shrink-0 h-[60px] w-[100px] rounded-xl flex items-center justify-center">
+                    <div className="bg-systemGray5 shrink-0 h-[60px] w-[60px] rounded-xl flex items-center justify-center">
                         <Dumbbell className="text-secondaryText" />
                     </div>
                 ) : (
                     <Image
-                        className="h-[60px] w-[100px] rounded-md"
+                        className="h-[60px] w-[60px] rounded-md"
                         height={60}
-                        width={100}
+                        width={60}
                         src={program.image_url}
                         alt="programImage"
                         style={{objectFit: "cover"}}

@@ -30,7 +30,7 @@ const PurchaseProgramButton = ({
     } else {
         if (contextUser) {
             return (
-                <Button variant="systemBlue" size="full" asChild>
+                <Button variant="systemBlue" size="sm" asChild>
                     <Link href={{
                         pathname: "purchase",
                         query: {
@@ -39,7 +39,7 @@ const PurchaseProgramButton = ({
                             userId: contextUser.id
                         }
                     }}>
-                        Purchase Program - {formatter.format(program.price)}
+                        Buy - {formatter.format(program.price)}
                     </Link>
                 </Button>
             )
