@@ -59,7 +59,7 @@ const CreatorLibraryWorkout = ({
     }
 
     const addNewTableExercise = (newExercise: FetchedExercise) => {
-        setExercises(exercises => [newExercise, ...exercises]);
+        setExercises(exercises => [...exercises, newExercise]);
     }
 
     if (isLoading || !workout) {

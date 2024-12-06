@@ -33,7 +33,7 @@ const LibraryExercises = () => {
     }, []);
 
     const addExercise = (exercise: Tables<"exercises">) => {
-        const newExercises = [exercise, ...exercises];
+        const newExercises = [...exercises, exercise];
         setExercises(newExercises);
     }
 
