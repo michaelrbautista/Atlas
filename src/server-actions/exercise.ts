@@ -35,7 +35,7 @@ export async function getWorkoutExercise(workoutExerciseId: string) {
     }
 
     const { data, error } = await supabase
-        .from("workout_exercises")
+        .from("program_exercises")
         .select()
         .eq("id", workoutExerciseId)
         .single()
@@ -212,7 +212,9 @@ export async function editProgramExercise(programExercise: FetchedExercise, form
 
     let newExercise = {
         sets: parseInt(formData.get("sets") as string),
-        reps: parseInt(formData.get("reps") as string)
+        reps: parseInt(formData.get("reps") as string),
+        time: formData.get("time") as string,
+        other: formData.get("other") as string
     }
 
     // Update
@@ -226,6 +228,7 @@ export async function editProgramExercise(programExercise: FetchedExercise, form
             sets,
             reps,
             time,
+            other,
             exercises(
                 title,
                 instructions,
@@ -294,7 +297,8 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
         exercise_number: parseInt(formData.get("exerciseNumber") as string),
         sets: parseInt(formData.get("sets") as string),
         reps: parseInt(formData.get("reps") as string),
-        time: formData.get("time") as string
+        time: formData.get("time") as string,
+        other: formData.get("other") as string
     }
 
     const { data: programExerciseData, error: programExerciseError } = await supabase
@@ -316,6 +320,7 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
             sets: programExerciseData.sets,
             reps: programExerciseData.reps,
             time: programExerciseData.time,
+            other: programExerciseData.other,
             exercises: {
                 title: exercise.title,
                 instructions: exercise.instructions,
@@ -344,7 +349,8 @@ export async function addExerciseToLibraryWorkout(formData: FormData) {
         title: formData.get("title") as string,
         sets: parseInt(formData.get("sets") as string),
         reps: parseInt(formData.get("reps") as string),
-        time: formData.get("time") as string
+        time: formData.get("time") as string,
+        other: formData.get("other") as string
     }
 
     const { data: workoutExerciseData, error: workoutExerciseError } = await supabase

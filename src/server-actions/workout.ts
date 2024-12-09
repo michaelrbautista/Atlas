@@ -38,7 +38,7 @@ export async function getWorkoutExercises(workoutId: string) {
     }
 
     const { data, error } = await supabase
-        .from("workout_exercises")
+        .from("program_exercises")
         .select()
         .eq("workout_id", workoutId)
 
@@ -64,6 +64,7 @@ export async function getProgramWorkout(workoutId: string) {
                 sets,
                 reps,
                 time,
+                other,
                 exercises(
                     title,
                     instructions,
@@ -72,6 +73,7 @@ export async function getProgramWorkout(workoutId: string) {
             )
         `)
         .eq("id", workoutId)
+        .order("exercise_number", { referencedTable: "program_exercises", ascending: true })
         .single()
 
     if (error && !data) {
@@ -102,6 +104,7 @@ export async function getLibraryWorkout(workoutId: string) {
                 sets,
                 reps,
                 time,
+                other,
                 exercises(
                     title,
                     instructions,
@@ -173,6 +176,7 @@ export async function editProgramWorkout(workoutId: string, formData: FormData) 
                 sets,
                 reps,
                 time,
+                other,
                 exercises(
                     title,
                     instructions,

@@ -23,11 +23,12 @@ const Program = async ({
 
     // Check if program is purchased
     const isPurchased = await checkIfProgramIsPurchased(params.id);
+    console.log(isPurchased)
 
     const programContentsComponent = () => {
         if (!isPurchased && program.free) {
             return (<Button className="" variant="systemBlue" size="sm">Save program</Button>)
-        } else {
+        } else if (!isPurchased && !program.free) {
             return (<PurchaseProgramButton program={program} creator={creator}/>)
         }
     }
@@ -77,7 +78,7 @@ const Program = async ({
                         ]}
                     />
                 </div>
-                {isPurchased || program?.free && (
+                {(isPurchased || program?.free) && (
                     <div>
                         <Separator />
                         <MobileCalendar

@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "../../ui/use-toast";
 import { FetchedExercise } from "@/server-actions/fetch-types";
+import { Textarea } from "@/components/ui/textarea";
 
 const EditProgramExerciseForm = ({
     programExercise,
@@ -31,7 +32,9 @@ const EditProgramExerciseForm = ({
         resolver: zodResolver(ExistingExerciseSchema),
         defaultValues: {
             sets: programExercise.sets ?? 1,
-            reps: programExercise.reps ?? 1
+            reps: programExercise.reps ?? 1,
+            time: programExercise.time ?? "",
+            other: programExercise.other ?? ""
         }
     })
 
@@ -46,6 +49,14 @@ const EditProgramExerciseForm = ({
 
         if (data.reps) {
             formData.append("reps", data.reps.toString());
+        }
+
+        if (data.time) {
+            formData.append("time", data.time.toString());
+        }
+
+        if (data.other) {
+            formData.append("other", data.other.toString());
         }
 
         let { data: resultData, error: resultError } = await editProgramExercise(programExercise, formData);
@@ -94,6 +105,40 @@ const EditProgramExerciseForm = ({
                                         {...field}
                                         id="reps"
                                         name="reps"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="time"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Time</FormLabel>
+                                <FormControl>
+                                <Input
+                                        {...field}
+                                        id="time"
+                                        name="time"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="other"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Other notes</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        {...field}
+                                        id="other"
+                                        name="other"
                                     />
                                 </FormControl>
                                 <FormMessage />

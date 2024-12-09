@@ -54,6 +54,7 @@ export type Database = {
           exercise_id: string
           exercise_number: number
           id: string
+          other: string | null
           program_workout_id: string | null
           reps: number | null
           sets: number | null
@@ -66,6 +67,7 @@ export type Database = {
           exercise_id?: string
           exercise_number: number
           id?: string
+          other?: string | null
           program_workout_id?: string | null
           reps?: number | null
           sets?: number | null
@@ -78,6 +80,7 @@ export type Database = {
           exercise_id?: string
           exercise_number?: number
           id?: string
+          other?: string | null
           program_workout_id?: string | null
           reps?: number | null
           sets?: number | null
@@ -300,53 +303,6 @@ export type Database = {
           username?: string
         }
         Relationships: []
-      }
-      workout_exercises: {
-        Row: {
-          created_at: string
-          created_by: string
-          exercise_id: string
-          exercise_number: number
-          id: string
-          reps: number | null
-          sets: number | null
-          time: string | null
-          title: string
-          workout_id: string
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string
-          exercise_id?: string
-          exercise_number: number
-          id?: string
-          reps?: number | null
-          sets?: number | null
-          time?: string | null
-          title: string
-          workout_id?: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          exercise_id?: string
-          exercise_number?: number
-          id?: string
-          reps?: number | null
-          sets?: number | null
-          time?: string | null
-          title?: string
-          workout_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workout_exercises_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       workouts: {
         Row: {

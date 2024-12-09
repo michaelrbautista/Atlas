@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-export const PostSchema = z.object({
-    text: z.string().max(400, {
-        message: "Please enter less than 400 characters."
-    }).optional()
-})
-
 export const ProgramSchema = z.object({
     image: z.instanceof(File).optional(),
     title: z.string().trim().min(1, {
@@ -54,9 +48,12 @@ export const ExistingExerciseSchema = z.object({
     }).min(1, {
         message: "There must be at least 1 rep."
     }),
-    time: z.string().max(400, {
+    time: z.string().max(50, {
         message: "Please enter less than 400 characters."
-    }).optional()
+    }).optional(),
+    other: z.string().max(400, {
+        message: "Please enter less than 400 characters."
+    }).optional(),
 })
 
 export const NewExerciseSchema = z.object({

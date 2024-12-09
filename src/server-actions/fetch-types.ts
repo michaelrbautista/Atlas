@@ -40,6 +40,7 @@ export type FetchedExercise = {
     sets: number | null;
     reps: number | null;
     time: string | null;
+    other: string | null;
     exercises: {
         title: string;
         instructions: string | null;

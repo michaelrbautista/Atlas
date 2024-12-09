@@ -15,6 +15,7 @@ import { Tables } from "../../../../database.types";
 import { useToast } from "../../ui/use-toast";
 import { addExerciseToWorkout } from "@/server-actions/exercise";
 import { FetchedExercise } from "@/server-actions/fetch-types";
+import { Textarea } from "@/components/ui/textarea";
 
 const ExistingExerciseForm = ({
     exercise,
@@ -40,7 +41,8 @@ const ExistingExerciseForm = ({
         defaultValues: {
             sets: 1,
             reps: 1,
-            time: ""
+            time: "",
+            other: ""
         }
     })
 
@@ -76,6 +78,10 @@ const ExistingExerciseForm = ({
 
         if (data.reps) {
             formData.append("reps", data.reps.toString());
+        }
+
+        if (data.other) {
+            formData.append("other", data.other.toString());
         }
 
         // Add exercise
@@ -125,6 +131,40 @@ const ExistingExerciseForm = ({
                                         {...field}
                                         id="reps"
                                         name="reps"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="time"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Time</FormLabel>
+                                <FormControl>
+                                <Input
+                                        {...field}
+                                        id="time"
+                                        name="time"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="other"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Other notes</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        {...field}
+                                        id="other"
+                                        name="other"
                                     />
                                 </FormControl>
                                 <FormMessage />

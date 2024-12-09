@@ -57,6 +57,10 @@ export const columns: ColumnDef<FetchedExercise>[] = [
         header: "Time",
     },
     {
+        accessorKey: "other",
+        header: "Other notes",
+    },
+    {
         id: "actions",
         cell: ({ row, table }) => {
         const exercise = row.original
