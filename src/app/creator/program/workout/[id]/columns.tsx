@@ -25,6 +25,10 @@ declare module '@tanstack/react-table' {
 
 export const columns: ColumnDef<FetchedExercise>[] = [
     {
+        accessorKey: "exercise_number",
+        header: "#",
+    },
+    {
         accessorKey: "video_url",
         header: "Video",
         cell: ({ row }) => {

@@ -113,6 +113,7 @@ export async function getLibraryWorkout(workoutId: string) {
             )
         `)
         .eq("id", workoutId)
+        .order("exercise_number", { referencedTable: "program_exercises", ascending: true })
         .single()
 
     if (error && !data) {
