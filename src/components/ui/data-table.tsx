@@ -17,12 +17,10 @@ import {
 } from "@/components/ui/table"
 import { FetchedExercise } from "@/server-actions/fetch-types"
 import React, { Dispatch, SetStateAction } from "react"
-import { deleteProgramExercise } from "@/server-actions/exercise"
-import { deleteProgram, redirectToCreatorsProgram } from "@/server-actions/program"
+import { decrementProgramExercises, deleteProgramExercise } from "@/server-actions/exercise"
+import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -94,14 +92,27 @@ export function DataTable<TData, TValue>({
                 })
                 setData(updatedExercises)
             },
-            deleteProgramExercise: (programExerciseId: string) => {
+            deleteProgramExercise: (programExerciseId: string, exerciseNumber: number, workoutId?: string, programWorkoutId?: string) => {
+                // Delete exercise from program
                 deleteProgramExercise(programExerciseId);
+
+                // Decrement exercises
+                decrementProgramExercises(exerciseNumber, workoutId, programWorkoutId);
 
                 const fetchedData = data as FetchedExercise[]
                 setData(
-                    fetchedData.filter(exercise =>
+                    fetchedData.filter(exercise => {
                         exercise.id !== programExerciseId
-                    ) as TData[]
+
+                        // Decrement exercises on UI
+                        if (exercise.id !== programExerciseId) {
+                            if (exercise.exercise_number > exerciseNumber) {
+                                exercise.exercise_number -= 1
+                            }
+
+                            return exercise
+                        }
+                    }) as TData[]
                 );
             },
             updateLibraryExercise: (newExercise: Tables<"exercises">) => {

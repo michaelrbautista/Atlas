@@ -224,6 +224,8 @@ export async function editProgramExercise(programExercise: FetchedExercise, form
         .eq("id", programExercise.id)
         .select(`
             id,
+            workout_id,
+            program_workout_id,
             exercise_number,
             sets,
             reps,
@@ -251,6 +253,7 @@ export async function editProgramExercise(programExercise: FetchedExercise, form
 export async function deleteProgramExercise(programExerciseId: string) {
     const supabase = createClient();
 
+    // Delete exercise from database
     const response = await supabase
         .from("program_exercises")
         .delete()
@@ -259,6 +262,36 @@ export async function deleteProgramExercise(programExerciseId: string) {
     if (response.error) {
         return {
             error: "Couldn't delete exercise."
+        }
+    }
+}
+
+export async function decrementProgramExercises(deletedExerciseNumber: number, workoutId?: string, programWorkoutId?: string) {
+    const supabase = createClient();
+    
+    if (workoutId) {
+        const { data, error } = await supabase
+            .rpc("decrement_library_program_exercises", {
+                workout_id_input: workoutId,
+                deleted_exercise_number: deletedExerciseNumber
+            })
+
+        if (error && !data) {
+            return {
+                error: "Couldn't decrement exercises."
+            }
+        }
+    } else if (programWorkoutId) {
+        const { data, error } = await supabase
+            .rpc("decrement_program_exercises", {
+                program_workout_id_input: programWorkoutId,
+                deleted_exercise_number: deletedExerciseNumber
+            })
+
+        if (error && !data) {
+            return {
+                error: "Couldn't decrement exercises."
+            }
         }
     }
 }
@@ -304,7 +337,21 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
     const { data: programExerciseData, error: programExerciseError } = await supabase
         .from("program_exercises")
         .insert(newWorkoutExercise)
-        .select()
+        .select(`
+            id,
+            workout_id,
+            program_workout_id,
+            exercise_number,
+            sets,
+            reps,
+            time,
+            other,
+            exercises(
+                title,
+                instructions,
+                video_url
+            )
+        `)
         .single()
 
     if (programExerciseError && !programExerciseData) {
@@ -314,19 +361,7 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
     }
 
     return {
-        data: {
-            id: programExerciseData.id,
-            exercise_number: programExerciseData.exercise_number,
-            sets: programExerciseData.sets,
-            reps: programExerciseData.reps,
-            time: programExerciseData.time,
-            other: programExerciseData.other,
-            exercises: {
-                title: exercise.title,
-                instructions: exercise.instructions,
-                video_url: exercise.video_url
-            }
-        }
+        data: programExerciseData
     }
 }
 

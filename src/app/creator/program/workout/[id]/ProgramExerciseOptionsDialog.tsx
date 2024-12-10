@@ -13,9 +13,13 @@ import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramEx
 import { FetchedExercise } from "@/server-actions/fetch-types"
 
 const ProgramExerciseOptionsDialog = ({
+    workoutId,
+    programWorkoutId,
     exercise,
     table
 }: {
+    workoutId?: string,
+    programWorkoutId?: string,
     exercise: FetchedExercise,
     table: Table<FetchedExercise>
 }) => {
@@ -75,7 +79,7 @@ const ProgramExerciseOptionsDialog = ({
                             <p>Are you sure you want to delete this exercise?</p>
                             <Button
                                 onClick={() => {
-                                    table.options.meta?.deleteProgramExercise!(exercise.id, exercise.exercise_number);
+                                    table.options.meta?.deleteProgramExercise!(exercise.id, exercise.exercise_number, workoutId, programWorkoutId);
                                     setIsOpen(false);
                                 }}
                                 variant="destructive"

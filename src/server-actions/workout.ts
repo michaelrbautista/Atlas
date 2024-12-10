@@ -60,6 +60,8 @@ export async function getProgramWorkout(workoutId: string) {
             description,
             program_exercises(
                 id,
+                workout_id,
+                program_workout_id,
                 exercise_number,
                 sets,
                 reps,
@@ -100,6 +102,8 @@ export async function getLibraryWorkout(workoutId: string) {
             description,
             program_exercises(
                 id,
+                workout_id,
+                program_workout_id,
                 exercise_number,
                 sets,
                 reps,
@@ -173,6 +177,8 @@ export async function editProgramWorkout(workoutId: string, formData: FormData) 
             description,
             program_exercises(
                 id,
+                workout_id,
+                program_workout_id,
                 exercise_number,
                 sets,
                 reps,

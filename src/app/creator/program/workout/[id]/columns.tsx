@@ -2,24 +2,18 @@
 
 import { FetchedExercise } from "@/server-actions/fetch-types"
 import { ColumnDef, RowData } from "@tanstack/react-table"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramExerciseForm"
-import React, { useState } from "react"
+import React from "react"
 import ProgramExerciseOptionsDialog from "./ProgramExerciseOptionsDialog"
 import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton"
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateProgramExercise?: (exercise: FetchedExercise, exerciseNumber: number) => void;
-        deleteProgramExercise?: (programExerciseId: string, programExerciseIndex: number) => void;
+        deleteProgramExercise?: (
+            programExerciseId: string,
+            exerciseNumber: number,
+            workoutId?: string,
+            programWorkoutId?: string) => void;
     }
 }
 
@@ -71,6 +65,8 @@ export const columns: ColumnDef<FetchedExercise>[] = [
  
         return (
             <ProgramExerciseOptionsDialog
+                workoutId={exercise.workout_id ?? undefined}
+                programWorkoutId={exercise.program_workout_id ?? undefined}
                 exercise={exercise}
                 table={table}
             />

@@ -341,6 +341,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrement_library_program_exercises: {
+        Args: {
+          workout_id_input: string
+          deleted_exercise_number: number
+        }
+        Returns: undefined
+      }
+      decrement_program_exercises: {
+        Args: {
+          program_workout_id_input: string
+          deleted_exercise_number: number
+        }
+        Returns: undefined
+      }
       delete_user:
         | {
             Args: Record<PropertyKey, never>
