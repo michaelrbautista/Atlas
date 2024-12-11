@@ -4,6 +4,24 @@ import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
 import { FetchedExercise } from "./fetch-types";
 
+export async function udpateOrderOfExercises(exercises: FetchedExercise[]) {
+    const supabase = createClient();
+
+    exercises.map(async (exercise) => {
+        const { data, error } = await supabase
+            .from("program_exercises")
+            .update({
+                exercise_number: exercise.exercise_number
+            })
+            .eq("id", exercise.id)
+
+        if (error && !data) {
+            console.log(error);
+            return
+        }
+    })
+}
+
 export async function getCreatorsExercises() {
     const supabase = createClient();
 

@@ -8,8 +8,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { FetchedExercise, FetchedWorkout } from "@/server-actions/fetch-types";
 import { getProgramWorkout } from "@/server-actions/workout";
 import EditProgramWorkoutButton from "@/components/creator/workout/program/EditProgramWorkoutButton";
-import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
+import { Button } from "@/components/ui/button";
+import { ReorderDataTable } from "./data-table";
+import { DataTable } from "@/components/ui/data-table";
 
 const CreatorProgramWorkout = ({ 
     params
@@ -19,6 +21,7 @@ const CreatorProgramWorkout = ({
     const [isLoading, setIsLoading] = useState(false);
     const [workout, setWorkout] = useState<FetchedWorkout>();
     const [exercises, setExercises] = useState<FetchedExercise[]>([]);
+    const [isReordering, setIsReordering] = useState(false);
 
     const { toast } = useToast();
 
@@ -54,7 +57,7 @@ const CreatorProgramWorkout = ({
         setWorkout(oldWorkout)
     }
 
-    const addNewExercise = (exercise: FetchedExercise) => {
+    const addNewTableExercise = (exercise: FetchedExercise) => {
         setExercises(exercises => [...exercises, exercise]);
     }
 
@@ -78,19 +81,61 @@ const CreatorProgramWorkout = ({
                     <p className="text-primaryText text-base font-normal">{workout.description}</p>
                 </div>
                 <Separator />
-                <div className="flex justify-between items-center pb-5 pt-5">
-                    <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
-                    <AddExerciseButton
-                        addNewExercise={addNewExercise}
-                        programWorkoutId={params.id}
-                        exerciseNumber={exercises.length + 1}
-                    />
-                </div>
-                <DataTable
-                    columns={columns}
-                    data={exercises}
-                    setData={setExercises}
-                />
+                {!isReordering ? (
+                    <div className="flex flex-col">
+                        <div className="flex justify-between items-center pb-5 pt-5">
+                            <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
+                            <div className="flex flex-row gap-5">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setIsReordering(true);
+                                    }}
+                                >
+                                    Reorder
+                                </Button>
+                                <AddExerciseButton
+                                    addNewExercise={addNewTableExercise}
+                                    workoutId={params.id}
+                                    exerciseNumber={exercises.length + 1}
+                                />
+                            </div>
+                        </div>
+                        <DataTable
+                            columns={columns}
+                            data={exercises}
+                            setData={setExercises}
+                        />
+                    </div>
+                ): (
+                    <div className="flex flex-col">
+                        <div className="flex justify-between items-center pb-5 pt-5">
+                            <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
+                            <div className="flex flex-row gap-5">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setIsReordering(true);
+                                    }}
+                                >
+                                    Reorder
+                                </Button>
+                                <AddExerciseButton
+                                    addNewExercise={addNewTableExercise}
+                                    workoutId={params.id}
+                                    exerciseNumber={exercises.length + 1}
+                                />
+                            </div>
+                        </div>
+                        <ReorderDataTable
+                            columns={columns}
+                            data={exercises}
+                            setData={setExercises}
+                            isReordering={isReordering}
+                            setIsReordering={setIsReordering}
+                        />
+                    </div>
+                )}
             </div>
         )
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import AddExerciseButton from "@/components/creator/exercise/AddExerciseButton";
@@ -9,8 +9,14 @@ import { useToast } from "@/components/ui/use-toast";
 import EditLibraryWorkoutButton from "@/components/creator/workout/library/EditLibraryWorkoutButton";
 import { getLibraryWorkout } from "@/server-actions/workout";
 import { FetchedExercise, FetchedWorkout } from "@/server-actions/fetch-types";
-import { DataTable } from "@/components/ui/data-table";
+
 import { columns } from "../../program/workout/[id]/columns";
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { ReorderDataTable } from "../../program/workout/[id]/data-table";
+import { reorderColumns } from "../../program/workout/[id]/reorderColumns";
+import { DataTable } from "@/components/ui/data-table";
+
 
 const CreatorLibraryWorkout = ({ 
     params
@@ -21,6 +27,7 @@ const CreatorLibraryWorkout = ({
     const [workout, setWorkout] = useState<FetchedWorkout | null>(null);
     const [editWorkout, setEditWorkout] = useState<Tables<"workouts"> | null>(null);
     const [exercises, setExercises] = useState<FetchedExercise[]>([]);
+    const [isReordering, setIsReordering] = useState(false);
 
     const { toast } = useToast();
 
@@ -82,19 +89,41 @@ const CreatorLibraryWorkout = ({
                     <p className="text-primaryText text-base font-normal">{workout.description}</p>
                 </div>
                 <Separator />
-                <div className="flex justify-between items-center pb-5 pt-5">
-                    <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
-                    <AddExerciseButton
-                        addNewExercise={addNewTableExercise}
-                        workoutId={params.id}
-                        exerciseNumber={exercises.length + 1}
+                {!isReordering ? (
+                    <div className="flex flex-col">
+                        <div className="flex justify-between items-center pb-5 pt-5">
+                            <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
+                            <div className="flex flex-row gap-5">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setIsReordering(true);
+                                    }}
+                                >
+                                    Reorder
+                                </Button>
+                                <AddExerciseButton
+                                    addNewExercise={addNewTableExercise}
+                                    workoutId={params.id}
+                                    exerciseNumber={exercises.length + 1}
+                                />
+                            </div>
+                        </div>
+                        <DataTable
+                            columns={columns}
+                            data={exercises}
+                            setData={setExercises}
+                        />
+                    </div>
+                ): (
+                    <ReorderDataTable
+                        columns={reorderColumns}
+                        data={exercises}
+                        setData={setExercises}
+                        isReordering={isReordering}
+                        setIsReordering={setIsReordering}
                     />
-                </div>
-                <DataTable
-                    columns={columns}
-                    data={exercises}
-                    setData={setExercises}
-                />
+                )}
             </div>
         )
     }

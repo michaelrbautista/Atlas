@@ -21,6 +21,7 @@ import { decrementProgramExercises, deleteProgramExercise } from "@/server-actio
 import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
+import { Reorder } from "framer-motion";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -165,7 +166,6 @@ export function DataTable<TData, TValue>({
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
@@ -174,7 +174,7 @@ export function DataTable<TData, TValue>({
                                 ))}
                             </TableRow>
                         ))
-                    ) : (
+                    ): (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
                                 No results.

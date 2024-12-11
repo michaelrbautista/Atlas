@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-context-menu": "^2.2.1",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -31,10 +34,11 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.400.0",
+    "motion": "^11.13.5",
     "next": "^14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.53.0",
+    "react-hook-form": "^7.54.0",
     "react-intersection-observer": "^9.13.1",
     "sharp": "^0.33.4",
     "stripe": "^16.6.0",

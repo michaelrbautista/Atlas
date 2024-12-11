@@ -7,7 +7,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog"
 import React, { useState } from "react"
 import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramExerciseForm"
 import { FetchedExercise } from "@/server-actions/fetch-types"
