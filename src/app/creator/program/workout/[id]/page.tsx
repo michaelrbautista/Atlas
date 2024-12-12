@@ -12,6 +12,7 @@ import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { ReorderDataTable } from "./data-table";
 import { DataTable } from "@/components/ui/data-table";
+import { reorderColumns } from "./reorderColumns";
 
 const CreatorProgramWorkout = ({ 
     params
@@ -108,33 +109,13 @@ const CreatorProgramWorkout = ({
                         />
                     </div>
                 ): (
-                    <div className="flex flex-col">
-                        <div className="flex justify-between items-center pb-5 pt-5">
-                            <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
-                            <div className="flex flex-row gap-5">
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => {
-                                        setIsReordering(true);
-                                    }}
-                                >
-                                    Reorder
-                                </Button>
-                                <AddExerciseButton
-                                    addNewExercise={addNewTableExercise}
-                                    workoutId={params.id}
-                                    exerciseNumber={exercises.length + 1}
-                                />
-                            </div>
-                        </div>
-                        <ReorderDataTable
-                            columns={columns}
-                            data={exercises}
-                            setData={setExercises}
-                            isReordering={isReordering}
-                            setIsReordering={setIsReordering}
-                        />
-                    </div>
+                    <ReorderDataTable
+                        columns={reorderColumns}
+                        data={exercises}
+                        setData={setExercises}
+                        isReordering={isReordering}
+                        setIsReordering={setIsReordering}
+                    />
                 )}
             </div>
         )
