@@ -14,7 +14,6 @@ import { createProgram } from '@/server-actions/program';
 import { Tables } from '../../../../database.types';
 import { useToast } from '../../ui/use-toast';
 import { Switch } from '../../ui/switch';
-import { Separator } from '../../ui/separator';
 
 const NewProgramForm = ({
     setIsOpen,
