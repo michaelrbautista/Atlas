@@ -38,7 +38,7 @@ export async function getWorkoutExercises(workoutId: string) {
     }
 
     const { data, error } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .select()
         .eq("workout_id", workoutId)
 
@@ -58,7 +58,7 @@ export async function getProgramWorkout(workoutId: string) {
             id,
             title,
             description,
-            program_exercises(
+            workout_exercises(
                 id,
                 workout_id,
                 program_workout_id,
@@ -75,7 +75,7 @@ export async function getProgramWorkout(workoutId: string) {
             )
         `)
         .eq("id", workoutId)
-        .order("exercise_number", { referencedTable: "program_exercises", ascending: true })
+        .order("exercise_number", { referencedTable: "workout_exercises", ascending: true })
         .single()
 
     if (error && !data) {
@@ -100,7 +100,7 @@ export async function getLibraryWorkout(workoutId: string) {
             created_by,
             title,
             description,
-            program_exercises(
+            workout_exercises(
                 id,
                 workout_id,
                 program_workout_id,
@@ -117,7 +117,7 @@ export async function getLibraryWorkout(workoutId: string) {
             )
         `)
         .eq("id", workoutId)
-        .order("exercise_number", { referencedTable: "program_exercises", ascending: true })
+        .order("exercise_number", { referencedTable: "workout_exercises", ascending: true })
         .single()
 
     if (error && !data) {
@@ -175,7 +175,7 @@ export async function editProgramWorkout(workoutId: string, formData: FormData) 
             id,
             title,
             description,
-            program_exercises(
+            workout_exercises(
                 id,
                 workout_id,
                 program_workout_id,
@@ -302,7 +302,7 @@ export async function addLibraryWorkoutToProgram(
 
     // Get exercises from library workout
     const { data: exercisesData, error: exercisesError } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .select()
         .eq("workout_id", libraryWorkoutId)
 
@@ -339,7 +339,7 @@ export async function addLibraryWorkoutToProgram(
 
     // Copy exercises to program workout
     const { error: copyExercisesError } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .insert(newExercises)
 
     if (copyExercisesError) {

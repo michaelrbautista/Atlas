@@ -21,7 +21,7 @@ const Workout = async ({
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-foreground text-xl sm:text-2xl font-bold">Exercises</p>
                 </div>
-                <ExerciseList exercises={workout.data?.program_exercises!} />
+                <ExerciseList exercises={workout.data?.workout_exercises!} />
             </div>
         </div>
     )

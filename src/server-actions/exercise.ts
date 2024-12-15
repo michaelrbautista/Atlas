@@ -9,7 +9,7 @@ export async function udpateOrderOfExercises(exercises: FetchedExercise[]) {
 
     exercises.map(async (exercise) => {
         const { data, error } = await supabase
-            .from("program_exercises")
+            .from("workout_exercises")
             .update({
                 exercise_number: exercise.exercise_number
             })
@@ -53,7 +53,7 @@ export async function getWorkoutExercise(workoutExerciseId: string) {
     }
 
     const { data, error } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .select()
         .eq("id", workoutExerciseId)
         .single()
@@ -69,7 +69,7 @@ export async function getProgramExercise(exerciseId: string) {
     const supabase = createClient();
 
     const { data, error } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .select(`
             *,
             exercises(*)
@@ -237,7 +237,7 @@ export async function editProgramExercise(programExercise: FetchedExercise, form
 
     // Update
     const { data: exerciseData, error: exerciseError } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .update(newExercise)
         .eq("id", programExercise.id)
         .select(`
@@ -273,7 +273,7 @@ export async function deleteProgramExercise(programExerciseId: string) {
 
     // Delete exercise from database
     const response = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .delete()
         .eq("id", programExerciseId)
 
@@ -289,7 +289,7 @@ export async function decrementProgramExercises(deletedExerciseNumber: number, w
     
     if (workoutId) {
         const { data, error } = await supabase
-            .rpc("decrement_library_program_exercises", {
+            .rpc("decrement_library_workout_exercises", {
                 workout_id_input: workoutId,
                 deleted_exercise_number: deletedExerciseNumber
             })
@@ -301,7 +301,7 @@ export async function decrementProgramExercises(deletedExerciseNumber: number, w
         }
     } else if (programWorkoutId) {
         const { data, error } = await supabase
-            .rpc("decrement_program_exercises", {
+            .rpc("decrement_program_workout_exercises", {
                 program_workout_id_input: programWorkoutId,
                 deleted_exercise_number: deletedExerciseNumber
             })
@@ -353,7 +353,7 @@ export async function addExerciseToWorkout(exercise: Tables<"exercises">, formDa
     }
 
     const { data: programExerciseData, error: programExerciseError } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .insert(newWorkoutExercise)
         .select(`
             id,
@@ -407,7 +407,7 @@ export async function addExerciseToLibraryWorkout(formData: FormData) {
     }
 
     const { data: workoutExerciseData, error: workoutExerciseError } = await supabase
-        .from("program_exercises")
+        .from("workout_exercises")
         .insert(newWorkoutExercise)
         .select()
         .single()

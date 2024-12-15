@@ -46,11 +46,11 @@ const CreatorLibraryWorkout = ({
                 return
             }
 
-            const { program_exercises, ...editWorkout } = data!
+            const { workout_exercises, ...editWorkout } = data!
 
             setWorkout(data!);
             setEditWorkout(editWorkout)
-            setExercises(data!.program_exercises)
+            setExercises(data!.workout_exercises)
             setIsLoading(false);
         }
 

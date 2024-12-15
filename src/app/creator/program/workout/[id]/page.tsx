@@ -41,10 +41,10 @@ const CreatorProgramWorkout = ({
                 return
             }
 
-            console.log(data!.program_exercises)
+            console.log(data!.workout_exercises)
 
             setWorkout(data);
-            setExercises(data!.program_exercises)
+            setExercises(data!.workout_exercises)
             setIsLoading(false);
         }
 

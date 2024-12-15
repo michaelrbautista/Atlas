@@ -18,7 +18,7 @@ import { useToast } from "../../ui/use-toast";
 const ExerciseItem = ({
     workoutExercise
 }: {
-    workoutExercise: Tables<"program_exercises">
+    workoutExercise: Tables<"workout_exercises">
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [exercise, setExercise] = useState<Tables<"exercises"> | null>(null);

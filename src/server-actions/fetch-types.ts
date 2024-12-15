@@ -31,7 +31,7 @@ export type FetchedWorkout = {
     id: string;
     title: string;
     description: string | null;
-    program_exercises: FetchedExercise[];
+    workout_exercises: FetchedExercise[];
 }
 
 export type FetchedExercise = {
