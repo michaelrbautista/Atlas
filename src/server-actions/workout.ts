@@ -312,14 +312,15 @@ export async function addLibraryWorkoutToProgram(
         }
     }
 
-    // Make workout_id column null and add program_workout_id
+    // Copy exercises for new program workout
     var newExercises: {
         program_workout_id: string,
         exercise_id: string,
         exercise_number: number,
         sets: number | null,
         reps: number | null,
-        time: string | null
+        time: string | null,
+        other: string | null
     }[] = []
 
     exercisesData.map((exercise) => {
@@ -329,7 +330,8 @@ export async function addLibraryWorkoutToProgram(
             exercise_number: exercise.exercise_number,
             sets: exercise.sets,
             reps: exercise.reps,
-            time: exercise.time
+            time: exercise.time,
+            other: exercise.other
         }
 
         exercise.workout_id = null
