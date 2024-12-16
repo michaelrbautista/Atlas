@@ -81,7 +81,7 @@ const ExistingWorkoutList = ({
                 ) : workouts?.length == 0 ? (
                     <div className="text-secondaryText text-sm pt-5">You haven't created any workouts yet.</div>
                 ) : 
-                    <div className="flex flex-col gap-5 pb-10 w-full overflow-scroll">
+                    <div className="flex flex-col gap-5 pb-10 w-full max-h-[400px] overflow-scroll">
                         <Table>
                             <TableHeader>
                                 <TableRow>

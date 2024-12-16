@@ -36,7 +36,7 @@ const NewProgramWorkoutButton = ({
                     <Plus className="text-secondaryText"></Plus>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="bg-systemBackground flex flex-col gap-5 min-w-[800px]">
+            <DialogContent className="bg-systemBackground flex flex-col gap-5 min-w-[800px] min-h-[600px] max-h-[600px]">
                 <DialogHeader>
                     <DialogTitle>Add Workout</DialogTitle>
                     <DialogDescription>
@@ -49,7 +49,7 @@ const NewProgramWorkoutButton = ({
                         <TabsTrigger value="Existing workout">Existing workout</TabsTrigger>
                         <TabsTrigger value="New workout">New workout</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="Existing workout" className="w-full min-h-[600px]">
+                    <TabsContent value="Existing workout" className="w-full overflow-scroll">
                         <ExistingWorkoutList
                             programId={programId}
                             week={week}
@@ -58,7 +58,7 @@ const NewProgramWorkoutButton = ({
                             addWorkout={addWorkout}
                         />
                     </TabsContent>
-                    <TabsContent value="New workout" className="w-full min-h-[600px]">
+                    <TabsContent value="New workout" className="w-full h-full overflow-scroll">
                         <NewProgramWorkoutForm
                             programId={programId}
                             week={week}
