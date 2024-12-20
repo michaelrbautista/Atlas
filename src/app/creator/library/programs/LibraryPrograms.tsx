@@ -65,16 +65,6 @@ const LibraryPrograms = () => {
         setPrograms(newPrograms);
     }
 
-    const updateProgram = (updatedProgram: Tables<"programs">) => {
-        setPrograms(programs.map(program => program.id === updatedProgram.id ? updatedProgram : program));
-    }
-
-    const deleteProgramClient = (programId: string) => {
-        deleteProgram(programId);
-
-        setPrograms(programs => programs.filter(program => program.id !== programId));
-    }
-
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">

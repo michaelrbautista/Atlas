@@ -37,16 +37,6 @@ const LibraryExercises = () => {
         setExercises(newExercises);
     }
 
-    const updateExercise = (updatedExercise: Tables<"exercises">) => {
-        setExercises(exercises.map(exercise => exercise.id === updatedExercise.id ? updatedExercise : exercise));
-    }
-
-    const deleteExerciseClient = (exerciseId: string) => {
-        deleteLibraryExercise(exerciseId);
-
-        setExercises(exercises => exercises.filter(exercise => exercise.id !== exerciseId));
-    }
-
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table"
 import { FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { decrementProgramExercises, deleteProgramExercise, udpateOrderOfExercises } from "@/server-actions/exercise"
+import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise, udpateOrderOfExercises } from "@/server-actions/exercise"
 import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
@@ -93,13 +93,13 @@ export function ReorderDataTable<TData, TValue>({
                 })
                 setData(updatedExercises)
             },
-            deleteLibraryExercise: (programExerciseId: string) => {
-                deleteProgramExercise(programExerciseId);
+            deleteLibraryExercise: (exercise: Tables<"exercises">) => {
+                deleteLibraryExercise(exercise);
 
                 const fetchedData = data as FetchedExercise[]
                 setData(
-                    fetchedData.filter(exercise =>
-                        exercise.id !== programExerciseId
+                    fetchedData.filter(listExercise =>
+                        listExercise.id !== exercise.id
                     ) as TData[]
                 );
             }
