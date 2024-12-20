@@ -16,7 +16,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { FetchedExercise } from "@/server-actions/fetch-types"
+import { FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction, useState } from "react"
 import { decrementProgramExercises, deleteProgramExercise, udpateOrderOfExercises } from "@/server-actions/exercise"
 import { deleteProgram } from "@/server-actions/program"

@@ -79,7 +79,7 @@ const ProgramOptionsDialog = ({
                         <p>Are you sure you want to delete this program?</p>
                         <Button
                             onClick={() => {
-                                table.options.meta?.deleteProgram!(program.id);
+                                table.options.meta?.deleteProgram!(program);
                                 setIsOpen(false);
                             }}
                             variant="destructive"

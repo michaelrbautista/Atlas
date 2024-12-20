@@ -77,7 +77,7 @@ const ExerciseOptionsDialog = ({
                         <p>Are you sure you want to delete this exercise?</p>
                         <Button
                             onClick={() => {
-                                table.options.meta?.deleteLibraryExercise!(exercise.id);
+                                table.options.meta?.deleteLibraryExercise!(exercise);
                                 setIsOpen(false);
                             }}
                             variant="destructive"

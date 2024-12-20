@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Button } from "../../../ui/button";
 import { Tables } from "../../../../../database.types";
 import EditProgramWorkoutForm from "./EditProgramWorkoutForm";
-import { FetchedWorkout } from "@/server-actions/fetch-types";
+import { FetchedWorkout } from "@/server-actions/models";
 
 const EditProgramWorkoutButton = ({
     workout,

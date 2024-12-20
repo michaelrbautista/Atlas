@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramExerciseForm"
-import { FetchedExercise } from "@/server-actions/fetch-types"
+import { FetchedExercise } from "@/server-actions/models"
 
 const ProgramExerciseOptionsDialog = ({
     workoutId,

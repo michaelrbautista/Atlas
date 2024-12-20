@@ -9,7 +9,7 @@ import ExerciseOptionsDialog from "./ExerciseOptionsDialog"
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateLibraryExercise?: (newExercise: Tables<"exercises">) => void;
-        deleteLibraryExercise?: (exerciseId: string) => void;
+        deleteLibraryExercise?: (exercise: Tables<"exercises">) => void;
     }
 }
 

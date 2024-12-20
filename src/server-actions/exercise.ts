@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
-import { FetchedExercise } from "./fetch-types";
+import { FetchedExercise } from "./models";
 
 export async function udpateOrderOfExercises(exercises: FetchedExercise[]) {
     const supabase = createClient();
@@ -284,6 +284,34 @@ export async function deleteProgramExercise(programExerciseId: string) {
     }
 }
 
+export async function deleteLibraryExercise(exercise: Tables<"exercises">) {
+    const supabase = createClient();
+
+    const response = await supabase
+        .from("exercises")
+        .delete()
+        .eq("id", exercise.id)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete exercise."
+        }
+    }
+
+    if (exercise.video_path) {
+        const { data, error } = await supabase
+            .storage
+            .from("exercise_videos")
+            .remove([exercise.video_path])
+
+        if (error && !data) {
+            return {
+                error: "Couldn't delete program."
+            }
+        }
+    }
+}
+
 export async function decrementProgramExercises(deletedExerciseNumber: number, workoutId?: string, programWorkoutId?: string) {
     const supabase = createClient();
     
@@ -310,21 +338,6 @@ export async function decrementProgramExercises(deletedExerciseNumber: number, w
             return {
                 error: "Couldn't decrement exercises."
             }
-        }
-    }
-}
-
-export async function deleteLibraryExercise(exerciseId: string) {
-    const supabase = createClient();
-
-    const response = await supabase
-        .from("exercises")
-        .delete()
-        .eq("id", exerciseId)
-
-    if (response.error) {
-        return {
-            error: "Couldn't delete exercise."
         }
     }
 }

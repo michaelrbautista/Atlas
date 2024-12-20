@@ -153,19 +153,32 @@ export async function getPurchasedPrograms(userId: string) {
     return purchaseData
 }
 
-export async function deleteProgram(programId: string) {
+export async function deleteProgram(program: Tables<"programs">) {
     const supabase = createClient();
 
     const response = await supabase
         .from("programs")
         .delete()
-        .eq("id", programId)
+        .eq("id", program.id)
 
     if (response.error) {
         console.log(response.error);
 
         return {
             error: "Couldn't delete program."
+        }
+    }
+
+    if (program.image_path) {
+        const { data, error } = await supabase
+            .storage
+            .from("program_images")
+            .remove([program.image_path])
+
+        if (error && !data) {
+            return {
+                error: "Couldn't delete program."
+            }
         }
     }
 }

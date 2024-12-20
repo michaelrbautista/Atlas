@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { useState } from "react";
 import { Tables } from "../../../../database.types";
 import SelectExerciseList from "./SelectExerciseList";
-import { FetchedExercise } from "@/server-actions/fetch-types";
+import { FetchedExercise } from "@/server-actions/models";
 
 const AddExerciseButton = ({
     workoutId,

@@ -12,7 +12,7 @@ import { redirectToCreatorsProgram } from "@/server-actions/program"
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         updateProgram?: (newProgram: Tables<"programs">) => void;
-        deleteProgram?: (programId: string) => void;
+        deleteProgram?: (program: Tables<"programs">) => void;
     }
 }
 

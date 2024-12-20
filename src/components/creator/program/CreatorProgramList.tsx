@@ -6,7 +6,7 @@ import { useInView } from "react-intersection-observer";
 import { Tables } from "../../../../database.types";
 import { getCreatorsPrograms } from "@/server-actions/program";
 import ProgramItem from "../../user/program/ProgramItem";
-import { FetchedProgram } from "@/server-actions/fetch-types";
+import { FetchedProgram } from "@/server-actions/models";
 
 const CreatorProgramList = ({
     user

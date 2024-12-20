@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FetchedWorkout } from "@/server-actions/fetch-types";
+import { FetchedWorkout } from "@/server-actions/models";
 
 const EditProgramWorkoutForm = ({
     workout,

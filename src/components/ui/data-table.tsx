@@ -15,13 +15,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { FetchedExercise } from "@/server-actions/fetch-types"
+import { FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction } from "react"
-import { decrementProgramExercises, deleteProgramExercise } from "@/server-actions/exercise"
+import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise } from "@/server-actions/exercise"
 import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
-import { Reorder } from "framer-motion";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -51,13 +50,13 @@ export function DataTable<TData, TValue>({
                 })
                 setData(updatedPrograms)
             },
-            deleteProgram: (programId: string) => {
-                deleteProgram(programId);
+            deleteProgram: (program: Tables<"programs">) => {
+                deleteProgram(program);
 
                 const fetchedData = data as FetchedExercise[]
                 setData(
-                    fetchedData.filter(program =>
-                        program.id !== programId
+                    fetchedData.filter(listProgram =>
+                        listProgram.id !== program.id
                     ) as TData[]
                 );
             },
@@ -127,13 +126,13 @@ export function DataTable<TData, TValue>({
                 })
                 setData(updatedExercises)
             },
-            deleteLibraryExercise: (programExerciseId: string) => {
-                deleteProgramExercise(programExerciseId);
+            deleteLibraryExercise: (exercise: Tables<"exercises">) => {
+                deleteLibraryExercise(exercise);
 
                 const fetchedData = data as FetchedExercise[]
                 setData(
-                    fetchedData.filter(exercise =>
-                        exercise.id !== programExerciseId
+                    fetchedData.filter(listExercise =>
+                        listExercise.id !== exercise.id
                     ) as TData[]
                 );
             }

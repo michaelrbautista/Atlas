@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
-import { FetchedExercise } from "@/server-actions/fetch-types"
+import { FetchedExercise } from "@/server-actions/models"
 
 const ExerciseList = ({
     exercises

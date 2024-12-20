@@ -8,7 +8,7 @@ import { createClient } from "@/utils/supabase/client";
 import CreateExerciseButton from "./CreateExerciseButton";
 import ExistingExerciseForm from "./ExistingExerciseForm";
 import { useToast } from "../../ui/use-toast";
-import { FetchedExercise } from "@/server-actions/fetch-types";
+import { FetchedExercise } from "@/server-actions/models";
 
 const SelectExerciseList = ({
     workoutId,

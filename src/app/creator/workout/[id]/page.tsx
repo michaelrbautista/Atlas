@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import EditLibraryWorkoutButton from "@/components/creator/workout/library/EditLibraryWorkoutButton";
 import { getLibraryWorkout } from "@/server-actions/workout";
-import { FetchedExercise, FetchedWorkout } from "@/server-actions/fetch-types";
+import { FetchedExercise, FetchedWorkout } from "@/server-actions/models";
 
 import { columns } from "../../program/workout/[id]/columns";
 import { Button } from "@/components/ui/button";

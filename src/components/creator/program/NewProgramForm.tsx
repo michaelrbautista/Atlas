@@ -212,7 +212,7 @@ const NewProgramForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating program" : "Create Program"}
+                        {isLoading ? "Creating program" : "Create program"}
                     </Button>
                 </div>
             </form>

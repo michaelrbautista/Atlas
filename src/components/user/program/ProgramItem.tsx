@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell } from "lucide-react";
-import { FetchedProgram } from "@/server-actions/fetch-types";
+import { FetchedProgram } from "@/server-actions/models";
 
 const ProgramItem = ({
     program

@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "../../ui/use-toast";
-import { FetchedExercise } from "@/server-actions/fetch-types";
+import { FetchedExercise } from "@/server-actions/models";
 import { Textarea } from "@/components/ui/textarea";
 
 const EditProgramExerciseForm = ({

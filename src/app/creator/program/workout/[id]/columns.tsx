@@ -1,6 +1,6 @@
 "use client"
 
-import { FetchedExercise } from "@/server-actions/fetch-types"
+import { FetchedExercise } from "@/server-actions/models"
 import { ColumnDef, RowData } from "@tanstack/react-table"
 import React from "react"
 import ProgramExerciseOptionsDialog from "./ProgramExerciseOptionsDialog"

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import AddExerciseButton from "@/components/creator/exercise/AddExerciseButton";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { FetchedExercise, FetchedWorkout } from "@/server-actions/fetch-types";
+import { FetchedExercise, FetchedWorkout } from "@/server-actions/models";
 import { getProgramWorkout } from "@/server-actions/workout";
 import EditProgramWorkoutButton from "@/components/creator/workout/program/EditProgramWorkoutButton";
 import { columns } from "./columns";

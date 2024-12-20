@@ -1,4 +1,4 @@
-import { FetchedPurchasedProgram } from "@/server-actions/fetch-types";
+import { FetchedPurchasedProgram } from "@/server-actions/models";
 import PurchasedProgramItem from "./PurchasedProgramItem";
 
 

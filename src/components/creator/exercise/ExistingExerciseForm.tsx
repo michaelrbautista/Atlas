@@ -14,7 +14,7 @@ import { z } from "zod";
 import { Tables } from "../../../../database.types";
 import { useToast } from "../../ui/use-toast";
 import { addExerciseToWorkout } from "@/server-actions/exercise";
-import { FetchedExercise } from "@/server-actions/fetch-types";
+import { FetchedExercise } from "@/server-actions/models";
 import { Textarea } from "@/components/ui/textarea";
 
 const ExistingExerciseForm = ({
