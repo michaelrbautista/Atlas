@@ -14,24 +14,24 @@ import SignUpForm from "@/components/landingpage/SignUpForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 const Page = () => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     // const [showSignIn, setShowSignIn] = useState(false);
     // const [showCreateAccount, setShowCreateAccount] = useState(false);
 
     const [showSignUp, setShowSignUp] = useState(false);
 
-    useEffect(() => {
-        const getAuthSession = async () => {
-            const currentSession = await checkAuth();
+    // useEffect(() => {
+    //     const getAuthSession = async () => {
+    //         const currentSession = await checkAuth();
       
-            if (currentSession) {
-                setIsLoading(false);
-            }
-        }
+    //         if (currentSession) {
+    //             setIsLoading(false);
+    //         }
+    //     }
       
-        getAuthSession();
-    }, []);
+    //     getAuthSession();
+    // }, []);
 
     if (isLoading) {
         return (
@@ -111,18 +111,18 @@ const Page = () => {
                             </p>
                         </div>
                         <div className="flex flex-col gap-10">
-                            <div className="relative flex items-center w-[350px] h-[300px] sm:w-[600px] sm:h-[400px]">
+                            <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
                                 <Image
                                     className="rounded-md"
                                     fill
-                                    src="/secondLandingPage.png"
-                                    alt="secondLandingPage"
+                                    src="/thirdLandingPage.png"
+                                    alt="thirdLandingPage"
                                     style={{objectFit: "contain"}}
                                     priority
                                 />
                             </div>
                             <p className="text-secondaryText text-md sm:text-lg font-black text-center">
-                                Monetize your training and nutrition protocols in one platform.
+                                Give your community easy access to all of your content with the mobile app.
                             </p>
                         </div>
                         {/* <div className="flex flex-col items-center gap-5">
