@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -36,14 +36,14 @@ const StripeOnboardingSection = ({
         }
     }, [stripeAccountId]);
 
-    if (!stripeAccountId || paymentsEnabled) {
+    if (stripeAccountId === "" || paymentsEnabled) {
         return (
             <div className="flex flex-col gap-2 w-full">
                 <p className="text-systemGray1 text-base font-medium">
                     2. Onboard Stripe account
                 </p>
                 <Button className={buttonVariants({ variant: "disabled", size: "full"})} disabled>
-                    {paymentsEnabled ? "Stripe onboarding" : "Onboarding complete"}
+                    {paymentsEnabled ? "Onboarding complete" : "Stripe onboarding"}
                 </Button>
             </div>
         )

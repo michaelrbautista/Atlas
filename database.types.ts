@@ -244,6 +244,7 @@ export type Database = {
           profile_picture_path: string | null
           profile_picture_url: string | null
           stripe_account_id: string | null
+          subscription_price: number | null
           username: string
         }
         Insert: {
@@ -256,6 +257,7 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
+          subscription_price?: number | null
           username: string
         }
         Update: {
@@ -268,6 +270,7 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
+          subscription_price?: number | null
           username?: string
         }
         Relationships: []

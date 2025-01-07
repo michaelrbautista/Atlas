@@ -30,6 +30,30 @@ export async function getCreatorPrograms() {
     }
 }
 
+export async function createSubscriptionPrice(formData: FormData) {
+    const supabase = createClient();
+
+    const { data: { user: currentUser } } = await supabase.auth.getUser()
+
+    if (!currentUser) {
+        console.log("Couldn't get current user.");
+        return
+    }
+
+    const price = parseFloat(formData.get("price") as string)
+
+    const { error } = await supabase
+        .from("users")
+        .update({ subscription_price: price })
+        .eq("id", currentUser.id)
+
+    if (error) {
+        return {
+            error: error.message
+        }
+    }
+}
+
 export async function updateStripeAccountId(stripeAccountId: string) {
     const supabase = createClient();
 
@@ -41,9 +65,9 @@ export async function updateStripeAccountId(stripeAccountId: string) {
     }
 
     const { error } = await supabase
-        .from('users')
+        .from("users")
         .update({ stripe_account_id: stripeAccountId })
-        .eq('id', currentUser.id)
+        .eq("id", currentUser.id)
 
     if (error) {
         console.log("Error updating user's stripe account id.");

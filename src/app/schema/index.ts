@@ -121,3 +121,11 @@ export const SignUpSchema = z.object({
         message: "Please enter a valid email."
     })
 })
+
+export const SubscriptionPriceSchema = z.object({
+    price: z.coerce.number({
+        message: "Price must be a number."
+    }).min(5, {
+        message: "Price must be at least $5.00."
+    })
+})

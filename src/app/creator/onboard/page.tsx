@@ -7,16 +7,17 @@ import { updateStripePaymentsEnabled } from "@/server-actions/creator";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import CreateSubscriptionPrice from "@/components/user/CreateSubscriptionPrice";
 
 const OnboardCreator = () => {
     const [stripeAccountId, setStripeAccountId] = useState("");
     const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+    const [subscriptionPriceIsSet, setSubscriptionPriceIsSet] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
     const { toast } = useToast();
 
-    // Use effect
     useEffect(() => {
         const checkProgress = async () => {
             const supabase = createClient();
@@ -41,6 +42,7 @@ const OnboardCreator = () => {
                 // Check if stripe account was created
                 if (userData.stripe_account_id) {
                     setStripeAccountId(userData.stripe_account_id);
+                    setSubscriptionPriceIsSet(userData.subscription_price != null);
                     checkPaymentsEnabled(userData.stripe_account_id);
                 } else {
                     console.log("Stripe account not created.");
@@ -113,6 +115,12 @@ const OnboardCreator = () => {
 
                         {/* Onboard stripe account */}
                         <StripeOnboardingSection
+                            stripeAccountId={stripeAccountId}
+                            paymentsEnabled={paymentsEnabled}
+                        />
+
+                        {/* Create subscription price */}
+                        <CreateSubscriptionPrice
                             stripeAccountId={stripeAccountId}
                             paymentsEnabled={paymentsEnabled}
                         />

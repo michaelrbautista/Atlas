@@ -67,12 +67,12 @@ const Sidebar = () => {
                 {(!contextIsLoading) && (
                     (contextUser) ? (
                         <div className="w-full flex flex-col gap-5">
-                            {(!contextUser.payments_enabled &&
+                            {(!contextUser.subscription_price &&
                                 <div className="px-5">
                                     <BecomeCreatorButton />
-                                    <p className="text-secondaryText text-sm p-2">
+                                    {/* <p className="text-secondaryText text-sm p-2">
                                         Become a creator to monetize your content.
-                                    </p>
+                                    </p> */}
                                 </div>
                             )}
                             <div className="flex flex-row gap-2 px-2 justify-between items-center">

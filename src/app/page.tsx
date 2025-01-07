@@ -16,22 +16,22 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 const Page = () => {
     const [isLoading, setIsLoading] = useState(false);
 
-    // const [showSignIn, setShowSignIn] = useState(false);
-    // const [showCreateAccount, setShowCreateAccount] = useState(false);
+    const [showSignIn, setShowSignIn] = useState(false);
+    const [showCreateAccount, setShowCreateAccount] = useState(false);
 
     const [showSignUp, setShowSignUp] = useState(false);
 
-    // useEffect(() => {
-    //     const getAuthSession = async () => {
-    //         const currentSession = await checkAuth();
+    useEffect(() => {
+        const getAuthSession = async () => {
+            const currentSession = await checkAuth();
       
-    //         if (currentSession) {
-    //             setIsLoading(false);
-    //         }
-    //     }
+            if (currentSession) {
+                setIsLoading(false);
+            }
+        }
       
-    //     getAuthSession();
-    // }, []);
+        getAuthSession();
+    }, []);
 
     if (isLoading) {
         return (
@@ -44,7 +44,7 @@ const Page = () => {
             <div className="h-full">
                 <div className="fixed z-50 w-full h-20 flex items-center justify-between px-5 sm:px-10 bg-systemBackground">
                     <Logo></Logo>
-                    <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
+                    {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
                         <DialogTrigger asChild>
                             <Button variant="secondary">Sign up today</Button>
                         </DialogTrigger>
@@ -53,8 +53,8 @@ const Page = () => {
                             <DialogDescription hidden />
                             <SignUpForm setIsOpen={setShowSignUp} />
                         </DialogContent>
-                    </Dialog>
-                    {/* <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
+                    </Dialog> */}
+                    <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
                         <DialogTrigger asChild>
                             <Button variant="ghost">Sign In</Button>
                         </DialogTrigger>
@@ -62,7 +62,7 @@ const Page = () => {
                             <DialogTitle hidden></DialogTitle>
                             <SignInForm fromLandingPage={true} setIsOpen={setShowSignIn}></SignInForm>
                         </DialogContent>
-                    </Dialog> */}
+                    </Dialog>
                 </div>
                 <div className="pt-40 flex flex-col gap-24 justify-center items-center">
                     <div className="flex flex-col items-center gap-24 w-4/5 sm:w-[800px]">
@@ -85,16 +85,25 @@ const Page = () => {
                                 priority
                             />
                         </div>
-                        <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
-                        <DialogTrigger asChild>
-                            <Button variant="systemBlue">Sign up today</Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-background max-w-96 sm:max-w-md">
-                            <DialogTitle>Sign Up</DialogTitle>
-                            <DialogDescription hidden />
-                            <SignUpForm setIsOpen={setShowSignUp} />
-                        </DialogContent>
-                    </Dialog>
+                        <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
+                            <DialogTrigger asChild>
+                                <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Get Started For Free</Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-96 sm:max-w-md">
+                                <DialogTitle hidden></DialogTitle>
+                                <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
+                            </DialogContent>
+                        </Dialog>
+                        {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
+                            <DialogTrigger asChild>
+                                <Button variant="systemBlue">Sign up today</Button>
+                            </DialogTrigger>
+                            <DialogContent className="bg-background max-w-96 sm:max-w-md">
+                                <DialogTitle>Sign Up</DialogTitle>
+                                <DialogDescription hidden />
+                                <SignUpForm setIsOpen={setShowSignUp} />
+                            </DialogContent>
+                        </Dialog> */}
                         <div className="flex flex-col gap-10">
                             <div className="relative flex items-center w-[350px] h-[300px] sm:w-[600px] sm:h-[400px]">
                                 <Image
@@ -110,7 +119,7 @@ const Page = () => {
                                 Monetize your training and nutrition protocols in one platform.
                             </p>
                         </div>
-                        <div className="flex flex-col gap-10">
+                        <div className="flex flex-col items-center gap-10">
                             <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
                                 <Image
                                     className="rounded-md"
@@ -124,6 +133,15 @@ const Page = () => {
                             <p className="text-secondaryText text-md sm:text-lg font-black text-center">
                                 Give your community easy access to all of your content with the mobile app.
                             </p>
+                            <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
+                                <Image
+                                layout="intrinsic"
+                                src="/appstoreicon.svg"
+                                width={150}
+                                height={150}
+                                alt="web"
+                                />
+                            </a>
                         </div>
                         {/* <div className="flex flex-col items-center gap-5">
                             <p className="text-primaryText text-xl sm:text-3xl font-black text-center">
@@ -143,7 +161,16 @@ const Page = () => {
                             <p className="text-primaryText text-base sm:text-2xl font-bold text-center">
                                 Grow your online fitness business and help your community get in better shape at the same time.
                             </p>
-                            <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
+                            <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
+                                <DialogTrigger asChild>
+                                    <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Get Started For Free</Button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-96 sm:max-w-md">
+                                    <DialogTitle hidden></DialogTitle>
+                                    <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
+                                </DialogContent>
+                            </Dialog>
+                            {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
                                 <DialogTrigger asChild>
                                     <Button variant="systemBlue">Sign up today</Button>
                                 </DialogTrigger>
@@ -151,15 +178,6 @@ const Page = () => {
                                     <DialogTitle>Sign Up</DialogTitle>
                                     <DialogDescription hidden />
                                     <SignUpForm setIsOpen={setShowSignUp} />
-                                </DialogContent>
-                            </Dialog>
-                            {/* <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
-                                <DialogTrigger asChild>
-                                    <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Get Started For Free</Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-96 sm:max-w-md">
-                                    <DialogTitle hidden></DialogTitle>
-                                    <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                                 </DialogContent>
                             </Dialog> */}
                         </div>
