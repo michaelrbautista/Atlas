@@ -194,6 +194,45 @@ export type Database = {
           },
         ]
       }
+      subscriptions: {
+        Row: {
+          created_at: string
+          id: string
+          subscribed_to: string
+          subscriber: string
+          tier: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          subscribed_to?: string
+          subscriber?: string
+          tier?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          subscribed_to?: string
+          subscriber?: string
+          tier?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_subscribed_to_fkey"
+            columns: ["subscribed_to"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_subscriber_fkey"
+            columns: ["subscriber"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           bio: string | null
@@ -230,6 +269,24 @@ export type Database = {
           profile_picture_url?: string | null
           stripe_account_id?: string | null
           username?: string
+        }
+        Relationships: []
+      }
+      waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: number
         }
         Relationships: []
       }

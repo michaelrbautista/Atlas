@@ -115,3 +115,9 @@ export const CreateAccountSchema = z.object({
       });
     }
   });
+
+export const SignUpSchema = z.object({
+    email: z.string().email({
+        message: "Please enter a valid email."
+    })
+})
