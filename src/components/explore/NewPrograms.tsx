@@ -1,5 +1,5 @@
 import { getNewPrograms } from "@/server-actions/program"
-import ProgramList from "../user/program/ProgramList";
+import ProgramList from "../program/user/ProgramList";
 
 const NewPrograms = async () => {
     const newPrograms = await getNewPrograms();

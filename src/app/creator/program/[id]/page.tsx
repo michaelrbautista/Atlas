@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
-import Calendar from "@/components/creator/program/calendar/Calendar";
+import Calendar from "@/components/program/creator/calendar/Calendar";
 import { useToast } from "@/components/ui/use-toast";
-import ProgramOptionsButton from "@/components/creator/program/ProgramOptionsButton";
-import { BadgeList } from "@/components/user/program/BadgeList";
-import { InfoList } from "@/components/user/program/InfoList";
+import ProgramOptionsButton from "@/components/program/creator/ProgramOptionsButton";
+import { BadgeList } from "@/components/program/user/BadgeList";
+import { InfoList } from "@/components/program/user/InfoList";
 
 const ViewCreatorProgram = ({ 
     params

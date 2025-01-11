@@ -9,13 +9,19 @@ import { useCallback } from "react";
 import { Tables } from "../../../../database.types";
 
 const StripePaymentForm = ({
-    program,
+    creatorId,
+    priceId,
+    price,
     connectedAccountId,
-    userId
+    userId,
+    customerId
 }: {
-    program: Tables<"programs">
+    creatorId: string,
+    priceId: string,
+    price: number,
     connectedAccountId: string,
-    userId: string
+    userId: string,
+    customerId?: string
 }) => {
     const stripePromise = loadStripe(
         process.env.NODE_ENV === "production" ? 
@@ -23,7 +29,7 @@ const StripePaymentForm = ({
         process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY as string,
         {
             stripeAccount: connectedAccountId
-        }  
+        }
     )
 
     const fetchClientSecret = useCallback(() => {
@@ -33,13 +39,12 @@ const StripePaymentForm = ({
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                currency: "usd",
-                programId: program.id,
-                programName: program.title,
-                price: program.price,
-                creatorId: program.created_by,
+                priceId: priceId,
+                price: price,
+                creatorId: creatorId,
                 userId: userId,
-                destinationAccountId: connectedAccountId
+                destinationAccountId: connectedAccountId,
+                customerId: customerId
             })
         })
         .then((res) => res.json())
@@ -49,7 +54,7 @@ const StripePaymentForm = ({
     const options = { fetchClientSecret };
 
     return (
-        <div className="h-full w-full overflow-scroll">
+        <div className="h-full w-full rounded-xl overflow-scroll">
             <EmbeddedCheckoutProvider
                 stripe={stripePromise}
                 options={options}

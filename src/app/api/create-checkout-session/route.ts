@@ -13,51 +13,46 @@ const stripe = require("stripe")(stripeSecretKey);
 
 export async function POST(request: NextRequest) {
     try {
+        // Subscription
         const {
-            currency,
-            programId,
-            programName,
+            priceId,
             price,
             creatorId,
             userId,
-            destinationAccountId
+            destinationAccountId,
+            customerId
         } = await request.json();
 
         const session = await stripe.checkout.sessions.create(
             {
+                payment_method_types: ["card"],
+                customer: customerId,
                 line_items: [
                     {
-                        price_data: {
-                            currency: currency,
-                            product_data: {
-                                name: programName
-                            },
-                            unit_amount: convertToSubcurrency(price)
-                        },
+                        price: priceId,
                         quantity: 1,
                     }
                 ],
-                payment_intent_data: {
-                    application_fee_amount: convertToSubcurrency(price) * 0.1
-                },
-                mode: "payment",
+                mode: "subscription",
                 ui_mode: "embedded",
                 metadata: {
-                    programId: programId,
                     creatorId: creatorId,
                     userId: userId
                 },
-                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?programId=${programId}`
+                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}`
             },
             {
                 stripeAccount: destinationAccountId
             }
         );
 
+        console.log("Checkout session: ", session.id);
+
         return NextResponse.json({
             clientSecret: session.client_secret
         })
     } catch (error) {
+        console.log("Checkout session error");
         console.log(error);
 
         return NextResponse.json(

@@ -13,9 +13,9 @@ import { Tables } from "../../../../../database.types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { deleteLibraryExercise, getCreatorsExercises } from "@/server-actions/exercise";
-import CreateExerciseButton from "@/components/creator/exercise/CreateExerciseButton";
-import ExerciseOptions from "@/components/creator/exercise/ExerciseOptions";
-import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton";
+import CreateExerciseButton from "@/components/exercise/creator/CreateExerciseButton";
+import ExerciseOptions from "@/components/exercise/creator/ExerciseOptions";
+import PlayExerciseVideoButton from "@/components/exercise/user/exercise/PlayExerciseVideoButton";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 

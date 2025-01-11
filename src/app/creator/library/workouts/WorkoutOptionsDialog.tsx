@@ -10,7 +10,7 @@ import { MoreHorizontal } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import { Tables } from "../../../../../database.types"
-import EditLibraryWorkoutForm from "@/components/creator/workout/library/EditLibraryWorkoutForm"
+import EditLibraryWorkoutForm from "@/components/workout/creator/library/EditLibraryWorkoutForm"
 
 const WorkoutOptionsDialog = ({
     workout,

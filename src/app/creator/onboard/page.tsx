@@ -1,15 +1,17 @@
 "use client";
 
-import CreateStripeAccountSection from "@/components/user/CreateStripeAccountSection";
-import StripeOnboardingSection from "@/components/user/StripeOnboardingSection";
+import CreateStripeAccountSection from "@/components/profile/creator/CreateStripeAccountSection";
+import StripeOnboardingSection from "@/components/profile/creator/StripeOnboardingSection";
 import { useToast } from "@/components/ui/use-toast";
-import { updateStripePaymentsEnabled } from "@/server-actions/creator";
+import { redirectToHome, updateStripePaymentsEnabled } from "@/server-actions/creator";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateSubscriptionPrice from "@/components/user/CreateSubscriptionPrice";
+import CreateSubscriptionPrice from "@/components/profile/creator/CreateSubscriptionPrice";
+import { Tables } from "../../../../database.types";
 
 const OnboardCreator = () => {
+    const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [stripeAccountId, setStripeAccountId] = useState("");
     const [paymentsEnabled, setPaymentsEnabled] = useState(false);
     const [subscriptionPriceIsSet, setSubscriptionPriceIsSet] = useState(false);
@@ -39,10 +41,17 @@ const OnboardCreator = () => {
                     return;
                 }
 
+                setUser(userData);
+
+                if (userData.stripe_price_id) {
+                    redirectToHome();
+                    return
+                }
+
                 // Check if stripe account was created
                 if (userData.stripe_account_id) {
                     setStripeAccountId(userData.stripe_account_id);
-                    setSubscriptionPriceIsSet(userData.subscription_price != null);
+                    setSubscriptionPriceIsSet(userData.stripe_price_id != null);
                     checkPaymentsEnabled(userData.stripe_account_id);
                 } else {
                     console.log("Stripe account not created.");
@@ -90,7 +99,7 @@ const OnboardCreator = () => {
         checkProgress();
     }, [stripeAccountId]);
 
-    if (isLoading) {
+    if (isLoading || !user) {
         return (
             <div className="h-full w-full flex items-center justify-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
@@ -100,7 +109,7 @@ const OnboardCreator = () => {
         return ( 
             <div className="h-full w-full flex flex-col gap-10 sm:max-w-2xl px-5 pt-20 md:py-10">
                 <div className="flex flex-col justify-between items-center gap-5 pb-5">
-                    <p className="text-primaryText text-3xl font-bold">Become a creator</p>
+                    <h1 className="text-primaryText text-3xl font-bold">Become a creator</h1>
                     <p className="text-primaryText text-center text-lg font-normal">
                         Create an account with Stripe to start monetizing your content.
                     </p>
@@ -122,6 +131,7 @@ const OnboardCreator = () => {
                         {/* Create subscription price */}
                         <CreateSubscriptionPrice
                             stripeAccountId={stripeAccountId}
+                            creatorFullName={user.full_name}
                             paymentsEnabled={paymentsEnabled}
                         />
                     </div>

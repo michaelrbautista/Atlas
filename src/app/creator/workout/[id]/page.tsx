@@ -3,10 +3,10 @@
 import { Loader2, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
-import AddExerciseButton from "@/components/creator/exercise/AddExerciseButton";
+import AddExerciseButton from "@/components/exercise/creator/AddExerciseButton";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import EditLibraryWorkoutButton from "@/components/creator/workout/library/EditLibraryWorkoutButton";
+import EditLibraryWorkoutButton from "@/components/workout/creator/library/EditLibraryWorkoutButton";
 import { getLibraryWorkout } from "@/server-actions/workout";
 import { FetchedExercise, FetchedWorkout } from "@/server-actions/models";
 

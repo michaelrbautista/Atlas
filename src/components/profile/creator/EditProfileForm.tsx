@@ -3,19 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Button } from "../ui/button";
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { Textarea } from '../../ui/textarea';
+import { Button } from "../../ui/button";
+import { useEffect, useState } from 'react';
 import { Loader2, Pencil } from 'lucide-react';
 
-import { useToast } from '../ui/use-toast';
-import { Tables } from '../../../database.types';
+import { useToast } from '../../ui/use-toast';
+import { Tables } from '../../../../database.types';
 import { UserSchema } from "@/app/schema";
 import { editUser, redirectToProfile } from "@/server-actions/user";
 import Image from "next/image";
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 
 const EditProfileForm = ({
     user
@@ -37,7 +37,8 @@ const EditProfileForm = ({
             profilePicture: new File([], ""),
             fullName: user.full_name,
             username: user.username,
-            bio: user.bio ?? ""
+            bio: user.bio ?? "",
+            price: user.subscription_price ?? 5.00
         }
     })
 
@@ -166,6 +167,44 @@ const EditProfileForm = ({
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name="bio"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bio</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        {...field}
+                                        id="bio"
+                                        name="bio"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    {user.subscription_price != null && (
+                        <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Price of subscription</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            id="price"
+                                            name="price"
+                                            type="number"
+                                            step={0.01}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {!isLoading && "Save"}

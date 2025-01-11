@@ -135,11 +135,11 @@ const Page = () => {
                             </p>
                             <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
                                 <Image
-                                layout="intrinsic"
-                                src="/appstoreicon.svg"
-                                width={150}
-                                height={150}
-                                alt="web"
+                                    layout="intrinsic"
+                                    src="/appstoreicon.svg"
+                                    width={150}
+                                    height={150}
+                                    alt="web"
                                 />
                             </a>
                         </div>

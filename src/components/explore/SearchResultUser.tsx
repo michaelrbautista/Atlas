@@ -12,10 +12,7 @@ const SearchResultUser = ({
 }) => {
     return (
         <Link href={{
-            pathname: `/${user.username}`,
-            query: {
-                isUser: false
-            }
+            pathname: `/${user.username}`
         }} className="flex flex-row gap-5 p-5 border-b-[1px]">
             {(!user.profile_picture_url) ? (
                 // Replace with placeholder image

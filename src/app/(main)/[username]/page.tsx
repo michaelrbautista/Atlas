@@ -2,15 +2,17 @@
 
 import { Users } from "lucide-react";
 import Image from "next/image";
-import { getUserFromUsername } from "@/server-actions/user";
+import { checkIfSubscribed, getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditProfileButton from "@/components/user/EditProfileButton";
-import CreatorProgramList from "@/components/creator/program/CreatorProgramList";
+import EditProfileButton from "@/components/profile/creator/EditProfileButton";
+import CreatorProgramList from "@/components/program/creator/CreatorProgramList";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/context";
 import { Spinner } from "@/components/misc/Spinner";
+import { Button } from "@/components/ui/button";
+import SubscribeButton from "@/components/profile/user/SubscribeButton";
 
 const User = ({ 
     params
@@ -18,6 +20,7 @@ const User = ({
     params: { username: string }
 }) => {
     const [user, setUser] = useState<Tables<"users"> | null>(null);
+    const [isSubscribed, setIsSubscribed] = useState(false);
 
     const {
         user: contextUser
@@ -25,9 +28,25 @@ const User = ({
 
     useEffect(() => {
         const getUser = async () => {
-            const user = await getUserFromUsername(params.username);
+            const { data: userData, error: userError } = await getUserFromUsername(params.username);
 
-            setUser(user);
+            if (userError && !userData) {
+                console.log("Couldn't get user.");
+                return
+            }
+
+            setUser(userData);
+
+            console.log(user?.stripe_account_id)
+
+            if (contextUser?.id != userData.id) {
+                // Check if subscribed
+                const checkSubscription = await checkIfSubscribed(userData.id);
+
+                if (checkSubscription != undefined) {
+                    setIsSubscribed(checkSubscription);
+                }
+            }
         }
 
         getUser();
@@ -65,8 +84,13 @@ const User = ({
                     </div>
                 </div>
                 <p className="text-primaryText text-base">{user.bio}</p>
-                {contextUser?.id == user.id && (
+                {contextUser?.id == user.id ? (
                     <EditProfileButton />
+                ) : user.stripe_price_id && (
+                    <SubscribeButton
+                        username={params.username}
+                        isSubscribed={isSubscribed}
+                    />
                 )}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-primaryText font-bold text-lg">Programs</h1>

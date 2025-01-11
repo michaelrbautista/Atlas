@@ -1,6 +1,6 @@
 "use client";
 
-import NewProgramButton from "../../../../components/creator/program/NewProgramButton";
+import NewProgramButton from "../../../../components/program/creator/NewProgramButton";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import {
@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { deleteProgram, redirectToCreatorsProgram } from "@/server-actions/program";
-import ProgramOptions from "@/components/creator/program/ProgramOptions";
+import ProgramOptions from "@/components/program/creator/ProgramOptions";
 import { useToast } from "@/components/ui/use-toast";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";

@@ -16,7 +16,7 @@ import { Dialog,
 } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import { Tables } from "../../../../../database.types"
-import EditProgramForm from "@/components/creator/program/EditProgramForm"
+import EditProgramForm from "@/components/program/creator/EditProgramForm"
 
 const ProgramOptionsDialog = ({
     program,

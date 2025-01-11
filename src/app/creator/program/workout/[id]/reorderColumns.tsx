@@ -4,7 +4,7 @@ import { FetchedExercise } from "@/server-actions/models"
 import { ColumnDef, RowData } from "@tanstack/react-table"
 import React from "react"
 import ProgramExerciseOptionsDialog from "./ProgramExerciseOptionsDialog"
-import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton"
+import PlayExerciseVideoButton from "@/components/exercise/user/exercise/PlayExerciseVideoButton"
 import { Menu } from "lucide-react"
 
 export const reorderColumns: ColumnDef<FetchedExercise>[] = [

@@ -1,9 +1,72 @@
 "use server";
 
-import { cache } from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
+
+export const redirectToSubscribe = async (username: string) => {
+    redirect(`${username}/subscribe`);
+}
+
+export const checkIfPreviouslySubscribed = async (creatorId: string) => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.log("Couldn't get current user.");
+        return
+    }
+
+    const { data, error } = await supabase
+        .from("subscriptions")
+        .select()
+        .eq("subscriber", user.id)
+        .eq("subscribed_to", creatorId)
+
+    if (error && !data) {
+        console.log(error)
+        throw new Error(error.message)
+    }
+
+    if (data.length > 0) {
+        if (!data[0].is_active) {
+            return data[0].stripe_customer_id;
+        }
+    } else {
+        return
+    }
+}
+
+export const checkIfSubscribed = async (creatorId: string) => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.log("Couldn't get current user.");
+        return
+    }
+
+    const { data, error } = await supabase
+        .from("subscriptions")
+        .select()
+        .eq("subscriber", user.id)
+        .eq("subscribed_to", creatorId)
+
+    if (error && !data) {
+        console.log(error)
+        throw new Error(error.message)
+    }
+
+    if (data.length > 0) {
+        if (data[0].is_active) {
+            return true
+        }
+    } else {
+        return false
+    }
+}
 
 export const getUserFromUsername = async (username: string) => {
     const supabase = createClient();
@@ -16,10 +79,14 @@ export const getUserFromUsername = async (username: string) => {
 
     if (error && !data) {
         console.log(error)
-        throw new Error(error.message)
+        return {
+            error: error
+        }
     }
 
-    return data
+    return {
+        data: data
+    }
 }
 
 export const getCurrentUser = async () => {
@@ -49,7 +116,7 @@ export const redirectToBecomeCreator = () => {
 }
 
 export const redirectToProfile = (username: string) => {
-    return redirect(`/${username}?isUser=true`)
+    return redirect(`/${username}`)
 }
 
 export const redirectToEditProfile = () => {

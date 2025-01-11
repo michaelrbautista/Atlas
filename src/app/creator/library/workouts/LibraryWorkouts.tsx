@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
-import NewLibraryWorkoutButton from "../../../../components/creator/workout/library/NewLibraryWorkoutButton";
+import NewLibraryWorkoutButton from "../../../../components/workout/creator/library/NewLibraryWorkoutButton";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { deleteLibraryWorkout } from "@/server-actions/workout";

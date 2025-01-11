@@ -1,4 +1,4 @@
-import PurchasedProgramList from "@/components/user/program/PurchasedProgramList";
+import PurchasedProgramList from "@/components/program/user/PurchasedProgramList";
 import { getUsersPrograms } from "@/server-actions/program";
 
 const Programs = async () => {

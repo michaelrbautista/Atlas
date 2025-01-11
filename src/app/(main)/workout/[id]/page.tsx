@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react";
-import ExerciseList from "@/components/user/exercise/ExerciseList";
+import ExerciseList from "@/components/exercise/user/ExerciseList";
 import { getProgramWorkout } from "@/server-actions/workout";
 
 const Workout = async ({ 

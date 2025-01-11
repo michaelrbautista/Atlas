@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { Dumbbell } from "lucide-react";
-import PurchaseProgramButton from "@/components/user/program/PurchaseProgramButton";
-import MobileCalendar from "@/components/user/program/calendar/MobileCalendar";
+import PurchaseProgramButton from "@/components/program/user/PurchaseProgramButton";
+import MobileCalendar from "@/components/program/user/calendar/MobileCalendar";
 import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
 import { getUser } from "@/server-actions/user";
-import LoggedOutPurchaseButton from "@/components/user/program/LoggedOutPurchaseButton";
-import { BadgeList } from "@/components/user/program/BadgeList";
+import LoggedOutPurchaseButton from "@/components/program/user/LoggedOutPurchaseButton";
+import { BadgeList } from "@/components/program/user/BadgeList";
 import { Button } from "@/components/ui/button";
-import { InfoList } from "@/components/user/program/InfoList";
+import { InfoList } from "@/components/program/user/InfoList";
 import { Separator } from "@/components/ui/separator";
 
 const Program = async ({ 

@@ -9,7 +9,7 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { deleteProgramWorkout } from "@/server-actions/workout"
 import { useToast } from "@/components/ui/use-toast"
-import NewProgramWorkoutButton from "@/components/creator/workout/program/NewProgramWorkoutButton"
+import NewProgramWorkoutButton from "@/components/workout/creator/program/NewProgramWorkoutButton"
 
 const Day = ({
     programId,

@@ -3,7 +3,7 @@
 import { ColumnDef, RowData } from "@tanstack/react-table"
 import React from "react"
 import { Tables } from "../../../../../database.types"
-import PlayExerciseVideoButton from "@/components/user/exercise/PlayExerciseVideoButton"
+import PlayExerciseVideoButton from "@/components/exercise/user/exercise/PlayExerciseVideoButton"
 import ExerciseOptionsDialog from "./ExerciseOptionsDialog"
 
 declare module '@tanstack/react-table' {

@@ -1,25 +1,24 @@
 "use client";
 
-import { ProgramSchema, SignUpSchema, SubscriptionPriceSchema } from '@/app/schema';
+import { SubscriptionPriceSchema } from '@/app/schema';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Button } from '../ui/button';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { Button } from '../../ui/button';
+import { useCallback, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Tables } from '../../../database.types';
-import { useToast } from '../ui/use-toast';
-import { signUpForWaitlist } from '@/server-actions/landingPage';
-import { createSubscriptionPrice, redirectToHome } from '@/server-actions/creator';
+import { useToast } from '../../ui/use-toast';
+import { addPriceId, redirectToHome } from '@/server-actions/creator';
 
 const CreateSubscriptionPrice = ({
     stripeAccountId,
+    creatorFullName,
     paymentsEnabled
 }: {
     stripeAccountId: string,
+    creatorFullName: string,
     paymentsEnabled: boolean
 }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +32,22 @@ const CreateSubscriptionPrice = ({
         }
     })
 
+    const priceId = useCallback((price: number) => {
+        return fetch("/api/create-price", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                stripeAccountId: stripeAccountId,
+                creatorFullName: creatorFullName,
+                monthlyPrice: price
+            })
+        })
+        .then((res) => res.json())
+        .then((data) => data.priceId);
+    }, []);
+
     async function onSubmit(data: z.infer<typeof SubscriptionPriceSchema>) {
         setIsLoading(true);
 
@@ -42,8 +57,10 @@ const CreateSubscriptionPrice = ({
             formData.append("price", data.price.toString());
         }
 
-        // Save subscription price in users table
-        let error = await createSubscriptionPrice(formData);
+        const stripePriceId = await priceId(data.price);
+
+        // Add creator's stripe priceId to users table
+        let error = await addPriceId(stripePriceId);
 
         if (error) {
             toast({

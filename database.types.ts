@@ -198,6 +198,9 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_active: boolean
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
           subscribed_to: string
           subscriber: string
           tier: string
@@ -205,6 +208,9 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          is_active?: boolean
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           subscribed_to?: string
           subscriber?: string
           tier?: string
@@ -212,6 +218,9 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          is_active?: boolean
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           subscribed_to?: string
           subscriber?: string
           tier?: string
@@ -244,7 +253,7 @@ export type Database = {
           profile_picture_path: string | null
           profile_picture_url: string | null
           stripe_account_id: string | null
-          subscription_price: number | null
+          stripe_price_id: string | null
           username: string
         }
         Insert: {
@@ -257,7 +266,7 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
-          subscription_price?: number | null
+          stripe_price_id?: string | null
           username: string
         }
         Update: {
@@ -270,7 +279,7 @@ export type Database = {
           profile_picture_path?: string | null
           profile_picture_url?: string | null
           stripe_account_id?: string | null
-          subscription_price?: number | null
+          stripe_price_id?: string | null
           username?: string
         }
         Relationships: []

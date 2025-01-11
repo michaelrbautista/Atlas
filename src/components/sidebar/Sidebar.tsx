@@ -67,7 +67,7 @@ const Sidebar = () => {
                 {(!contextIsLoading) && (
                     (contextUser) ? (
                         <div className="w-full flex flex-col gap-5">
-                            {(!contextUser.subscription_price &&
+                            {(!contextUser.stripe_price_id &&
                                 <div className="px-5">
                                     <BecomeCreatorButton />
                                     {/* <p className="text-secondaryText text-sm p-2">

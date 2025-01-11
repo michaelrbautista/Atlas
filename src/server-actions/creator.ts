@@ -30,7 +30,7 @@ export async function getCreatorPrograms() {
     }
 }
 
-export async function createSubscriptionPrice(formData: FormData) {
+export async function addPriceId(priceId: string) {
     const supabase = createClient();
 
     const { data: { user: currentUser } } = await supabase.auth.getUser()
@@ -40,11 +40,9 @@ export async function createSubscriptionPrice(formData: FormData) {
         return
     }
 
-    const price = parseFloat(formData.get("price") as string)
-
     const { error } = await supabase
         .from("users")
-        .update({ subscription_price: price })
+        .update({ stripe_price_id: priceId })
         .eq("id", currentUser.id)
 
     if (error) {
@@ -103,7 +101,7 @@ export async function redirectWhenChangingView(viewChangingTo: "user" | "creator
 }
 
 export async function redirectToHome() {
-    return redirect("/home");
+    return redirect("/explore");
 }
 
 export async function redirectToTeam() {

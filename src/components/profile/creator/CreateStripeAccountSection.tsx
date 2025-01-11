@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useState } from "react";
-import { Button, buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
 import { Loader2 } from "lucide-react";
 import { updateStripeAccountId } from "@/server-actions/creator";
 

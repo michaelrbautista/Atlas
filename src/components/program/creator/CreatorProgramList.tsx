@@ -5,8 +5,8 @@ import { Skeleton } from "../../ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { Tables } from "../../../../database.types";
 import { getCreatorsPrograms } from "@/server-actions/program";
-import ProgramItem from "../../user/program/ProgramItem";
 import { FetchedProgram } from "@/server-actions/models";
+import ProgramItem from "../user/ProgramItem";
 
 const CreatorProgramList = ({
     user

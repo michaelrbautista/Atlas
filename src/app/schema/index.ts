@@ -78,6 +78,11 @@ export const UserSchema = z.object({
     }),
     bio: z.string().max(400,{
         message: "Your bio must be less than 400 characters."
+    }).optional(),
+    price: z.coerce.number({
+        message: "Price must be a number."
+    }).min(5, {
+        message: "Price must be at least $5.00."
     }).optional()
 })
 

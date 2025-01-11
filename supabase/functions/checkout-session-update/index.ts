@@ -7,7 +7,7 @@ import  "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@16.10.0?target=deno";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_API_KEY"), {
+const stripe = new Stripe(Deno.env.get("STRIPE_API_LIVE_KEY"), {
     apiVersion: "2024-06-20",
     httpClient: Stripe.createFetchHttpClient()
 })
@@ -19,44 +19,91 @@ Deno.serve(async (request) => {
 
     const body = await request.text();
 
-    let receivedEvent;
+    let data;
+    let event;
+    let eventType;
 
     try {
-        receivedEvent = await stripe.webhooks.constructEventAsync(
+        event = await stripe.webhooks.constructEventAsync(
             body,
             signature,
             Deno.env.get("STRIPE_WEBHOOK_LIVE_SECRET"),
             undefined,
             cryptoProvider
         )
+    } catch (err) {
+        console.log("Webhook error: ", err);
+        return new Response(err.message, { status: 400 })
+    }
 
+    data = event.data;
+    eventType = event.type;
+
+    try {
         const supabaseClient = createClient(
             Deno.env.get("SUPABASE_URL")!,
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
         );
 
-        if (receivedEvent.type === "checkout.session.completed") {
+        switch (eventType) {
+            case "checkout.session.completed": {
+                const requestMetadata = data.object.metadata;
 
-            const requestMetadata = receivedEvent.data.object.metadata;
+                const session = await stripe.checkout.sessions.retrieve(
+                    data.object.id,
+                    {
+                        expand: ["line_items"]
+                    }
+                )
 
-            const purchasedProgram = {
-                program_id: requestMetadata.programId,
-                created_by: requestMetadata.creatorId,
-                purchased_by: requestMetadata.userId
-            };
+                const customerId = session?.customer;
+                const customer = await stripe.customers.retrieve(customerId);
 
-            const { error } = await supabaseClient
-                .from("purchased_programs")
-                .insert(purchasedProgram);
+                const priceId = session?.line_items.data[0]?.price.id;
 
-            if (error) {
-                throw error;
+                if (customer.email) {
+                    const user = await supabaseClient
+                        .from("users")
+                        .select()
+                        .eq("email", customer.email)
+                        .single()
+
+                    if (user) {
+                        const subscription = {
+                            subscribed_to: requestMetadata.creatorId,
+                            subscriber: requestMetadata.userId,
+                            tier: "monthly"
+                        };
+        
+                        const { error } = await supabaseClient
+                            .from("subscriptions")
+                            .insert(subscription);
+        
+                        if (error) {
+                            throw error;
+                        }
+                    } else {
+                        console.log("No user found in Stripe webhook.");
+                    }
+                } else {
+                    console.log("No user found in Stripe webhook.");
+                }
+
+                break;
             }
+
+            case "customer.subscription.deleted": {
+                console.log("");
+
+                break;
+            }
+
+            default:
         }
     
         return new Response(JSON.stringify({ ok: true }), { status: 200 })
     } catch (err) {
-        console.log("Error: ", err);
+        console.log("Webhook error: ", err);
         return new Response(err.message, { status: 400 })
     }
 });

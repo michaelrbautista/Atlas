@@ -16,7 +16,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog"
 import React, { useState } from "react"
-import EditProgramExerciseForm from "@/components/creator/exercise/EditProgramExerciseForm"
+import EditProgramExerciseForm from "@/components/exercise/creator/EditProgramExerciseForm"
 import { FetchedExercise } from "@/server-actions/models"
 
 const ProgramExerciseOptionsDialog = ({
