@@ -20,6 +20,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import LogoutButton from "../../auth/LogoutButton";
 import { useUserContext } from "@/context";
 import UserDropdown from "../UserDropdown";
+import { useState } from "react";
 
 const anonRoutes = [
     {
@@ -48,12 +49,14 @@ const userRoutes = [
 ]
 
 const MobileSidebar = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
     // Get user from context
     const { user: contextUser } = useUserContext();
 
     return (
         <div className="bg-systemBackground sticky top-0 w-full z-50 flex lg:hidden h-16 text-white">
-            <Sheet>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger className="lg:hidden hover:opacity-75 transition p-5">
                     <Menu color="white"/>
                 </SheetTrigger>
@@ -66,8 +69,11 @@ const MobileSidebar = () => {
                             <MobileSidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></MobileSidebarRoutes>
                             {(contextUser !== null) ? (
                                 <div className="px-5 flex flex-row justify-between items-center">
-                                    <UserInfo id={contextUser.id} fullName={contextUser.full_name} username={contextUser.username}></UserInfo>
-                                    <UserDropdown />
+                                    <div className="flex flex-col p-2 items-start">
+                                        <p className="text-foreground text-base font-bold line-clamp-1">{contextUser.full_name}</p>
+                                        <p className="text-muted-foreground text-sm font-normal line-clamp-1">@{contextUser.username}</p>
+                                    </div>
+                                    <UserDropdown username={contextUser.username} setIsOpen={setIsOpen} />
                                 </div>
                             ) : (
                                 <div className="px-5 flex flex-col gap-5">

@@ -117,10 +117,12 @@ const User = ({
                 ) : user.stripe_price_id && (
                     getSubscribeButton()  
                 )}
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-primaryText font-bold text-lg">Programs</h1>
-                    <CreatorProgramList user={user} />
-                </div>
+                {user.stripe_price_id && (
+                    <div className="flex flex-col gap-2">
+                        <h1 className="text-primaryText font-bold text-lg">Programs</h1>
+                        <CreatorProgramList user={user} />
+                    </div>
+                )}
             </div>
         )
     }

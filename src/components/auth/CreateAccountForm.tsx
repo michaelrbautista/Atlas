@@ -175,7 +175,7 @@ const CreateAccountForm = ({
                         />
                         <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isLoading ? "Creating account" : "Create account"}
+                            {!isLoading && "Create account"}
                         </Button>
                     </div>
                 </form>

@@ -107,7 +107,7 @@ const SignInForm = ({
                         />
                         <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isLoading ? "Signing in" : "Sign in"}
+                            {!isLoading && "Sign in"}
                         </Button>
                     </div>
                 </form>

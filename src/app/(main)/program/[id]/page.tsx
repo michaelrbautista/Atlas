@@ -24,10 +24,6 @@ const Program = async ({
     // Check if user is subscribed to creator
     const isSubscribed = await checkIfSubscribed(creator.id);
 
-    const programContentsComponent = () => {
-        
-    }
-
     return (
         <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
             <div className="flex flex-col gap-5">
