@@ -16,8 +16,8 @@ const Page = ({
     params: { username: string }
 }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [currentUserId, setCurrentUserId] = useState("");
-    const [user, setUser] = useState<Tables<"users"> | null>(null);
+    const [currentUser, setCurrentUser] = useState<Tables<"users"> | null>(null);
+    const [creator, setCreator] = useState<Tables<"users"> | null>(null);
     const [plan, setPlan] = useState("");
     const [subscriptionPrice, setSubscriptionPrice] = useState(0);
 
@@ -33,7 +33,7 @@ const Page = ({
                 return
             }
 
-            setCurrentUserId(currentUser.id);
+            setCurrentUser(currentUser);
 
             // Get creator
             const { data, error } = await getUserFromUsername(params.username);
@@ -43,7 +43,7 @@ const Page = ({
                 return
             }
 
-            setUser(data);
+            setCreator(data);
 
             // Get creator's subscription price
             if (data.stripe_price_id && data.stripe_account_id) {
@@ -79,7 +79,7 @@ const Page = ({
         })
     }
 
-    if (isLoading || !user?.stripe_price_id) {
+    if (isLoading || !creator?.stripe_price_id || !currentUser) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
                 <Spinner></Spinner>
@@ -89,7 +89,7 @@ const Page = ({
         return (
             <div className="flex flex-col w-full max-w-xl px-5 py-10 gap-10">
                 <div className="flex flex-row gap-5 items-center w-full justify-center">
-                    {(!user.profile_picture_url) ? (
+                    {(!creator.profile_picture_url) ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-16 w-16 rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
@@ -99,15 +99,15 @@ const Page = ({
                             className="h-16 w-16 rounded-full"
                             height={64}
                             width={64}
-                            src={user?.profile_picture_url}
+                            src={creator?.profile_picture_url}
                             alt="programImage"
                             style={{objectFit: "cover"}}
                             priority
                         />
                     )}
                     <div className="flex flex-col">
-                        <h1 className="font-bold">{user.full_name}</h1>
-                        <h2 className="text-secondaryText">@{user.username}</h2>
+                        <h1 className="font-bold">{creator.full_name}</h1>
+                        <h2 className="text-secondaryText">@{creator.username}</h2>
                     </div>
                 </div>
                 {plan == "" ? (
@@ -116,7 +116,7 @@ const Page = ({
                             Choose a plan
                         </h1>
                         <div className="flex w-full justify-center">
-                            {user.stripe_price_id && (
+                            {creator.stripe_price_id && (
                                 <SubscriptionItem
                                     setPlan={setPlan}
                                     subscriptionPrice={subscriptionPrice}
@@ -143,12 +143,13 @@ const Page = ({
                                 </Button>
                             </div>
                             <StripePaymentForm
-                                creatorId={user.id}
-                                priceId={user.stripe_price_id}
-                                price={subscriptionPrice}
-                                connectedAccountId={user.stripe_account_id!}
-                                userId={currentUserId}
+                                priceId={creator.stripe_price_id}
+                                creatorId={creator.id}
+                                creatorUsername={creator.username}
+                                connectedAccountId={creator.stripe_account_id!}
+                                userId={currentUser.id}
                                 customerId={existingCustomerId === "" ? undefined : existingCustomerId}
+                                customerEmail={currentUser.email}
                             />
                         </div>
                     </div>

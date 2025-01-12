@@ -110,15 +110,16 @@ const ViewCreatorProgram = ({
                                 <Dumbbell className="text-secondaryText" />
                             </div>
                         ) : (
+                            <div className="relative flex items-center w-[120px] h-[120px]">
                             <Image
-                                className="h-[120px] w-[120px] rounded-xl"
-                                height={120}
-                                width={120}
+                                className="rounded-xl"
+                                fill
                                 src={programImageUrl}
                                 alt="programImage"
                                 style={{objectFit: "cover"}}
                                 priority
                             />
+                        </div>
                         )}
                         <div className="shrink-0">
                             <ProgramOptionsButton

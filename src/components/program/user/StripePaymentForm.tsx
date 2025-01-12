@@ -6,22 +6,23 @@ import {
     EmbeddedCheckout
 } from "@stripe/react-stripe-js";
 import { useCallback } from "react";
-import { Tables } from "../../../../database.types";
 
 const StripePaymentForm = ({
-    creatorId,
     priceId,
-    price,
+    creatorId,
+    creatorUsername,
     connectedAccountId,
     userId,
-    customerId
+    customerId,
+    customerEmail
 }: {
-    creatorId: string,
     priceId: string,
-    price: number,
+    creatorId: string,
+    creatorUsername: string,
     connectedAccountId: string,
     userId: string,
-    customerId?: string
+    customerId?: string,
+    customerEmail: string
 }) => {
     const stripePromise = loadStripe(
         process.env.NODE_ENV === "production" ? 
@@ -40,11 +41,12 @@ const StripePaymentForm = ({
             },
             body: JSON.stringify({
                 priceId: priceId,
-                price: price,
                 creatorId: creatorId,
+                creatorUsername: creatorUsername,
                 userId: userId,
                 destinationAccountId: connectedAccountId,
-                customerId: customerId
+                customerId: customerId,
+                customerEmail: customerEmail
             })
         })
         .then((res) => res.json())

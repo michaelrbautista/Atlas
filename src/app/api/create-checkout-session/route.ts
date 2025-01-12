@@ -16,17 +16,19 @@ export async function POST(request: NextRequest) {
         // Subscription
         const {
             priceId,
-            price,
             creatorId,
+            creatorUsername,
             userId,
             destinationAccountId,
-            customerId
+            customerId,
+            customerEmail
         } = await request.json();
 
         const session = await stripe.checkout.sessions.create(
             {
                 payment_method_types: ["card"],
                 customer: customerId,
+                customer_email: customerEmail,
                 line_items: [
                     {
                         price: priceId,
@@ -39,7 +41,7 @@ export async function POST(request: NextRequest) {
                     creatorId: creatorId,
                     userId: userId
                 },
-                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}`
+                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?creator=${creatorUsername}`
             },
             {
                 stripeAccount: destinationAccountId

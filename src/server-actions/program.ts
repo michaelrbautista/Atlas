@@ -219,7 +219,6 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
                 .storage
                 .from("program_images")
                 .update(program.image_path, image, {
-                    cacheControl: '3600',
                     upsert: true
                 });
 
@@ -254,7 +253,6 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
                 .storage
                 .from("program_images")
                 .upload(imageName, image, {
-                    cacheControl: '3600',
                     upsert: false
                 });
 
@@ -358,7 +356,6 @@ export async function createProgram(formData: FormData) {
             .storage
             .from("program_images")
             .upload(imageName, image, {
-                cacheControl: '3600',
                 upsert: false
             });
 

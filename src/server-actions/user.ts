@@ -159,7 +159,6 @@ export const editUser = async (oldUser: Tables<"users">, formData: FormData) => 
                 .storage
                 .from("profile_pictures")
                 .update(oldUser.profile_picture_path, image, {
-                    cacheControl: '3600',
                     upsert: true
                 });
 
@@ -194,7 +193,6 @@ export const editUser = async (oldUser: Tables<"users">, formData: FormData) => 
                 .storage
                 .from("profile_pictures")
                 .upload(imageName, image, {
-                    cacheControl: '3600',
                     upsert: false
                 });
 
@@ -204,7 +202,7 @@ export const editUser = async (oldUser: Tables<"users">, formData: FormData) => 
                 }
             }
 
-            profilePictureUrl = storageData.path;
+            profilePicturePath = storageData.path;
 
             // Get public url for image
             const { data: storageUrl } = supabase

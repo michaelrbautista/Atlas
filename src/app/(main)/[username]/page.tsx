@@ -22,26 +22,38 @@ const User = ({
     const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
 
+    const [profilePictureUrl, setProfilePictureUrl] = useState("");
+
     const {
         user: contextUser
     } = useUserContext();
 
     useEffect(() => {
         const getUser = async () => {
-            const { data: userData, error: userError } = await getUserFromUsername(params.username);
+            // Get user
+            const { data: creatorData, error: creatorError } = await getUserFromUsername(params.username);
 
-            if (userError && !userData) {
+            if (creatorError && !creatorData) {
                 console.log("Couldn't get user.");
                 return
             }
 
-            setUser(userData);
+            setUser(creatorData);
 
-            console.log(user?.stripe_account_id)
+            // Get profile picture
+            const supabase = createClient();
 
-            if (contextUser?.id != userData.id) {
+            if (creatorData.profile_picture_path) {
+                const { data } = supabase.storage
+                    .from("profile_pictures")
+                    .getPublicUrl(creatorData.profile_picture_path)
+
+                setProfilePictureUrl(data.publicUrl);
+            }
+
+            if (contextUser?.id != creatorData.id) {
                 // Check if subscribed
-                const checkSubscription = await checkIfSubscribed(userData.id);
+                const checkSubscription = await checkIfSubscribed(creatorData.id);
 
                 if (checkSubscription != undefined) {
                     setIsSubscribed(checkSubscription);
@@ -51,6 +63,21 @@ const User = ({
 
         getUser();
     }, []);
+
+    const getSubscribeButton = () => {
+        if (isSubscribed) {
+            return (
+                <Button variant="disabled">Unsubscribe</Button>
+            )
+        } else {
+            return (
+                <SubscribeButton
+                    username={params.username}
+                    isSubscribed={isSubscribed}
+                />
+            )
+        }
+    }
 
     if (!user || !contextUser) {
         return (
@@ -68,15 +95,16 @@ const User = ({
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
-                        <Image
-                            className="h-20 w-20 rounded-full"
-                            height={80}
-                            width={80}
-                            src={user.profile_picture_url}
-                            alt="programImage"
-                            style={{objectFit: "cover"}}
-                            priority
-                        />
+                        <div className="relative w-[80px] h-[80px] shrink-0">
+                            <Image
+                                className="rounded-full"
+                                fill
+                                src={profilePictureUrl}
+                                alt="profilePicture"
+                                style={{objectFit: "cover"}}
+                                priority
+                            />
+                        </div>
                     )}
                     <div className="flex flex-col w-full">
                         <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
@@ -87,10 +115,7 @@ const User = ({
                 {contextUser?.id == user.id ? (
                     <EditProfileButton />
                 ) : user.stripe_price_id && (
-                    <SubscribeButton
-                        username={params.username}
-                        isSubscribed={isSubscribed}
-                    />
+                    getSubscribeButton()  
                 )}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-primaryText font-bold text-lg">Programs</h1>

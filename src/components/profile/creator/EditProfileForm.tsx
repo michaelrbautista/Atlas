@@ -37,8 +37,7 @@ const EditProfileForm = ({
             profilePicture: new File([], ""),
             fullName: user.full_name,
             username: user.username,
-            bio: user.bio ?? "",
-            price: user.subscription_price ?? 5.00
+            bio: user.bio ?? ""
         }
     })
 
@@ -184,27 +183,6 @@ const EditProfileForm = ({
                             </FormItem>
                         )}
                     />
-                    {user.subscription_price != null && (
-                        <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Price of subscription</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            id="price"
-                                            name="price"
-                                            type="number"
-                                            step={0.01}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    )}
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {!isLoading && "Save"}

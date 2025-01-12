@@ -8,7 +8,9 @@ const ReturnPage = async ({
     searchParams: Promise<{ [key: string]: string | undefined }>
 }) => {
     
-    const { programId = "" } = await searchParams
+    const {
+        creator = ""
+    } = await searchParams
 
     return (
         <div className="flex flex-col w-full max-w-xl px-5 py-20 sm:py-10 gap-10 sm:gap-10">
@@ -21,6 +23,11 @@ const ReturnPage = async ({
                 <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
                     <Image src="/appstoreicon.svg" width={150} height={150} alt="web"></Image>
                 </a>
+                <Button variant="secondary" asChild>
+                    <Link href={`/${creator}`}>
+                        Go to creator
+                    </Link>
+                </Button>
             </div>
         </div>
     )

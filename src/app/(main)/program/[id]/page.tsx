@@ -23,7 +23,6 @@ const Program = async ({
 
     // Check if program is purchased
     const isPurchased = await checkIfProgramIsPurchased(params.id);
-    console.log(isPurchased)
 
     const programContentsComponent = () => {
         if (!isPurchased && program.free) {
@@ -43,15 +42,16 @@ const Program = async ({
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
-                        <Image
-                            className="h-[120px] w-[120px] rounded-xl"
-                            height={120}
-                            width={120}
-                            src={program.image_url}
-                            alt="programImage"
-                            style={{objectFit: "cover"}}
-                            priority
-                        />
+                        <div className="relative flex items-center w-[120px] h-[120px]">
+                            <Image
+                                className="rounded-xl"
+                                fill
+                                src={program.image_url}
+                                alt="programImage"
+                                style={{objectFit: "cover"}}
+                                priority
+                            />
+                        </div>
                     )}
                     {programContentsComponent()}
                 </div>

@@ -131,7 +131,6 @@ export async function editExercise(exercise: Tables<"exercises">, formData: Form
                 .storage
                 .from("program_images")
                 .update(exercise.video_path, video, {
-                    cacheControl: '3600',
                     upsert: true
                 });
 
@@ -166,7 +165,6 @@ export async function editExercise(exercise: Tables<"exercises">, formData: Form
                 .storage
                 .from("exercise_videos")
                 .upload(videoName, video, {
-                    cacheControl: '3600',
                     upsert: false
                 });
 
@@ -463,7 +461,6 @@ export async function createExercise(formData: FormData) {
             .storage
             .from("exercise_videos")
             .upload(videoName, video, {
-                cacheControl: '3600',
                 upsert: false
             });
 
