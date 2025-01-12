@@ -1,3 +1,4 @@
+import AllUsers from "@/components/explore/AllUsers";
 import NewPrograms from "@/components/explore/NewPrograms";
 import Search from "@/components/explore/Search";
 import SearchResultsList from "@/components/explore/SearchResultsList";
@@ -20,9 +21,9 @@ const Home = async ({
             {query == "" ? (
                 <div>
                     <div className="flex justify-between items-center pt-5 pb-2">
-                        <p className="text-foreground text-xl font-bold">New Programs</p>
+                        <p className="text-foreground text-xl font-bold">Users</p>
                     </div>
-                    <NewPrograms />
+                    <AllUsers />
                 </div>
             ) : (
                 <div>

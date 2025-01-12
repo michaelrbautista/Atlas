@@ -259,6 +259,22 @@ export const editUser = async (oldUser: Tables<"users">, formData: FormData) => 
     }
 }
 
+export const getAllUsers = async () => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("users")
+        .select()
+        .neq("stripe_price_id", null)
+        // .neq("id", "e4d6f88c-d8c3-4a01-98d6-b5d56a366491")
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export const getUser = async (userId: string) => {
     const supabase = createClient();
 

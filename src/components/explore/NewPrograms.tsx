@@ -8,4 +8,5 @@ const NewPrograms = async () => {
         <ProgramList programs={newPrograms} />
     )
 }
+
 export default NewPrograms

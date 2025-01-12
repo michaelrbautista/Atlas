@@ -3,7 +3,7 @@ import { Dumbbell } from "lucide-react";
 import PurchaseProgramButton from "@/components/program/user/PurchaseProgramButton";
 import MobileCalendar from "@/components/program/user/calendar/MobileCalendar";
 import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
-import { getUser } from "@/server-actions/user";
+import { checkIfSubscribed, getUser } from "@/server-actions/user";
 import LoggedOutPurchaseButton from "@/components/program/user/LoggedOutPurchaseButton";
 import { BadgeList } from "@/components/program/user/BadgeList";
 import { Button } from "@/components/ui/button";
@@ -21,15 +21,11 @@ const Program = async ({
     // Get creator
     const creator = await getUser(program.created_by);
 
-    // Check if program is purchased
-    const isPurchased = await checkIfProgramIsPurchased(params.id);
+    // Check if user is subscribed to creator
+    const isSubscribed = await checkIfSubscribed(creator.id);
 
     const programContentsComponent = () => {
-        if (!isPurchased && program.free) {
-            return (<Button className="" variant="systemBlue" size="sm">Save program</Button>)
-        } else if (!isPurchased && !program.free) {
-            return (<PurchaseProgramButton program={program} creator={creator}/>)
-        }
+        
     }
 
     return (
@@ -42,7 +38,7 @@ const Program = async ({
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
-                        <div className="relative flex items-center w-[120px] h-[120px]">
+                        <div className="relative flex items-center w-[120px] h-[120px] shrink-0">
                             <Image
                                 className="rounded-xl"
                                 fill
@@ -53,7 +49,9 @@ const Program = async ({
                             />
                         </div>
                     )}
-                    {programContentsComponent()}
+                    {!isSubscribed && !program.free && (
+                        <Button className="" variant="secondary" size="sm" disabled>Subscribers only</Button>
+                    )}
                 </div>
                 <div className="flex flex-col w-full h-full items-start justify-between">
                     <p className="text-primaryText text-lg font-bold">{program?.title}</p>
@@ -78,7 +76,7 @@ const Program = async ({
                         ]}
                     />
                 </div>
-                {(isPurchased || program?.free) && (
+                {(isSubscribed || program?.free) && (
                     <div>
                         <Separator />
                         <MobileCalendar
