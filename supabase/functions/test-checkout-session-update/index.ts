@@ -39,8 +39,6 @@ Deno.serve(async (request) => {
     data = event.data;
     eventType = event.type;
 
-    console.log(event);
-
     try {
         const supabaseClient = createClient(
             Deno.env.get("SUPABASE_URL")!,
@@ -78,11 +76,41 @@ Deno.serve(async (request) => {
                         .eq("email", customer.email)
                         .single()
 
-                    if (user) {
+                    if (!user) {
+                        console.log("No user found in Stripe webhook.");
+                        break
+                    }
+
+                    console.log("GOT USER");
+
+                    const previousSubscription = await supabaseClient
+                        .from("subscriptions")
+                        .select()
+                        .eq("stripe_customer_id", customerId)
+                        .single()
+
+                    console.log("GOT SUBSCRIPTION");
+
+                    if (previousSubscription) {
+                        const { error } = await supabaseClient
+                            .from("subscriptions")
+                            .update({
+                                "stripe_subscription_id": session?.subscription,
+                                "is_active": true
+                            })
+                            .eq("stripe_customer_id", customerId)
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log("UPDATED SUBSCRIPTION");
+                    } else {
                         const subscription = {
                             subscriber: requestMetadata.userId,
                             subscribed_to: requestMetadata.creatorId,
                             tier: "monthly",
+                            stripe_subscription_id: session?.subscription,
                             stripe_customer_id: customerId,
                             stripe_price_id: priceId,
                             is_active: true
@@ -96,19 +124,28 @@ Deno.serve(async (request) => {
                             throw error;
                         }
 
-                        console.log("SAVED SUBSCRIPTION IN DB");
-                    } else {
-                        console.log("No user found in Stripe webhook.");
+                        console.log("CREATED NEW SUBSCRIPTION");
                     }
                 } else {
-                    console.log("No user found in Stripe webhook.");
+                    console.log("No customer found in Stripe webhook.");
                 }
 
                 break;
             }
 
             case "customer.subscription.deleted": {
-                console.log("");
+                const subscriptionId = data.object.id
+
+                const { error } = await supabaseClient
+                    .from("subscriptions")
+                    .update({
+                        "is_active": false
+                    })
+                    .eq("stripe_subscription_id", subscriptionId)
+
+                if (error) {
+                    throw error;
+                }
 
                 break;
             }

@@ -4,6 +4,24 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+export async function getSubscriptionIds(userId: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from("subscriptions")
+        .select("id")
+        .eq("subscriber", userId)
+
+    if (error && !data) {
+        return {
+            error: error.message
+        }
+    }
+
+    return {
+        data: data
+    }
+}
+
 export async function checkAuth() {
     const supabase = createClient();
 

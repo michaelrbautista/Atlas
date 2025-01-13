@@ -2,7 +2,7 @@
 
 import { Users } from "lucide-react";
 import Image from "next/image";
-import { checkIfSubscribed, getUserFromUsername } from "@/server-actions/user";
+import { getSubscription, getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditProfileButton from "@/components/profile/creator/EditProfileButton";
 import CreatorProgramList from "@/components/program/creator/CreatorProgramList";
@@ -13,6 +13,7 @@ import { useUserContext } from "@/context";
 import { Spinner } from "@/components/misc/Spinner";
 import { Button } from "@/components/ui/button";
 import SubscribeButton from "@/components/profile/user/SubscribeButton";
+import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
 
 const User = ({ 
     params
@@ -20,7 +21,7 @@ const User = ({
     params: { username: string }
 }) => {
     const [user, setUser] = useState<Tables<"users"> | null>(null);
-    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [userSubscription, setUserSubscription] = useState<Tables<"subscriptions"> | null>(null);
 
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
 
@@ -52,12 +53,15 @@ const User = ({
             }
 
             if (contextUser?.id != creatorData.id) {
-                // Check if subscribed
-                const checkSubscription = await checkIfSubscribed(creatorData.id);
+                // Get subscription
+                const { data: subscriptionData, error: subscriptionError } = await getSubscription(creatorData.id);
 
-                if (checkSubscription != undefined) {
-                    setIsSubscribed(checkSubscription);
+                if (subscriptionError && !subscriptionData) {
+                    console.log("Error getting subscription.");
+                    return
                 }
+                
+                setUserSubscription(subscriptionData);
             }
         }
 
@@ -65,15 +69,18 @@ const User = ({
     }, []);
 
     const getSubscribeButton = () => {
-        if (isSubscribed) {
+        if (userSubscription?.is_active && user?.stripe_account_id) {
             return (
-                <Button variant="disabled">Unsubscribe</Button>
+                <UnsubscribeButton
+                    connectedAccountId={user.stripe_account_id}
+                    subscriptionId={userSubscription.stripe_subscription_id}
+                    setSubscription={() => {setUserSubscription(null)}}
+                />
             )
         } else {
             return (
                 <SubscribeButton
                     username={params.username}
-                    isSubscribed={isSubscribed}
                 />
             )
         }

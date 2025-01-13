@@ -1,6 +1,6 @@
 "use client";
 
-import { Ellipsis, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import {
     Sheet,
@@ -14,19 +14,15 @@ import Logo from "@/components/misc/Logo";
 import MobileSidebarRoutes from "./MobileSidebarRoutes";
 import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
-import { Button } from "@/components/ui/button";
-import UserInfo from "../UserInfo";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
-import LogoutButton from "../../auth/LogoutButton";
 import { useUserContext } from "@/context";
 import UserDropdown from "../UserDropdown";
 import { useState } from "react";
 
 const anonRoutes = [
-    {
-        label: "Home",
-        href: "/home"
-    },
+    // {
+    //     label: "Home",
+    //     href: "/home"
+    // },
     {
         label: "Explore",
         href: "/explore"
@@ -34,17 +30,17 @@ const anonRoutes = [
 ]
 
 const userRoutes = [
-    {
-        label: "Home",
-        href: "/home"
-    },
+    // {
+    //     label: "Home",
+    //     href: "/home"
+    // },
     {
         label: "Explore",
         href: "/explore"
     },
     {
-        label:"Programs",
-        href: "/programs"
+        label:"Subscriptions",
+        href: "/subscriptions"
     }
 ]
 

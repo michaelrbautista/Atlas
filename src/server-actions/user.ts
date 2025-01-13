@@ -4,6 +4,36 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export const getAllSubscriptions = async () => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        console.log("Couldn't get current user.");
+        return
+    }
+
+    const { data, error } = await supabase
+        .from("subscriptions")
+        .select(`
+            subscribed_to:users!subscriptions_subscribed_to_fkey(
+                full_name,
+                username,
+                bio,
+                profile_picture_url
+            )
+        `)
+        .eq("subscriber", user.id)
+
+    if (error && !data) {
+        console.log(error)
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export const redirectToSubscribe = async (username: string) => {
     redirect(`${username}/subscribe`);
 }
@@ -38,6 +68,56 @@ export const checkIfPreviouslySubscribed = async (creatorId: string) => {
     }
 }
 
+export const getSubscription = async (creatorId: string) => {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return {
+            error: Error("Couldn't get current user.")
+        }
+    }
+
+    const { data: subscriptionData, error: subscriptionError } = await supabase
+        .from("subscriptions")
+        .select()
+        .eq("subscriber", user.id)
+        .eq("subscribed_to", creatorId)
+        .single()
+
+    if (subscriptionError && !subscriptionData) {
+        return {
+            error: subscriptionError
+        }
+    }
+
+    return {
+        data: subscriptionData
+    }
+}
+
+export const getUserFromUsername = async (username: string) => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("users")
+        .select()
+        .eq("username", username)
+        .single()
+
+    if (error && !data) {
+        console.log(error)
+        return {
+            error: error
+        }
+    }
+
+    return {
+        data: data
+    }
+}
+
 export const checkIfSubscribed = async (creatorId: string) => {
     const supabase = createClient();
 
@@ -65,27 +145,6 @@ export const checkIfSubscribed = async (creatorId: string) => {
         }
     } else {
         return false
-    }
-}
-
-export const getUserFromUsername = async (username: string) => {
-    const supabase = createClient();
-
-    const { data, error } = await supabase
-        .from("users")
-        .select()
-        .eq("username", username)
-        .single()
-
-    if (error && !data) {
-        console.log(error)
-        return {
-            error: error
-        }
-    }
-
-    return {
-        data: data
     }
 }
 

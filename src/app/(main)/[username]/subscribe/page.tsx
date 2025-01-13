@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/misc/Spinner";
-import StripePaymentForm from "@/components/program/user/StripePaymentForm";
+import StripePaymentForm from "@/components/profile/user/StripePaymentForm";
 
 const Page = ({ 
     params
@@ -21,7 +21,7 @@ const Page = ({
     const [plan, setPlan] = useState("");
     const [subscriptionPrice, setSubscriptionPrice] = useState(0);
 
-    const [existingCustomerId, setExistingCustomerId] = useState("");
+    const [existingCustomerId, setExistingCustomerId] = useState<string | null>(null);
 
     useEffect(() => {
         const getUser = async () => {
@@ -56,6 +56,8 @@ const Page = ({
             if (previousCustomerId) {
                 setExistingCustomerId(previousCustomerId);
             }
+
+            console.log(previousCustomerId);
         }
 
         getUser();
@@ -148,7 +150,7 @@ const Page = ({
                                 creatorUsername={creator.username}
                                 connectedAccountId={creator.stripe_account_id!}
                                 userId={currentUser.id}
-                                customerId={existingCustomerId === "" ? undefined : existingCustomerId}
+                                customerId={existingCustomerId ?? undefined}
                                 customerEmail={currentUser.email}
                             />
                         </div>

@@ -32,7 +32,7 @@ Deno.serve(async (request) => {
             cryptoProvider
         )
     } catch (err) {
-        console.log("Webhook error: ", err);
+        console.log("Construct stripe event error: ", err);
         return new Response(err.message, { status: 400 })
     }
 
@@ -53,11 +53,19 @@ Deno.serve(async (request) => {
                     data.object.id,
                     {
                         expand: ["line_items"]
+                    },
+                    {
+                        stripeAccount: event.account
                     }
                 )
 
                 const customerId = session?.customer;
-                const customer = await stripe.customers.retrieve(customerId);
+                const customer = await stripe.customers.retrieve(
+                    customerId,
+                    {
+                        stripeAccount: event.account
+                    }
+                );
 
                 const priceId = session?.line_items.data[0]?.price.id;
 
@@ -68,11 +76,44 @@ Deno.serve(async (request) => {
                         .eq("email", customer.email)
                         .single()
 
-                    if (user) {
+                    if (!user) {
+                        console.log("No user found in Stripe webhook.");
+                        break
+                    }
+
+                    console.log("GOT USER");
+
+                    const previousSubscription = await supabaseClient
+                        .from("subscriptions")
+                        .select()
+                        .eq("stripe_customer_id", customerId)
+                        .single()
+
+                    console.log("GOT SUBSCRIPTION");
+
+                    if (previousSubscription) {
+                        const { error } = await supabaseClient
+                            .from("subscriptions")
+                            .update({
+                                "stripe_subscription_id": session?.subscription,
+                                "is_active": true
+                            })
+                            .eq("stripe_customer_id", customerId)
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log("UPDATED SUBSCRIPTION");
+                    } else {
                         const subscription = {
-                            subscribed_to: requestMetadata.creatorId,
                             subscriber: requestMetadata.userId,
-                            tier: "monthly"
+                            subscribed_to: requestMetadata.creatorId,
+                            tier: "monthly",
+                            stripe_subscription_id: session?.subscription,
+                            stripe_customer_id: customerId,
+                            stripe_price_id: priceId,
+                            is_active: true
                         };
         
                         const { error } = await supabaseClient
@@ -82,18 +123,29 @@ Deno.serve(async (request) => {
                         if (error) {
                             throw error;
                         }
-                    } else {
-                        console.log("No user found in Stripe webhook.");
+
+                        console.log("CREATED NEW SUBSCRIPTION");
                     }
                 } else {
-                    console.log("No user found in Stripe webhook.");
+                    console.log("No customer found in Stripe webhook.");
                 }
 
                 break;
             }
 
             case "customer.subscription.deleted": {
-                console.log("");
+                const subscriptionId = data.object.id
+
+                const { error } = await supabaseClient
+                    .from("subscriptions")
+                    .update({
+                        "is_active": false
+                    })
+                    .eq("stripe_subscription_id", subscriptionId)
+
+                if (error) {
+                    throw error;
+                }
 
                 break;
             }

@@ -4,12 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell, Lock } from "lucide-react";
 import { FetchedProgram } from "@/server-actions/models";
+import { useUserContext } from "@/context";
 
 const ProgramItem = ({
     program
 }: {
     program: FetchedProgram
 }) => {
+    const {
+        subscriptions
+    } = useUserContext();
+
     return (
         <div className="flex flex-col gap-5 py-5 border-b-[1px]">
             <Link href={`/program/${program.id}`} className="flex flex-row gap-5">

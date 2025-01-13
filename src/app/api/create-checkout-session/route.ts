@@ -24,10 +24,29 @@ export async function POST(request: NextRequest) {
             customerEmail
         } = await request.json();
 
-        const session = await stripe.checkout.sessions.create(
-            {
+        let checkoutSessionBody;
+
+        if (customerId) {
+            checkoutSessionBody = {
                 payment_method_types: ["card"],
                 customer: customerId,
+                line_items: [
+                    {
+                        price: priceId,
+                        quantity: 1,
+                    }
+                ],
+                mode: "subscription",
+                ui_mode: "embedded",
+                metadata: {
+                    creatorId: creatorId,
+                    userId: userId
+                },
+                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?creator=${creatorUsername}`
+            }
+        } else {
+            checkoutSessionBody = {
+                payment_method_types: ["card"],
                 customer_email: customerEmail,
                 line_items: [
                     {
@@ -42,13 +61,15 @@ export async function POST(request: NextRequest) {
                     userId: userId
                 },
                 return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?creator=${creatorUsername}`
-            },
+            }
+        }
+
+        const session = await stripe.checkout.sessions.create(
+            checkoutSessionBody,
             {
                 stripeAccount: destinationAccountId
             }
         );
-
-        console.log("Checkout session: ", session.id);
 
         return NextResponse.json({
             clientSecret: session.client_secret

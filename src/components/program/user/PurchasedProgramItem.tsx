@@ -19,15 +19,16 @@ const PurchasedProgramItem = ({
         <div className="flex flex-col gap-5 py-5 border-b-[1px]">
             <Link href={`/program/${program.programs?.id}`} className="flex flex-col md:flex-row gap-5">
                 {program.programs?.image_url ? (
-                    <Image
-                        className="h-[120px] w-[120px] rounded-xl my-auto shrink-0"
-                        height={120}
-                        width={120}
-                        src={program.programs?.image_url}
-                        alt="programImage"
-                        style={{objectFit: "cover"}}
-                        priority
-                    />
+                    <div className="relative flex items-center w-[120px] h-[120px] shrink-0">
+                        <Image
+                            className="rounded-xl shrink-0"
+                            fill
+                            src={program.programs?.image_url}
+                            alt="programImage"
+                            style={{objectFit: "cover"}}
+                            priority
+                        />
+                    </div>
                 ) : (
                     <div className="bg-systemGray5 shrink-0 h-[120px] w-[120px] rounded-xl flex items-center justify-center">
                         <Dumbbell className="text-secondaryText" />

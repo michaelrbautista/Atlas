@@ -50,6 +50,7 @@ export async function getCreatorsPrograms(userId: string, offset: number) {
             free,
             private,
             created_by:users!programs_created_by_fkey(
+                id,
                 full_name
             )
         `)
@@ -104,6 +105,7 @@ export async function getUsersPrograms() {
         .from("purchased_programs")
         .select(`
             created_by:users!saved_workouts_created_by_fkey(
+                id,
                 full_name
             ),
             programs(

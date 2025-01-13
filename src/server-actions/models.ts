@@ -9,6 +9,7 @@ export type FetchedProgram = {
     free: boolean;
     private: boolean;
     created_by: {
+        id: string;
         full_name: string;
     } | null;
 }
@@ -47,5 +48,14 @@ export type FetchedExercise = {
         title: string;
         instructions: string | null;
         video_url: string | null;
+    } | null;
+}
+
+export type FetchedSubscription = {
+    subscribed_to: {
+        full_name: string;
+        username: string;
+        bio: string | null;
+        profile_picture_url: string | null;
     } | null;
 }

@@ -5,15 +5,21 @@ import Link from "next/link"
 
 
 const UserItem = ({
-    user
+    fullName,
+    username,
+    bio,
+    profilePictureUrl
 }: {
-    user: Tables<"users">
+    fullName: string,
+    username: string,
+    bio?: string,
+    profilePictureUrl?: string
 }) => {
     return (
         <Link href={{
-            pathname: `/${user.username}`
+            pathname: `/${username}`
         }} className="flex flex-row gap-5 p-5 border-b-[1px]">
-            {(!user.profile_picture_url) ? (
+            {(!profilePictureUrl) ? (
                 // Replace with placeholder image
                 <div className="bg-systemGray5 shrink-0 h-12 w-12 rounded-full flex items-center justify-center">
                     <Users className="text-secondaryText" />
@@ -23,7 +29,7 @@ const UserItem = ({
                     <Image
                         className="rounded-full"
                         fill
-                        src={user.profile_picture_url}
+                        src={profilePictureUrl}
                         alt="programImage"
                         style={{objectFit: "cover"}}
                         priority
@@ -31,9 +37,9 @@ const UserItem = ({
                 </div>
             )}
             <div className="flex flex-col w-full">
-                <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
-                <p className="text-secondaryText text-sm">@{user.username}</p>
-                <p className="text-secondaryText pt-3 text-sm line-clamp-2">{user.bio}</p>
+                <p className="text-primaryText text-lg font-bold">{fullName}</p>
+                <p className="text-secondaryText text-sm">@{username}</p>
+                <p className="text-secondaryText pt-3 text-sm line-clamp-2">{bio}</p>
             </div>
         </Link>
     )

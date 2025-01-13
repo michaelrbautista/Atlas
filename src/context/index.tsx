@@ -1,11 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { Tables } from '../../database.types';
 import { createClient } from '@/utils/supabase/client';
+import { getSubscriptionIds } from '@/server-actions/auth';
 
 type UserContextType = {
     user: Tables<"users"> | null,
+    subscriptions: string[],
     isLoading: boolean,
     login: (userId: string) => void,
     logout: () => void
@@ -13,6 +15,7 @@ type UserContextType = {
 
 export const UserContext = createContext<UserContextType>({
     user: null,
+    subscriptions: [],
     isLoading: true,
     login: () => {},
     logout: () => {}
@@ -23,6 +26,7 @@ export default function UserContextProvider({ children }: Readonly<{
 }>) {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
+    const [subscriptions, setSubscriptions] = useState<string[]>([]);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -36,6 +40,7 @@ export default function UserContextProvider({ children }: Readonly<{
                 return
             }
 
+            // Fetch current user
             const { data: userData, error: userError } = await supabase
                 .from("users")
                 .select()
@@ -50,10 +55,16 @@ export default function UserContextProvider({ children }: Readonly<{
 
             setUser(userData);
 
-            if (!userData.payments_enabled) {
+            // Get subscriptions
+            const { data: subscriptionsData, error: subscriptionsError } = await getSubscriptionIds(user.id);
+
+            if (subscriptionsError && !subscriptionsData) {
+                console.log("Couldn't get subscriptions.");
                 setIsLoading(false);
                 return
             }
+
+            setSubscriptions(subscriptionsData!.map(a => a.id));
 
             setIsLoading(false);
         }
@@ -87,13 +98,16 @@ export default function UserContextProvider({ children }: Readonly<{
         setUser(null);
     }
 
+    const valueObject = useMemo(() => ({
+        user: user,
+        subscriptions: subscriptions,
+        isLoading: isLoading,
+        login: login,
+        logout: logout
+    }), [isLoading]);
+
     return (
-        <UserContext.Provider value={{
-            user,
-            isLoading,
-            login,
-            logout
-        }}>
+        <UserContext.Provider value={valueObject}>
             {children}
         </UserContext.Provider>
     )
