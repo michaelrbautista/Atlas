@@ -82,7 +82,7 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function redirectToHome() {
-    return redirect("/home");
+    return redirect("/explore");
 }
 
 export async function createAccount(fullName: string, email: string, username: string, password: string) {
