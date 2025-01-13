@@ -21,6 +21,7 @@ export async function getNewPrograms() {
             free,
             private,
             created_by:users!programs_created_by_fkey(
+                id,
                 full_name
             )
         `)
@@ -385,7 +386,7 @@ export async function createProgram(formData: FormData) {
             weeks: parseInt(formData.get("weeks") as string),
             private: (formData.get("free") === "true"),
             free: (formData.get("free") === "true"),
-            price: parseFloat(formData.get("price") as string),
+            // price: parseFloat(formData.get("price") as string),
             image_url: storageUrl.publicUrl,
             image_path: storageData.path
         }
@@ -396,7 +397,7 @@ export async function createProgram(formData: FormData) {
             weeks: parseInt(formData.get("weeks") as string),
             private: (formData.get("free") === "true"),
             free: (formData.get("free") === "true"),
-            price: parseFloat(formData.get("price") as string),
+            // price: parseFloat(formData.get("price") as string),
         }
     }
 

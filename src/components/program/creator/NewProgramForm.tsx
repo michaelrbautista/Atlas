@@ -34,7 +34,7 @@ const NewProgramForm = ({
             description: "",
             weeks: 0,
             free: false,
-            price: 1.00,
+            // price: 1.00,
             private: false
         }
     })
@@ -62,9 +62,9 @@ const NewProgramForm = ({
 
         formData.append("free", data.free.toString());
 
-        if (data.price) {
-            formData.append("price", data.price.toString());
-        }
+        // if (data.price) {
+        //     formData.append("price", data.price.toString());
+        // }
 
         formData.append("private", data.private.toString());
 
@@ -190,7 +190,7 @@ const NewProgramForm = ({
                             </FormItem>
                         )}
                     />
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="price"
                         render={({ field }) => (
@@ -209,7 +209,7 @@ const NewProgramForm = ({
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? "Creating program" : "Create program"}

@@ -35,15 +35,16 @@ export const columns: ColumnDef<Tables<"programs">>[] = [
                         <Dumbbell className="text-secondaryText" />
                     </div>
                 ) : (
-                    <Image
-                        className="h-[60px] w-[60px] rounded-md"
-                        height={60}
-                        width={60}
-                        src={program.image_url}
-                        alt="programImage"
-                        style={{objectFit: "cover"}}
-                        priority
-                    />
+                    <div className="relative flex items-center w-[60px] h-[60px]">
+                        <Image
+                            className="rounded-md"
+                            fill
+                            src={program.image_url}
+                            alt="programImage"
+                            style={{objectFit: "cover"}}
+                            priority
+                        />
+                    </div>
                 )
             )
         }
@@ -57,13 +58,13 @@ export const columns: ColumnDef<Tables<"programs">>[] = [
         header: "Description",
     },
     {
-        accessorKey: "price",
-        header: "Price",
+        accessorKey: "tier",
+        header: "Tier",
         cell: ({ row }) => {
             const program = row.original
 
             return (
-                <p>{program.free ? "Free" : formatter.format(program.price)}</p>
+                <p>{program.free ? "Free" : "Paid"}</p>
             )
         }
     },

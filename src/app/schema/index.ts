@@ -19,11 +19,11 @@ export const ProgramSchema = z.object({
     }),
     private: z.boolean().default(false),
     free: z.boolean().default(false),
-    price: z.coerce.number({
-        message: "Price must be a number."
-    }).min(1, {
-        message: "Price must be at least 1.00."
-    })
+    // price: z.coerce.number({
+    //     message: "Price must be a number."
+    // }).min(1, {
+    //     message: "Price must be at least 1.00."
+    // })
 })
 
 export const WorkoutSchema = z.object({

@@ -37,7 +37,7 @@ const EditProgramForm = ({
             description: program.description ?? "",
             weeks: program.weeks,
             free: program.free,
-            price: program.price,
+            // price: program.price,
             private: program.private
         }
     })
@@ -65,9 +65,9 @@ const EditProgramForm = ({
 
         formData.append("free", data.free.toString());
 
-        if (data.price) {
-            formData.append("price", data.price.toString());
-        }
+        // if (data.price) {
+        //     formData.append("price", data.price.toString());
+        // }
 
         let { data: programData, error: programError } = await editProgram(program, formData);
 
@@ -191,7 +191,7 @@ const EditProgramForm = ({
                             </FormItem>
                         )}
                     />
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="price"
                         render={({ field }) => (
@@ -210,7 +210,7 @@ const EditProgramForm = ({
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {!isLoading && "Save program"}

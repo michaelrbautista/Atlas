@@ -111,15 +111,15 @@ const ViewCreatorProgram = ({
                             </div>
                         ) : (
                             <div className="relative flex items-center w-[120px] h-[120px]">
-                            <Image
-                                className="rounded-xl"
-                                fill
-                                src={programImageUrl}
-                                alt="programImage"
-                                style={{objectFit: "cover"}}
-                                priority
-                            />
-                        </div>
+                                <Image
+                                    className="rounded-xl"
+                                    fill
+                                    src={programImageUrl}
+                                    alt="programImage"
+                                    style={{objectFit: "cover"}}
+                                    priority
+                                />
+                            </div>
                         )}
                         <div className="shrink-0">
                             <ProgramOptionsButton
@@ -142,6 +142,10 @@ const ViewCreatorProgram = ({
                             {
                                 header: "Visibility",
                                 info: program.private ? "Private" : "Public"
+                            },
+                            {
+                                header: "Tier",
+                                info: program.free ? "Free" : "Paid"
                             }
                         ] : [
                             {
@@ -151,6 +155,10 @@ const ViewCreatorProgram = ({
                             {
                                 header: "Visibility",
                                 info: program.private ? "Private" : "Public"
+                            },
+                            {
+                                header: "Tier",
+                                info: program.free ? "Free" : "Paid"
                             }
                         ]}
                     />

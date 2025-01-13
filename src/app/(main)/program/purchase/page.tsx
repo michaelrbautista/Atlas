@@ -18,11 +18,6 @@ const PurchaseProgram = async ({
             <div className="flex flex-col items-center gap-5">
                 <p className="text-primaryText text-3xl font-bold text-center">Purchase Program</p>
                 <Separator />
-                <StripePaymentForm
-                    program={program}
-                    connectedAccountId={creatorId}
-                    userId={userId}
-                />
             </div>
         </div>
     )
