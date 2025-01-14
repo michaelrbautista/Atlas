@@ -84,7 +84,7 @@ const Sidebar = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="px-5 flex flex-col gap-5">
+                        <div className="p-5 flex flex-col gap-5">
                             <SignInButton fromLandingPage={false} />
                             <CreateAccountButton fromLandingPage={false} />
                         </div>

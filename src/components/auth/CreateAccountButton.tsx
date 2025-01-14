@@ -24,7 +24,7 @@ const CreateAccountButton = ({
     return (
         <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
             <DialogTrigger asChild>
-                <Button className={buttonVariants({ variant: "systemBlue", size: "full" })}>Create Account</Button>
+                <Button variant="systemBlue" size="full">Create Account</Button>
             </DialogTrigger>
             <DialogContent className="max-w-96 sm:max-w-md">
             <DialogHeader>

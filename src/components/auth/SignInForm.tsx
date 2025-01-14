@@ -54,7 +54,9 @@ const SignInForm = ({
 
         login(loginData!.id);
 
-        redirectToHome();
+        if (fromLandingPage) {
+            redirectToHome();
+        }
 
         setIsOpen(false);
     }

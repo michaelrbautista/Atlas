@@ -14,6 +14,7 @@ import { Spinner } from "@/components/misc/Spinner";
 import { Button } from "@/components/ui/button";
 import SubscribeButton from "@/components/profile/user/SubscribeButton";
 import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
+import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
 
 const User = ({ 
     params
@@ -25,12 +26,10 @@ const User = ({
 
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
 
-    const {
-        user: contextUser
-    } = useUserContext();
+    const userContext = useUserContext();
 
     useEffect(() => {
-        const getUser = async () => {
+        const getCreator = async () => {
             // Get user
             const { data: creatorData, error: creatorError } = await getUserFromUsername(params.username);
 
@@ -52,7 +51,7 @@ const User = ({
                 setProfilePictureUrl(data.publicUrl);
             }
 
-            if (contextUser?.id != creatorData.id) {
+            if (userContext.user?.id && userContext.user?.id != creatorData.id) {
                 // Get subscription
                 const { data: subscriptionData, error: subscriptionError } = await getSubscription(creatorData.id);
 
@@ -61,12 +60,12 @@ const User = ({
                     return
                 }
                 
-                setUserSubscription(subscriptionData);
+                setUserSubscription(subscriptionData!);
             }
         }
 
-        getUser();
-    }, []);
+        getCreator();
+    }, [userContext.user]);
 
     const getSubscribeButton = () => {
         if (userSubscription?.is_active && user?.stripe_account_id) {
@@ -78,15 +77,22 @@ const User = ({
                 />
             )
         } else {
-            return (
-                <SubscribeButton
-                    username={params.username}
-                />
-            )
+            if (userContext.user) {
+                return (
+                    <SubscribeButton
+                        username={params.username}
+                    />
+                )
+            } else {
+                return (
+                    <LoggedOutSubscribeButton />
+                )
+            }
+            
         }
     }
 
-    if (!user || !contextUser) {
+    if (!user) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
             <Spinner></Spinner>
@@ -119,7 +125,7 @@ const User = ({
                     </div>
                 </div>
                 <p className="text-primaryText text-base">{user.bio}</p>
-                {contextUser?.id == user.id ? (
+                {userContext.user?.id == user.id ? (
                     <EditProfileButton />
                 ) : user.stripe_price_id && (
                     getSubscribeButton()  

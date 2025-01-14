@@ -88,7 +88,7 @@ export const getSubscription = async (creatorId: string) => {
 
     if (subscriptionError && !subscriptionData) {
         return {
-            error: subscriptionError
+            error: subscriptionError.message
         }
     }
 
