@@ -1,6 +1,6 @@
 "use client";
 
-import { Users } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import Image from "next/image";
 import { getSubscription, getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +21,7 @@ const User = ({
 }: {
     params: { username: string }
 }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [userSubscription, setUserSubscription] = useState<Tables<"subscriptions"> | null>(null);
 
@@ -62,6 +63,8 @@ const User = ({
                 
                 setUserSubscription(subscriptionData!);
             }
+
+            setIsLoading(false);
         }
 
         getCreator();
@@ -76,23 +79,20 @@ const User = ({
                     setSubscription={() => {setUserSubscription(null)}}
                 />
             )
+        } else if (userContext.user) {
+            return (
+                <SubscribeButton
+                    username={params.username}
+                />
+            )
         } else {
-            if (userContext.user) {
-                return (
-                    <SubscribeButton
-                        username={params.username}
-                    />
-                )
-            } else {
-                return (
-                    <LoggedOutSubscribeButton />
-                )
-            }
-            
+            return (
+                <LoggedOutSubscribeButton />
+            )
         }
     }
 
-    if (!user) {
+    if (isLoading || !user || userContext.isLoading) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
             <Spinner></Spinner>
