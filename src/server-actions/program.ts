@@ -5,6 +5,28 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export async function saveProgram(programId: string, createdBy: string) {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { error: programsError } = await supabase
+        .from("purchased_programs")
+        .insert({
+            program_id: programId,
+            purchased_by: user.id,
+            created_by: createdBy
+        })
+
+    if (programsError) {
+        throw new Error(programsError.message)
+    }
+}
+
 export async function getNewPrograms() {
     const supabase = createClient();
 
@@ -85,6 +107,8 @@ export async function checkIfProgramIsPurchased(programId: string) {
     if (programsError && !programsData) {
         throw new Error(programsError.message)
     }
+
+    console.log(programsData);
 
     if (programsData.length > 0) {
         return true
