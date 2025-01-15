@@ -52,7 +52,7 @@ const User = ({
                 setProfilePictureUrl(data.publicUrl);
             }
 
-            if (userContext.user?.id && userContext.user?.id != creatorData.id) {
+            if (userContext.user?.id && userContext.user?.id != creatorData.id && userContext.user?.stripe_price_id) {
                 // Get subscription
                 const { data: subscriptionData, error: subscriptionError } = await getSubscription(creatorData.id);
 
