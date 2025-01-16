@@ -79,7 +79,7 @@ const Page = () => {
                             <Image
                                 className="rounded-md"
                                 fill
-                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/firstLandingPage.png?t=2025-01-16T04%3A08%3A40.813Z"
+                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.jpg?t=2025-01-16T04%3A42%3A43.313Z"
                                 alt="firstLandingPage"
                                 style={{objectFit: "contain"}}
                                 priority
@@ -109,7 +109,7 @@ const Page = () => {
                                 <Image
                                     className="rounded-md"
                                     fill
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/secondLandingPage.png?t=2025-01-16T04%3A09%3A16.767Z"
+                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.jpg?t=2025-01-16T04%3A42%3A59.966Z"
                                     alt="secondLandingPage"
                                     style={{objectFit: "contain"}}
                                     priority
@@ -124,7 +124,7 @@ const Page = () => {
                                 <Image
                                     className="rounded-md"
                                     fill
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/thirdLandingPage.png?t=2025-01-16T04%3A09%3A27.868Z"
+                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.jpg?t=2025-01-16T04%3A43%3A08.209Z"
                                     alt="thirdLandingPage"
                                     style={{objectFit: "contain"}}
                                     priority
