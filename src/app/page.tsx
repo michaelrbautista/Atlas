@@ -10,7 +10,6 @@ import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "@/components/
 import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
 import { checkAuth } from "@/server-actions/auth";
-import SignUpForm from "@/components/landingpage/SignUpForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import LoadImage from "@/components/misc/LoadImage";
 
