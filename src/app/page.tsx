@@ -12,6 +12,7 @@ import SignInForm from "@/components/auth/SignInForm";
 import { checkAuth } from "@/server-actions/auth";
 import SignUpForm from "@/components/landingpage/SignUpForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import LoadImage from "@/components/misc/LoadImage";
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -44,16 +45,6 @@ const Page = () => {
             <div className="h-full">
                 <div className="fixed z-50 w-full h-20 flex items-center justify-between px-5 sm:px-10 bg-systemBackground">
                     <Logo></Logo>
-                    {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
-                        <DialogTrigger asChild>
-                            <Button variant="secondary">Sign up today</Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-background max-w-96 sm:max-w-md">
-                            <DialogTitle>Sign Up</DialogTitle>
-                            <DialogDescription hidden />
-                            <SignUpForm setIsOpen={setShowSignUp} />
-                        </DialogContent>
-                    </Dialog> */}
                     <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
                         <DialogTrigger asChild>
                             <Button variant="ghost">Sign In</Button>
@@ -76,13 +67,12 @@ const Page = () => {
                             
                         </div>
                         <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
-                            <Image
-                                className="rounded-md"
-                                fill
-                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.png?t=2025-01-16T04%3A48%3A38.958Z"
+                            <LoadImage
                                 alt="firstLandingPage"
-                                style={{objectFit: "contain"}}
-                                priority
+                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.png?t=2025-01-16T04%3A48%3A38.958Z"
+                                sizes="(max-width: 640px) 350px, 800px"
+                                className="rounded-md"
+                                canSelect={false}
                             />
                         </div>
                         <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
@@ -94,25 +84,14 @@ const Page = () => {
                                 <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                             </DialogContent>
                         </Dialog>
-                        {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
-                            <DialogTrigger asChild>
-                                <Button variant="systemBlue">Sign up today</Button>
-                            </DialogTrigger>
-                            <DialogContent className="bg-background max-w-96 sm:max-w-md">
-                                <DialogTitle>Sign Up</DialogTitle>
-                                <DialogDescription hidden />
-                                <SignUpForm setIsOpen={setShowSignUp} />
-                            </DialogContent>
-                        </Dialog> */}
                         <div className="flex flex-col gap-10">
                             <div className="relative flex items-center w-[350px] h-[300px] sm:w-[600px] sm:h-[400px]">
-                                <Image
-                                    className="rounded-md"
-                                    fill
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.png?t=2025-01-16T04%3A48%3A48.462Z"
+                                <LoadImage
                                     alt="secondLandingPage"
-                                    style={{objectFit: "contain"}}
-                                    priority
+                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.png?t=2025-01-16T04%3A48%3A48.462Z"
+                                    sizes="(max-width: 640px) 350px, 600px"
+                                    className="rounded-md"
+                                    canSelect={false}
                                 />
                             </div>
                             <p className="text-secondaryText text-md sm:text-lg font-black text-center">
@@ -121,13 +100,12 @@ const Page = () => {
                         </div>
                         <div className="flex flex-col items-center gap-10">
                             <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
-                                <Image
-                                    className="rounded-md"
-                                    fill
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.png"
+                                <LoadImage
                                     alt="thirdLandingPage"
-                                    style={{objectFit: "contain"}}
-                                    priority
+                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.png"
+                                    sizes="(max-width: 640px) 350px, 800px"
+                                    className="rounded-md"
+                                    canSelect={false}
                                 />
                             </div>
                             <p className="text-secondaryText text-md sm:text-lg font-black text-center">
@@ -135,28 +113,16 @@ const Page = () => {
                             </p>
                             <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
                                 <Image
-                                    layout="intrinsic"
+                                    className="w-[150px] h-[50.13px]"
                                     src="/appstoreicon.svg"
                                     width={150}
-                                    height={150}
-                                    alt="web"
+                                    height={50.13}
+                                    alt="appStoreLink"
+                                    sizes="150px"
+                                    objectFit="contain"
                                 />
                             </a>
                         </div>
-                        {/* <div className="flex flex-col items-center gap-5">
-                            <p className="text-primaryText text-xl sm:text-3xl font-black text-center">
-                                Let your community follow your training programs in the iOS app.
-                            </p>
-                            <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
-                                <Image
-                                layout="intrinsic"
-                                src="/appstoreicon.svg"
-                                width={150}
-                                height={150}
-                                alt="web"
-                                />
-                            </a>
-                        </div> */}
                         <div className="flex flex-col items-center gap-5 py-20">
                             <p className="text-primaryText text-base sm:text-2xl font-bold text-center">
                                 Grow your online fitness business and help your community get in better shape at the same time.
@@ -170,16 +136,6 @@ const Page = () => {
                                     <CreateAccountForm fromLandingPage={true} setIsOpen={setShowCreateAccount}></CreateAccountForm>
                                 </DialogContent>
                             </Dialog>
-                            {/* <Dialog open={showSignUp} onOpenChange={setShowSignUp}>
-                                <DialogTrigger asChild>
-                                    <Button variant="systemBlue">Sign up today</Button>
-                                </DialogTrigger>
-                                <DialogContent className="bg-background max-w-96 sm:max-w-md">
-                                    <DialogTitle>Sign Up</DialogTitle>
-                                    <DialogDescription hidden />
-                                    <SignUpForm setIsOpen={setShowSignUp} />
-                                </DialogContent>
-                            </Dialog> */}
                         </div>
                     </div>
                     <div className="w-full h-20 flex items-center justify-between px-5 sm:px-10 border-t-[1px] border-systemGray6 bg-systemBackground">

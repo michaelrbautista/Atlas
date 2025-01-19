@@ -9,6 +9,86 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      articles: {
+        Row: {
+          collection_id: string
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          image_path: string | null
+          image_url: string | null
+          title: string
+        }
+        Insert: {
+          collection_id?: string
+          content: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          title: string
+        }
+        Update: {
+          collection_id?: string
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "articles_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collections_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercises: {
         Row: {
           created_at: string
@@ -284,24 +364,6 @@ export type Database = {
           stripe_account_id?: string | null
           stripe_price_id?: string | null
           username?: string
-        }
-        Relationships: []
-      }
-      waitlist: {
-        Row: {
-          created_at: string
-          email: string
-          id: number
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: number
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: number
         }
         Relationships: []
       }
