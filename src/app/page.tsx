@@ -11,7 +11,7 @@ import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
 import { checkAuth } from "@/server-actions/auth";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import LoadImage from "@/components/misc/LoadImage";
+import LoadImage from "@/components/misc/BlurImage";
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +69,7 @@ const Page = () => {
                             <LoadImage
                                 alt="firstLandingPage"
                                 src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.png?t=2025-01-16T04%3A48%3A38.958Z"
+                                contentMode="contain"
                                 sizes="(max-width: 640px) 350px, 800px"
                                 className="rounded-md"
                                 canSelect={false}
@@ -88,6 +89,7 @@ const Page = () => {
                                 <LoadImage
                                     alt="secondLandingPage"
                                     src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.png?t=2025-01-16T04%3A48%3A48.462Z"
+                                    contentMode="contain"
                                     sizes="(max-width: 640px) 350px, 600px"
                                     className="rounded-md"
                                     canSelect={false}
@@ -102,6 +104,7 @@ const Page = () => {
                                 <LoadImage
                                     alt="thirdLandingPage"
                                     src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.png"
+                                    contentMode="contain"
                                     sizes="(max-width: 640px) 350px, 800px"
                                     className="rounded-md"
                                     canSelect={false}
@@ -110,15 +113,19 @@ const Page = () => {
                             <p className="text-secondaryText text-md sm:text-lg font-black text-center">
                                 Give your community easy access to all of your content with the mobile app.
                             </p>
-                            <a target="_blank" href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" rel="noopener noreferrer">
+                            <a
+                                target="_blank"
+                                href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731"
+                                rel="noopener noreferrer"
+                                className="relative flex items-center w-[150px] h-[50.13px]"
+                            >
                                 <Image
-                                    className="w-[150px] h-[50.13px]"
-                                    src="/appstoreicon.svg"
-                                    width={150}
-                                    height={50.13}
                                     alt="appStoreLink"
+                                    src="/appstoreicon.svg"
+                                    fill
+                                    className="w-[150px] h-[50.13px]"
+                                    style={{objectFit: "contain"}}
                                     sizes="150px"
-                                    objectFit="contain"
                                 />
                             </a>
                         </div>

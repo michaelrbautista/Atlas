@@ -28,8 +28,8 @@ const CreateAccountButton = ({
             </DialogTrigger>
             <DialogContent className="max-w-96 sm:max-w-md">
             <DialogHeader>
-                <DialogTitle hidden>asdf</DialogTitle>
-                <DialogDescription hidden>asdf</DialogDescription>
+                <DialogTitle hidden></DialogTitle>
+                <DialogDescription hidden></DialogDescription>
             </DialogHeader>
                 <CreateAccountForm fromLandingPage={fromLandingPage} setIsOpen={setShowCreateAccount}></CreateAccountForm>
             </DialogContent>

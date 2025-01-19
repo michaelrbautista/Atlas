@@ -2,6 +2,7 @@ import { Users } from "lucide-react"
 import { Tables } from "../../../database.types"
 import Image from "next/image"
 import Link from "next/link"
+import LoadImage from "../misc/BlurImage"
 
 
 const UserItem = ({
@@ -26,13 +27,13 @@ const UserItem = ({
                 </div>
             ) : (
                 <div className="relative flex items-center w-[50px] h-[50px] shrink-0">
-                    <Image
-                        className="rounded-full"
-                        fill
+                    <LoadImage
+                        alt="userProfilePicture"
                         src={profilePictureUrl}
-                        alt="programImage"
-                        style={{objectFit: "cover"}}
-                        priority
+                        contentMode="cover"
+                        sizes="100px"
+                        className="rounded-full"
+                        canSelect={true}
                     />
                 </div>
             )}
