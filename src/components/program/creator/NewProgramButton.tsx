@@ -23,7 +23,7 @@ const NewProgramButton = ({
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="hidden sm:flex" asChild>
-                <Button  variant="systemBlue">New program</Button>
+                <Button variant="systemBlue" size="sm">New program</Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background">
                 <SheetHeader>

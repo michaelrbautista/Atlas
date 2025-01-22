@@ -313,7 +313,7 @@ export async function addLibraryWorkoutToProgram(
     }
 
     // Copy exercises for new program workout
-    var newExercises: {
+    const newExercises: {
         program_workout_id: string,
         exercise_id: string,
         exercise_number: number,
@@ -323,7 +323,7 @@ export async function addLibraryWorkoutToProgram(
         other: string | null
     }[] = []
 
-    exercisesData.map((exercise) => {
+    exercisesData.forEach((exercise) => {
         const newExercise = {
             program_workout_id: workoutData.id,
             exercise_id: exercise.exercise_id,

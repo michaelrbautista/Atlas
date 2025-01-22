@@ -1,37 +1,42 @@
 "use client";
 
-import { WorkoutSchema } from "@/app/schema";
+import { CollectionSchema } from "@/app/schema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createLibraryWorkout } from "@/server-actions/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Tables } from "../../../../../database.types";
+import { Tables } from "../../../database.types";
+import { createCollection, editCollection } from "@/server-actions/collection";
+import { useToast } from "../ui/use-toast";
 
-const NewLibraryWorkoutForm = ({
+const EditCollectionForm = ({
+    collection,
     setIsOpen,
-    addWorkout
+    updateCollection
 }: {
+    collection: Tables<"collections">,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addWorkout: (workout: Tables<"workouts">) => void
+    updateCollection: (collection: Tables<"collections">) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const form = useForm<z.infer<typeof WorkoutSchema>>({
-        resolver: zodResolver(WorkoutSchema),
+    const { toast } = useToast();
+
+    const form = useForm<z.infer<typeof CollectionSchema>>({
+        resolver: zodResolver(CollectionSchema),
         defaultValues: {
-            title: "",
-            description: ""
+            title: collection.title,
+            description: collection.description ?? ""
         }
     })
 
-    async function onSubmit(data: z.infer<typeof WorkoutSchema>) {
+    async function onSubmit(data: z.infer<typeof CollectionSchema>) {
         setIsLoading(true);
 
         const formData = new FormData();
@@ -46,16 +51,19 @@ const NewLibraryWorkoutForm = ({
             formData.append("description", data.description);
         }
 
-        // Create workout
-        let { data: workoutData, error: workoutError } = await createLibraryWorkout(formData);
+        // Create collection
+        let { data: collectionData, error: collectionError } = await editCollection(collection.id, formData);
 
-        if (workoutError && !workoutData) {
-            console.log(workoutError);
+        if (collectionError && !collectionData) {
+            toast({
+                title: "An error occurred.",
+                description: collectionError
+            })
             return
         }
 
         setIsOpen(false);
-        addWorkout(workoutData!);
+        updateCollection(collectionData!);
     }
 
     return (
@@ -96,11 +104,10 @@ const NewLibraryWorkoutForm = ({
                             </FormItem>
                         )}
                     />
-                    <p className="text-secondaryText text-sm">Exercises can be added after creating the workout.</p>
                     <div className="flex justify-end w-full">
                         <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} className="mt-3" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {!isLoading && "Save workout"}
+                            {!isLoading && "Save collection"}
                         </Button>
                     </div>
                 </div>
@@ -109,4 +116,4 @@ const NewLibraryWorkoutForm = ({
     )
 }
 
-export default NewLibraryWorkoutForm
+export default EditCollectionForm

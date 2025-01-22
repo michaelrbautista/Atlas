@@ -16,6 +16,7 @@ export type FetchedProgram = {
 
 export type FetchedPurchasedProgram = {
     created_by: {
+        id: string;
         full_name: string;
     } | null;
     programs: {
@@ -58,4 +59,49 @@ export type FetchedSubscription = {
         bio: string | null;
         profile_picture_url: string | null;
     } | null;
+}
+
+export type FetchedCollection = {
+    id: string;
+    created_at: string;
+    created_by: string;
+    title: string;
+    description: string | null;
+    articles: FetchedArticle[];
+}
+
+export type FetchedArticle = {
+    id: string;
+    created_by: {
+        id: string;
+        full_name: string;
+    } | null;
+    collection_id: string;
+    title: string;
+    content: string;
+    image_url: string | null;
+    image_path: string | null;
+}
+
+export type TipTapNode = {
+    type: string;
+    attrs: {
+        level: number | null;
+        start: number | null;
+        alt: string | null;
+        src: string | null;
+        title: string | null;
+    } | null;
+    content: [TipTapNodeContent] | null;
+}
+
+export type TipTapNodeContent = {
+    type: string;
+    marks: [
+        {
+            type: string;
+        }
+    ] | null;
+    text: string;
+    content: [TipTapNodeContent] | null;
 }

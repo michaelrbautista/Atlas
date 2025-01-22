@@ -100,7 +100,7 @@ const User = ({
         )
     } else {
         return (
-            <div className="flex flex-col w-full max-w-xl px-5 py-10 gap-5">
+            <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(!user.profile_picture_url) ? (
                         // Replace with placeholder image

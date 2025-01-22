@@ -44,6 +44,10 @@ const creatorRoutes = [
     {
         label: "Library",
         href: "/creator/library"
+    },
+    {
+        label: "Collections",
+        href: "/creator/collections"
     }
 ]
 

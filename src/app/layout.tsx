@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Inter as FontSans } from "next/font/google"
+import { Inter as FontSans, Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster";
 import UserContextProvider from "@/context";
 
-const fontSans = FontSans({
+// const fontSans = FontSans({
+//   subsets: ["latin"], 
+//   variable: "--font-sans",
+//   preload: false
+// });
+
+const inter = Inter({
   subsets: ["latin"], 
-  variable: "--font-sans",
+  variable: "--font-inter",
   preload: false
 });
 
@@ -24,7 +30,7 @@ export default function RootLayout({
     <html lang="en" className="dark h-full">
       <body className={cn(
         "bg-systemBackground h-full font-sans antialiased overscroll-none", 
-        fontSans.variable
+        inter.variable
         )}>
           <UserContextProvider>
             <Toaster />

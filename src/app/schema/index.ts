@@ -129,3 +129,25 @@ export const SubscriptionPriceSchema = z.object({
         message: "Price must be at least $5.00."
     })
 })
+
+export const CollectionSchema = z.object({
+    title: z.string().trim().min(1, {
+        message: "Please enter a collection title."
+    }).max(100, {
+        message: "Please enter a title that is under 100 characters."
+    }),
+    description: z.string().max(400, {
+        message: "Please enter a description that is under 400 characters."
+    }).optional()
+})
+
+export const ArticleSchema = z.object({
+    image: z.instanceof(File).optional(),
+    title: z.string().trim().min(1, {
+        message: "Please enter an article title."
+    }).max(100, {
+        message: "Please enter a title that is under 100 characters."
+    }),
+    content: z.string().trim(),
+    free: z.boolean().default(false),
+})

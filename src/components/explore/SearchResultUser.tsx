@@ -4,6 +4,7 @@ import { Users } from "lucide-react"
 import { Tables } from "../../../database.types"
 import Image from "next/image"
 import Link from "next/link"
+import BlurImage from "../misc/BlurImage";
 
 const SearchResultUser = ({
     user
@@ -20,15 +21,16 @@ const SearchResultUser = ({
                     <Users className="text-secondaryText" />
                 </div>
             ) : (
-                <Image
-                    className="h-12 w-12 rounded-full"
-                    height={48}
-                    width={48}
-                    src={user.profile_picture_url}
-                    alt="profilePicture"
-                    style={{objectFit: "cover"}}
-                    priority
-                />
+                <div className="relative flex items-center w-[50px] h-[50px] shrink-0">
+                    <BlurImage
+                        alt="userProfilePicture"
+                        src={user.profile_picture_url}
+                        contentMode="cover"
+                        sizes="100px"
+                        className="rounded-full"
+                        canSelect={true}
+                    />
+                </div>
             )}
             <div className="flex flex-col w-full">
                 <p className="text-primaryText text-lg font-bold">{user.full_name}</p>

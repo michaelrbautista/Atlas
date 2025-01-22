@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { Tables } from "../../../../../database.types";
-import { useToast } from "@/components/ui/use-toast";
-import NewLibraryWorkoutButton from "../../../../components/workout/creator/library/NewLibraryWorkoutButton";
+import { Tables } from "../../../../database.types";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
+import { Button } from "@/components/ui/button";
+import NewCollectionButton from "@/components/collections/NewCollectionButton";
+import { useToast } from "@/components/ui/use-toast";
+import { createClient } from "@/utils/supabase/client";
 
-const LibraryWorkouts = () => {
-    const [workouts, setWorkouts] = useState<Tables<"workouts">[]>([]);
-    
+const Collections = () => {
+    const [collections, setCollections] = useState<Tables<"collections">[]>([])
+
     const { toast } = useToast();
 
     useEffect(() => {
@@ -28,13 +29,13 @@ const LibraryWorkouts = () => {
             }
 
             const { data, error } = await supabase
-                .from("workouts")
+                .from("collections")
                 .select()
                 .eq("created_by", user.id)
                 .order("created_at", { ascending: false })
 
             if (data && !error) {
-                setWorkouts(data);
+                setCollections(data);
             } else {
                 toast({
                     title: "An error occurred.",
@@ -46,22 +47,23 @@ const LibraryWorkouts = () => {
         getCreatorsPrograms();
     }, []);
 
-    const addWorkout = (workout: Tables<"workouts">) => {
-        const newWorkouts = [workout, ...workouts];
-        setWorkouts(newWorkouts);
+    const addCollection = (collection: Tables<"collections">) => {
+        const newCollections = [...collections, collection];
+        setCollections(newCollections);
     }
 
     return (
-        <div className="flex flex-col gap-5 h-full w-full">
-            <div className="flex justify-end">
-                <NewLibraryWorkoutButton addWorkout={addWorkout} />
+        <div className="h-full w-full px-5 py-20 sm:py-10">
+            <div className="flex justify-between items-center pb-5">
+                <p className="text-foreground text-2xl sm:text-2xl font-bold">Collections</p>
+                <NewCollectionButton addCollection={addCollection} />
             </div>
             <DataTable
                 columns={columns}
-                data={workouts}
-                setData={setWorkouts}
+                data={collections}
+                setData={setCollections}
             />
         </div>
-    );
+    )
 }
-export default LibraryWorkouts
+export default Collections

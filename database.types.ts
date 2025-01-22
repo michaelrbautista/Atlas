@@ -15,6 +15,7 @@ export type Database = {
           content: string
           created_at: string
           created_by: string
+          free: boolean
           id: string
           image_path: string | null
           image_url: string | null
@@ -25,6 +26,7 @@ export type Database = {
           content: string
           created_at?: string
           created_by?: string
+          free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
@@ -35,6 +37,7 @@ export type Database = {
           content?: string
           created_at?: string
           created_by?: string
+          free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
