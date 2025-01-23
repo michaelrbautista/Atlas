@@ -27,7 +27,6 @@ const Article = ({
     const [isLoading, setIsLoading] = useState(false);
     const [article, setArticle] = useState<FetchedArticle | null>(null);
     const [articleContent, setArticleContent] = useState("");
-    const [isCreator, setIsCreator] = useState(false);
 
     const { toast } = useToast();
 
@@ -50,7 +49,6 @@ const Article = ({
 
             setArticle(data!);
             setArticleContent(data!.content);
-            setIsCreator(data?.created_by?.id == userContext.user?.id);
             setIsLoading(false);
         }
 
@@ -67,10 +65,12 @@ const Article = ({
         return (
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <div className="flex flex-col items-start pb-5">
-                    <div className="flex flex-row w-full justify-end">
-                        <ArticleOptionsButton
-                            article={article}
-                        />
+                    <div className="flex flex-row h-8 w-full justify-end">
+                        {article?.created_by?.id == userContext.user?.id && (
+                            <ArticleOptionsButton
+                                article={article}
+                            />
+                        )}
                     </div>
                     <p className="text-primaryText text-2xl sm:text-3xl font-bold">
                         {article.title}
