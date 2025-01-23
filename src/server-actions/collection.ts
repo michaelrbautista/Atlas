@@ -1,8 +1,42 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { Tables } from "../../database.types";
 import { redirect } from "next/navigation";
+
+export async function getCreatorsCollections(userId: string, offset: number) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("collections")
+        .select(`
+            id,
+            created_at,
+            title,
+            description,
+            articles(
+                id,
+                collection_id,
+                title,
+                content,
+                free,
+                image_url,
+                image_path,
+                created_by:users!articles_created_by_fkey(
+                    id,
+                    full_name
+                )
+            )
+        `)
+        .eq("created_by", userId)
+        .order("created_at", { ascending: false })
+        .range(offset, offset + 9)
+    
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
 
 export async function editCollection(collectionId: string, formData: FormData) {
     const supabase = createClient();
@@ -31,6 +65,42 @@ export async function editCollection(collectionId: string, formData: FormData) {
     }
 }
 
+export async function getCollectionServer(collectionId: string) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("collections")
+        .select(`
+            id,
+            created_at,
+            created_by,
+            title,
+            description,
+            articles(
+                id,
+                collection_id,
+                title,
+                content,
+                free,
+                image_url,
+                image_path,
+                created_by:users!articles_created_by_fkey(
+                    id,
+                    full_name
+                )
+            )
+        `)
+        .eq("id", collectionId)
+        .order("created_at", { referencedTable: "articles", ascending: true })
+        .single()
+
+    if (error && !data) {
+        throw new Error(error.message)
+    }
+
+    return data
+}
+
 export async function getCollection(collectionId: string) {
     const supabase = createClient();
 
@@ -44,12 +114,16 @@ export async function getCollection(collectionId: string) {
             description,
             articles(
                 id,
-                created_at,
                 collection_id,
                 title,
                 content,
+                free,
                 image_url,
-                image_path
+                image_path,
+                created_by:users!articles_created_by_fkey(
+                    id,
+                    full_name
+                )
             )
         `)
         .eq("id", collectionId)

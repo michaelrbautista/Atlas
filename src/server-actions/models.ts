@@ -64,10 +64,9 @@ export type FetchedSubscription = {
 export type FetchedCollection = {
     id: string;
     created_at: string;
-    created_by: string;
     title: string;
     description: string | null;
-    articles: FetchedArticle[];
+    articles: FetchedArticle[] | null;
 }
 
 export type FetchedArticle = {
@@ -79,6 +78,7 @@ export type FetchedArticle = {
     collection_id: string;
     title: string;
     content: string;
+    free: boolean;
     image_url: string | null;
     image_path: string | null;
 }

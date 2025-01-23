@@ -1,4 +1,4 @@
-import NewArticleForm from "@/components/articles/NewArticleForm";
+import NewArticleForm from "@/components/articles/creator/NewArticleForm";
 import Tiptap from "@/components/tiptap/Tiptap";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

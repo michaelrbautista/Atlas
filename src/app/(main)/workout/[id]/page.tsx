@@ -7,7 +7,6 @@ const Workout = async ({
 }: {
     params: { id: string }
 }) => {
-    
     // Get workout
     const workout = await getProgramWorkout(params.id);
 

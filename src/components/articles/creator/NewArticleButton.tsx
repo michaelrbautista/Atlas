@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-import { Tables } from "../../../database.types";
+import { Tables } from "../../../../database.types";
 import { redirectToNewArticle } from "@/server-actions/articles";
 
 const NewArticleButton = ({

@@ -59,24 +59,37 @@ export const redirectToNewArticle = async (collectionId: string) => {
     redirect(`/creator/article/new?collection=${collectionId}`);
 }
 
-export const getCollectionsArticles = async (collectionId: string) => {
+export async function getCollectionsArticles(collectionId: string, offset: number) {
     const supabase = createClient();
 
     const { data, error } = await supabase
         .from("articles")
-        .select()
+        .select(`
+            id,
+            collection_id,
+            title,
+            content,
+            free,
+            image_url,
+            image_path,
+            created_by:users!articles_created_by_fkey(
+                id,
+                full_name
+            )
+        `)
         .eq("collection_id", collectionId)
-        .single()
+        .order("created_at", { ascending: false })
+        .range(offset, offset + 9)
     
-    if (error && !data) {
-        return {
-            error: error.message
+        if (error && !data) {
+            return {
+                error: error.message
+            }
         }
-    }
-
-    return {
-        data: data
-    }
+    
+        return {
+            data: data
+        }
 }
 
 export const getArticle = async (articleId: string) => {
@@ -89,6 +102,7 @@ export const getArticle = async (articleId: string) => {
             collection_id,
             title,
             content,
+            free,
             image_url,
             image_path,
             created_by:users!articles_created_by_fkey(

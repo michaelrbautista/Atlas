@@ -5,7 +5,7 @@ import { Tables } from "../../../../database.types";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
-import NewCollectionButton from "@/components/collections/NewCollectionButton";
+import NewCollectionButton from "@/components/collections/creator/NewCollectionButton";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@/utils/supabase/client";
 

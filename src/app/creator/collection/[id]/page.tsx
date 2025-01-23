@@ -9,8 +9,8 @@ import { FetchedArticle, FetchedCollection } from "@/server-actions/models";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { getCollection } from "@/server-actions/collection";
-import NewArticleButton from "@/components/articles/NewArticleButton";
-import EditCollectionButton from "@/components/collections/EditCollectionButton";
+import NewArticleButton from "@/components/articles/creator/NewArticleButton";
+import EditCollectionButton from "@/components/collections/creator/EditCollectionButton";
 
 const CreatorCollection = ({ 
     params

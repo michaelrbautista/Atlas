@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import SubscribeButton from "@/components/profile/user/SubscribeButton";
 import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
 import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
+import CollectionList from "@/components/collections/creator/CollectionList";
 
 const User = ({ 
     params
@@ -131,10 +132,18 @@ const User = ({
                     getSubscribeButton()  
                 )}
                 {user.stripe_price_id && (
-                    <div className="flex flex-col gap-2">
-                        <h1 className="text-primaryText font-bold text-lg">Programs</h1>
-                        <CreatorProgramList user={user} />
-                    </div>
+                    <Tabs defaultValue="programs">
+                        <TabsList className="w-full">
+                            <TabsTrigger className="w-full" value="programs">Programs</TabsTrigger>
+                            <TabsTrigger className="w-full" value="collections">Collections</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="programs">
+                            <CreatorProgramList user={user} />
+                        </TabsContent>
+                        <TabsContent value="collections">
+                            <CollectionList user={user} />
+                        </TabsContent>
+                    </Tabs>
                 )}
             </div>
         )

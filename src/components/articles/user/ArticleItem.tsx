@@ -3,27 +3,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell, Lock } from "lucide-react";
-import { FetchedProgram } from "@/server-actions/models";
 import { useUserContext } from "@/context";
+import { FetchedArticle } from "@/server-actions/models";
 
-const ProgramItem = ({
-    program
+const ArticleItem = ({
+    article
 }: {
-    program: FetchedProgram
+    article: FetchedArticle
 }) => {
     const {
         subscriptions
     } = useUserContext();
 
     return (
-        <Link href={`/program/${program.id}`} className="flex flex-row gap-5 py-5 border-b-[1px]">
-            {program.image_url ? (
+        <Link href={`/article/${article.id}`} className="flex flex-row gap-5 py-5 border-b-[1px]">
+            {article.image_url ? (
                 <div className="relative flex items-center w-[120px] h-[120px] shrink-0">
                     <Image
                         className="rounded-xl shrink-0"
                         fill
-                        src={program.image_url}
-                        alt="programImage"
+                        src={article.image_url}
+                        alt="articleImage"
                         style={{objectFit: "cover"}}
                         priority
                     />
@@ -35,11 +35,11 @@ const ProgramItem = ({
             )}
             <div className="flex flex-col w-full justify-between">
                 <div className="flex flex-col w-full justify-start">
-                    <h1 className="text-primaryText font-bold text-md line-clamp-1">{program.title}</h1>
-                    <h1 className="text-secondaryText font-bold text-sm">{program.created_by?.full_name}</h1>
-                    <h1 className="text-secondaryText font-medium text-sm pt-2 line-clamp-2">{program.description}</h1>
+                    <h1 className="text-primaryText font-bold text-md line-clamp-1">{article.title}</h1>
+                    <h1 className="text-secondaryText font-bold text-sm">{article.created_by?.full_name}</h1>
+                    {/* <h1 className="text-secondaryText font-medium text-sm pt-2 line-clamp-2">{article.description}</h1> */}
                 </div>
-                {!program.free && (
+                {!article.free && (
                     <div className="flex flex-row gap-1 items-center">
                         <Lock color="gray" size={16} />
                         <p className="text-secondaryText text-sm">Subscribers only</p>
@@ -50,4 +50,4 @@ const ProgramItem = ({
     )
 };
 
-export default ProgramItem;
+export default ArticleItem;
