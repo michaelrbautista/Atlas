@@ -2,12 +2,10 @@
 
 import { ColumnDef, RowData } from "@tanstack/react-table"
 import React from "react"
-import { Tables } from "../../../../../database.types";
 import { Button } from "@/components/ui/button";
-import { redirectToCreatorsCollection } from "@/server-actions/collection";
 import { redirectToArticle } from "@/server-actions/articles";
 import { FetchedArticle } from "@/server-actions/models";
-import ArticleOptionsDialog from "./ArticleOptionsDialog";
+import ArticleOptionsButton from "@/components/articles/creator/ArticleOptionsButton";
 
 
 declare module '@tanstack/react-table' {
@@ -50,14 +48,10 @@ export const columns: ColumnDef<FetchedArticle>[] = [
         const article = row.original
  
         return (
-            <ArticleOptionsDialog
+            <ArticleOptionsButton
                 article={article}
                 table={table}
             />
-            // <CollectionOptionsDialog
-            //     collection={collection}
-            //     table={table}
-            // />
         )
         },
     },

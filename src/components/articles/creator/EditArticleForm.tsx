@@ -15,15 +15,16 @@ import { createProgram } from '@/server-actions/program';
 import { Tables } from '../../../../database.types';
 import { useToast } from '../../ui/use-toast';
 import { Switch } from '../../ui/switch';
-import { publishArticle, redirectToArticle, saveArticleImage } from '@/server-actions/articles';
+import { editArticle, publishArticle, redirectToArticle, saveArticleImage } from '@/server-actions/articles';
 import { JSONContent } from '@tiptap/react';
-import { TipTapNode } from '@/server-actions/models';
+import { FetchedArticle, TipTapNode } from '@/server-actions/models';
+import { createClient } from '@/utils/supabase/client';
 
-const NewArticleForm = ({
-    collectionId,
+const EditArticleForm = ({
+    article,
     content
 }: {
-    collectionId: string,
+    article: FetchedArticle,
     content: JSONContent
 }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +34,8 @@ const NewArticleForm = ({
     const form = useForm<z.infer<typeof ArticleSchema>>({
         resolver: zodResolver(ArticleSchema),
         defaultValues: {
-            title: "",
-            content: ""
+            title: article.title,
+            content: article.content
         }
     })
 
@@ -43,7 +44,7 @@ const NewArticleForm = ({
 
         const formData = new FormData();
 
-        formData.append("collectionId", collectionId);
+        formData.append("collectionId", article.collection_id);
 
         if (data.image && data.image.size > 0) {
             formData.append("image", data.image);
@@ -55,51 +56,103 @@ const NewArticleForm = ({
 
         formData.append("free", data.free.toString());
 
-        if (!content.content) {
-            toast({
-                title: "An error occurred.",
-                description: "There was an error publishing the article."
-            })
-            return
+        // 1. Create array of old images
+        const articleContent = JSON.parse(article.content) as JSONContent;
+        const oldNodes = articleContent.content as TipTapNode[];
+
+        const oldImages: string[] = [];
+
+        for (let node of oldNodes) {
+            if (node.type == "image" && node.attrs?.src) {
+                oldImages.push(node.attrs.src);
+            }
         }
 
-        const formattedNodes = content.content as TipTapNode[];
+        // 2. Create array of new images
+        const newNodes = content.content as TipTapNode[];
 
-        const updatedNodes: TipTapNode[] = [];
-        
-        for (let node of formattedNodes) {
+        const newImages: string[] = [];
+        const imagesToAdd: string[] = [];
+        const imagesToKeep: string[] = [];
+
+        // 3. Create array of images to remove, add, and keep
+        for (let node of newNodes) {
             if (node.type == "image" && node.attrs?.src) {
-                const response = await fetch(node.attrs.src);
-                const blob = await response.blob();
+                newImages.push(node.attrs.src);
 
-                const fileType = blob.type || "image/jpeg";
-
-                const image = new File([blob], `articleImage.${fileType.split("/").pop()}`, { type: fileType });
-
-                const imageFormData = new FormData();
-                if (image.size > 0) {
-                    imageFormData.append("image", image);
-                    imageFormData.append("fileType", fileType);
+                if (node.attrs.src.substring(0,4) == "blob") {
+                    imagesToAdd.push(node.attrs.src);
+                } else {
+                    imagesToKeep.push(node.attrs.src);
                 }
+            }
+        }
 
-                let { data: imageData, error: imageError } = await saveArticleImage(imageFormData);
+        let imagesToRemove = oldImages.filter((x) => !newImages.includes(x));
 
-                if (imageError && !imageData) {
-                    toast({
-                        title: "An error occurred.",
-                        description: imageError
-                    })
-                    return
-                }
+        let removePaths = imagesToRemove.map((src) => {
+            const splitSrc = src.split("/");
+            const imagePath = `${splitSrc[splitSrc.length - 2]}/${splitSrc[splitSrc.length - 1]}`;
+            
+            return imagePath
+        })
 
-                const newNode = {
-                    type: "image",
-                    attrs: {
-                        src: imageData
+        console.log("Images to add: ", imagesToAdd);
+        console.log("Images to keep: ", imagesToKeep);
+        console.log("Images to remove: ", removePaths);
+
+        // 4. Remove images
+        const supabase = createClient();
+
+        const { error } = await supabase
+            .storage
+            .from("article_images")
+            .remove(removePaths)
+
+        if (error) {
+            return {
+                error: "Couldn't delete article images."
+            }
+        }
+
+        // 5. Add new images
+        const updatedNodes: TipTapNode[] = [];
+
+        for (let node of newNodes) {
+            if (node.type == "image" && node.attrs?.src) {
+                if (node.attrs.src.substring(0,4) == "blob") {
+                    const response = await fetch(node.attrs.src);
+                    const blob = await response.blob();
+
+                    const fileType = blob.type || "image/jpeg";
+
+                    const image = new File([blob], `articleImage.${fileType.split("/").pop()}`, { type: fileType });
+
+                    const imageFormData = new FormData();
+                    if (image.size > 0) {
+                        imageFormData.append("image", image);
+                        imageFormData.append("fileType", fileType);
                     }
-                } as TipTapNode;
 
-                updatedNodes.push(newNode);
+                    let { data: imageData, error: imageError } = await saveArticleImage(imageFormData);
+
+                    if (imageError && !imageData) {
+                        toast({
+                            title: "An error occurred.",
+                            description: imageError
+                        })
+                        return
+                    }
+
+                    const newNode = {
+                        type: "image",
+                        attrs: {
+                            src: imageData
+                        }
+                    } as TipTapNode;
+
+                    updatedNodes.push(newNode);
+                }
             } else {
                 updatedNodes.push(node);
             }
@@ -113,8 +166,8 @@ const NewArticleForm = ({
 
         formData.append("content", JSON.stringify(newContent));
 
-        // 4. Upload article to supabase table
-        let { data: articleData, error: articleError } = await publishArticle(formData);
+        // 6. Update database
+        let { data: articleData, error: articleError } = await editArticle(article, formData);
 
         if (articleError && !articleData) {
             toast({
@@ -132,10 +185,10 @@ const NewArticleForm = ({
             <form className="py-5" onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-3">
                     <div className="flex justify-between items-center pb-5">
-                        <p className="text-foreground text-3xl font-bold">New Article</p>
+                        <p className="text-foreground text-3xl font-bold">Edit Article</p>
                         <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="sm" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {!isLoading && "Publish"}
+                            {!isLoading && "Save"}
                         </Button>
                     </div>
                     <Alert>
@@ -204,4 +257,4 @@ const NewArticleForm = ({
     )
 }
 
-export default NewArticleForm
+export default EditArticleForm

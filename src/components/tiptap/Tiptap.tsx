@@ -9,17 +9,18 @@ import Image from "@tiptap/extension-image"
 import { useEditor, EditorContent, Editor, mergeAttributes } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import NewArticleForm from "../articles/creator/NewArticleForm"
-import { Separator } from "@radix-ui/react-dropdown-menu"
-import { Dispatch, SetStateAction, useRef, useState } from "react"
-import { Input } from "../ui/input"
+import { useRef } from "react"
 import { Label } from "../ui/label"
 import { cn } from "@/lib/utils"
-import { useToast } from "../ui/use-toast"
+import EditArticleForm from "../articles/creator/EditArticleForm"
+import { FetchedArticle } from "@/server-actions/models"
 
 const Tiptap = ({
+    article,
     collection
 }: {
-    collection: string
+    article?: FetchedArticle,
+    collection?: string
 }) => {
     const editor = useEditor({
         extensions: [
@@ -74,7 +75,7 @@ const Tiptap = ({
                 },
             })
         ],
-        content: "",
+        content: article?.content ? JSON.parse(article.content) : "",
         editorProps: {
             attributes: {
                 spellcheck: "false",
@@ -91,10 +92,18 @@ const Tiptap = ({
     } else {
         return (
             <div className="flex flex-col gap-5">
-                <NewArticleForm
-                    collectionId={collection}
-                    content={editor.getJSON()}
-                />
+                {(article && !collection) && (
+                    <EditArticleForm
+                        article={article}
+                        content={editor.getJSON()}
+                    />
+                )}
+                {(collection && !article) && (
+                    <NewArticleForm
+                        collectionId={collection}
+                        content={editor.getJSON()}
+                    />
+                )}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-sm font-medium">Content</h1>
                     <MenuBar
@@ -112,8 +121,6 @@ const MenuBar = ({
 }: {
     editor: Editor | null,
 }) => {
-    const { toast } = useToast();
-
     const imageRef = useRef<HTMLInputElement>(null)
 
     if (!editor) {

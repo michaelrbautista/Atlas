@@ -72,7 +72,7 @@ const ViewContent = ({
         editorProps: {
             attributes: {
                 spellcheck: "false",
-                class: "p-4"
+                class: ""
             },
         },
         immediatelyRender: false

@@ -15,6 +15,9 @@ import { Loader2 } from "lucide-react"
 import { Tables } from "../../../../../database.types"
 import ViewContent from "@/components/tiptap/ViewContent"
 import { FetchedArticle } from "@/server-actions/models"
+import { Button } from "@/components/ui/button"
+import ArticleOptionsButton from "@/components/articles/creator/ArticleOptionsButton"
+import { useUserContext } from "@/context"
 
 const Article = ({ 
     params
@@ -24,8 +27,11 @@ const Article = ({
     const [isLoading, setIsLoading] = useState(false);
     const [article, setArticle] = useState<FetchedArticle | null>(null);
     const [articleContent, setArticleContent] = useState("");
+    const [isCreator, setIsCreator] = useState(false);
 
     const { toast } = useToast();
+
+    const userContext = useUserContext();
 
     useEffect(() => {
         const getArticleContent = async () => {
@@ -44,6 +50,7 @@ const Article = ({
 
             setArticle(data!);
             setArticleContent(data!.content);
+            setIsCreator(data?.created_by?.id == userContext.user?.id);
             setIsLoading(false);
         }
 
@@ -60,14 +67,15 @@ const Article = ({
         return (
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <div className="flex flex-col items-start pb-5">
-                    <p
-                        className="text-primaryText text-2xl sm:text-3xl font-bold"
-                    >
+                    <div className="flex flex-row w-full justify-end">
+                        <ArticleOptionsButton
+                            article={article}
+                        />
+                    </div>
+                    <p className="text-primaryText text-2xl sm:text-3xl font-bold">
                         {article.title}
                     </p>
-                    <p
-                        className="text-secondaryText text-base sm:text-lg"
-                    >
+                    <p className="text-secondaryText text-base sm:text-lg">
                         {article.created_by?.full_name}
                     </p>
                 </div>

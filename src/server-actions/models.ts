@@ -71,16 +71,16 @@ export type FetchedCollection = {
 
 export type FetchedArticle = {
     id: string;
-    created_by: {
-        id: string;
-        full_name: string;
-    } | null;
     collection_id: string;
     title: string;
     content: string;
     free: boolean;
     image_url: string | null;
     image_path: string | null;
+    created_by: {
+        id: string;
+        full_name: string;
+    } | null;
 }
 
 export type TipTapNode = {

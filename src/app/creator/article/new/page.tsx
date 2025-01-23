@@ -1,11 +1,4 @@
-import NewArticleForm from "@/components/articles/creator/NewArticleForm";
 import Tiptap from "@/components/tiptap/Tiptap";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { JSONContent } from "@tiptap/react";
-import { TriangleAlert } from "lucide-react";
-import { useState } from "react";
 
 const NewArticle = async ({
     searchParams

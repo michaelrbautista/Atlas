@@ -12,13 +12,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import React, { useState } from "react"
 import { Table } from "@tanstack/react-table"
 import { FetchedArticle } from "@/server-actions/models"
+import { redirectToEditArticle } from "@/server-actions/articles";
 
-const ArticleOptionsDialog = ({
+const ArticleOptionsButton = ({
     article,
     table
 }: {
     article: FetchedArticle,
-    table: Table<FetchedArticle>
+    table?: Table<FetchedArticle>
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -32,8 +33,21 @@ const ArticleOptionsDialog = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
+                        <Button
+                            className="justify-start h-8 cursor-pointer"
+                            variant="ghost"
+                            size="full"
+                            onClick={() => {
+                                // Redirect to edit article page
+                                redirectToEditArticle(article.id);
+                            }}
+                        >
+                            Edit article
+                        </Button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                         <DialogTrigger
-                            className="w-full"
+                            className="w-full cursor-pointer"
                             onClick={() => {
                                 setIsOpen(true);
                             }}
@@ -52,7 +66,14 @@ const ArticleOptionsDialog = ({
                     <p>Are you sure you want to delete this article?</p>
                     <Button
                         onClick={() => {
-                            table.options.meta?.deleteArticle!(article);
+                            if (table) {
+                                // Delete from table
+                                table.options.meta?.deleteArticle!(article);
+                            } else {
+                                // Delete from article detail view
+                                
+                            }
+                            
                             setIsOpen(false);
                         }}
                         variant="destructive"
@@ -64,4 +85,4 @@ const ArticleOptionsDialog = ({
         </Dialog>
     )
 }
-export default ArticleOptionsDialog
+export default ArticleOptionsButton
