@@ -1,5 +1,5 @@
 import { getAllUsers } from "@/server-actions/user";
-import UserItem from "./UserItem";
+import UserItem from "../subscriptions/UserItem";
 
 const AllUsers = async () => {
     const allUsers = await getAllUsers();

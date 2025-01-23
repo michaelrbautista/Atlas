@@ -2,7 +2,7 @@ import { Users } from "lucide-react"
 import { Tables } from "../../../database.types"
 import Image from "next/image"
 import Link from "next/link"
-import LoadImage from "../misc/BlurImage"
+import BlurImage from "../misc/BlurImage"
 
 
 const UserItem = ({
@@ -27,7 +27,7 @@ const UserItem = ({
                 </div>
             ) : (
                 <div className="relative flex items-center w-[50px] h-[50px] shrink-0">
-                    <LoadImage
+                    <BlurImage
                         alt="userProfilePicture"
                         src={profilePictureUrl}
                         contentMode="cover"

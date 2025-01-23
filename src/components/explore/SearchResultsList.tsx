@@ -1,5 +1,5 @@
 import { searchUsers } from "@/server-actions/search"
-import SearchResultUser from "./SearchResultUser";
+import UserItem from "../subscriptions/UserItem";
 
 const SearchResultsList = async ({
     query
@@ -12,7 +12,13 @@ const SearchResultsList = async ({
     return (
         <div className="border-t-[1px]">
             {results?.map((result) => {
-                return <SearchResultUser user={result} key={result.id}/>
+                return <UserItem
+                    fullName={result.full_name}
+                    username={result.username}
+                    bio={result.bio ?? undefined}
+                    profilePictureUrl={result.profile_picture_url ?? undefined}
+                    key={result.username}
+                />
             })}
         </div>
     )

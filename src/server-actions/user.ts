@@ -84,7 +84,6 @@ export const getSubscription = async (creatorId: string) => {
         .select()
         .eq("subscriber", user.id)
         .eq("subscribed_to", creatorId)
-        .single()
 
     if (subscriptionError && !subscriptionData) {
         return {
@@ -93,7 +92,7 @@ export const getSubscription = async (creatorId: string) => {
     }
 
     return {
-        data: subscriptionData
+        data: subscriptionData[0]
     }
 }
 

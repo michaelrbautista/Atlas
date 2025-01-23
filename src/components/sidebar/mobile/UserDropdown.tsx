@@ -7,11 +7,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Ellipsis } from "lucide-react";
-import LogoutButton from "../auth/LogoutButton";
+import LogoutButton from "../../auth/LogoutButton";
 import { logout } from "@/server-actions/auth";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 

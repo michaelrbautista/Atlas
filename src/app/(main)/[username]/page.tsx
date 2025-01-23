@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import Image from "next/image";
 import { getSubscription, getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,11 +11,10 @@ import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/context";
 import { Spinner } from "@/components/misc/Spinner";
-import { Button } from "@/components/ui/button";
 import SubscribeButton from "@/components/profile/user/SubscribeButton";
 import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
 import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
-import CollectionList from "@/components/collections/creator/CollectionList";
+import CollectionList from "@/components/collections/user/CollectionList";
 
 const User = ({ 
     params
@@ -24,7 +23,7 @@ const User = ({
 }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<Tables<"users"> | null>(null);
-    const [userSubscription, setUserSubscription] = useState<Tables<"subscriptions"> | null>(null);
+    const [userSubscription, setUserSubscription] = useState<Tables<"subscriptions"> | undefined>(undefined);
 
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
 
@@ -58,11 +57,11 @@ const User = ({
                 const { data: subscriptionData, error: subscriptionError } = await getSubscription(creatorData.id);
 
                 if (subscriptionError && !subscriptionData) {
-                    console.log("Error getting subscription.");
+                    console.log(subscriptionError);
                     return
                 }
                 
-                setUserSubscription(subscriptionData!);
+                setUserSubscription(subscriptionData);
             }
 
             setIsLoading(false);
@@ -77,7 +76,7 @@ const User = ({
                 <UnsubscribeButton
                     connectedAccountId={user.stripe_account_id}
                     subscriptionId={userSubscription.stripe_subscription_id}
-                    setSubscription={() => {setUserSubscription(null)}}
+                    setSubscription={() => {setUserSubscription(undefined)}}
                 />
             )
         } else if (userContext.user) {

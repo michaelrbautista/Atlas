@@ -15,7 +15,7 @@ import MobileSidebarRoutes from "./MobileSidebarRoutes";
 import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
 import { useUserContext } from "@/context";
-import UserDropdown from "../UserDropdown";
+import UserDropdown from "./UserDropdown";
 import { useState } from "react";
 
 const anonRoutes = [

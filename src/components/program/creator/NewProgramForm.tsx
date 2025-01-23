@@ -32,7 +32,7 @@ const NewProgramForm = ({
             image: new File([], ""),
             title: "",
             description: "",
-            weeks: 0,
+            weeks: 1,
             free: false,
             // price: 1.00,
             private: false

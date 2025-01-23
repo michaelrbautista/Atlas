@@ -100,6 +100,10 @@ export async function redirectWhenChangingView(viewChangingTo: "user" | "creator
     }
 }
 
+export async function redirectToLibrary() {
+    return redirect("/creator/library");
+}
+
 export async function redirectToHome() {
     return redirect("/explore");
 }

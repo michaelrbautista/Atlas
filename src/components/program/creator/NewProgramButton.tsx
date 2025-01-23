@@ -1,13 +1,12 @@
 "use client";
 
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
-} from "@/components/ui/sheet";
+import { Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import NewProgramForm from "./NewProgramForm";
@@ -21,18 +20,18 @@ const NewProgramButton = ({
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger className="hidden sm:flex" asChild>
-                <Button variant="systemBlue" size="sm">New program</Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-background">
-                <SheetHeader>
-                    <SheetTitle>New Program</SheetTitle>
-                    <SheetDescription hidden></SheetDescription>
-                </SheetHeader>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger className="hidden sm:flex" asChild>
+                <Button variant="systemBlue">New program</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>New Program</DialogTitle>
+                    <DialogDescription hidden></DialogDescription>
+                </DialogHeader>
                 <NewProgramForm setIsOpen={setIsOpen} addProgram={addProgram}/>
-            </SheetContent>
-        </Sheet>
+            </DialogContent>
+        </Dialog>
     );
 }
  

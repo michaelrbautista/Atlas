@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
+import { Loader2, MoreHorizontal } from "lucide-react"
 import { Dialog,
     DialogContent,
     DialogDescription,
@@ -18,14 +18,8 @@ import { Dialog,
 import { useState } from "react";
 import { Tables } from "../../../../database.types";
 import EditProgramForm from "./EditProgramForm";
-
-let copyUrl: string;
-
-if (process.env.NODE_ENV === "development") {
-    copyUrl = "http://localhost:3000"
-} else {
-    copyUrl = "https://www.useatlas.xyz"
-}
+import { deleteProgram } from "@/server-actions/program";
+import { redirectToLibrary } from "@/server-actions/creator";
 
 const ProgramOptionsButton = ({
     program,
@@ -34,8 +28,26 @@ const ProgramOptionsButton = ({
     program: Tables<"programs">,
     updateProgram: (updatedProgram: Tables<"programs">) => void
 }) => {
-    const [dialogType, setDialogType] = useState<"share" | "edit" | "delete">("share");
+    const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
     const [isOpen, setIsOpen] = useState(false);
+    const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+
+    const returnDialogTitle = () => {
+        if (dialogType == "edit") {
+            return (
+                <DialogTitle>Edit Program</DialogTitle>
+            )
+        } else {
+            return (
+                <DialogTitle>Delete Program</DialogTitle>
+            )
+        }
+    }
+
+    const deleteProgramClient = () => {
+        setDeleteIsLoading(true);
+        deleteProgram(program);
+    }
     
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -46,13 +58,6 @@ const ProgramOptionsButton = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        onClick={() => {
-                            navigator.clipboard.writeText(`${copyUrl}/program/${program.id}`)
-                        }}
-                    >
-                        Copy link to program
-                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <DialogTrigger
                             className="w-full"
@@ -79,13 +84,7 @@ const ProgramOptionsButton = ({
             </DropdownMenu>
             <DialogContent>
                 <DialogHeader>
-                    {dialogType == "share" ? (
-                        <DialogTitle>Share Program</DialogTitle>
-                    ) : dialogType == "edit" ? (
-                        <DialogTitle>Edit Program</DialogTitle>
-                    ) : (
-                        <DialogTitle>Delete Program</DialogTitle>
-                    )}
+                    {returnDialogTitle()}
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
                 {dialogType == "edit" ? (
@@ -98,14 +97,17 @@ const ProgramOptionsButton = ({
                     <div className="flex flex-col gap-5 pt-5">
                         <p>Are you sure you want to delete this program?</p>
                         <Button
-                            onClick={() => {
-                                // Delete program
-                                setIsOpen(false);
-                            }}
-                            variant="destructive"
-                        >
-                            Delete
-                        </Button>
+                        variant={deleteIsLoading ? "disabled" : "destructive"}
+                        size="full"
+                        disabled={deleteIsLoading}
+                        onClick={() => {
+                            deleteProgramClient();
+                            redirectToLibrary();
+                        }}
+                    >
+                        {deleteIsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {!deleteIsLoading && "Delete program"}
+                    </Button>
                     </div>
                 )}
             </DialogContent>
