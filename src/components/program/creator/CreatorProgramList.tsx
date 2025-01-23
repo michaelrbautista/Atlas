@@ -46,8 +46,8 @@ const CreatorProgramList = ({
             <div className="relative w-full gap-5 border-t-[1px]">
                 {Array.from(Array(10), (e, i) => {
                     return (
-                        <div className="flex flex-row gap-5 p-5 border-b-[1px]" key={i}>
-                            <Skeleton className="h-10 w-10 shrink-0 rounded-full" />
+                        <div className="flex flex-row gap-5 py-5 border-b-[1px]" key={i}>
+                            <Skeleton className="w-[120px] h-[120px] shrink-0 rounded-xl" />
                             <div className="flex flex-col gap-2 w-full">
                                 <Skeleton className="h-7 w-32"/>
                                 <Skeleton className="h-6 w-full"/>

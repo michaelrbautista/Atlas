@@ -47,14 +47,12 @@ const CollectionList = ({
             <div className="relative w-full gap-5 border-t-[1px]">
                 {Array.from(Array(10), (e, i) => {
                     return (
-                        <div className="flex flex-row gap-5 py-5 border-b-[1px]" key={i}>
-                            <div className="flex flex-row items-center w-full justify-between">
-                                <div className="flex flex-col w-full justify-start">
-                                    <Skeleton className="h-7 w-32"/>
-                                    <Skeleton className="h-6 w-full"/>
-                                </div>
-                                <ChevronRight />
+                        <div className="flex flex-row items-center gap-5 py-5 border-b-[1px]" key={i}>
+                            <div className="flex flex-col gap-2 w-full justify-start">
+                                <Skeleton className="h-5 w-32"/>
+                                <Skeleton className="h-4 w-full"/>
                             </div>
+                            <ChevronRight />
                         </div>
                     )
                 })}
