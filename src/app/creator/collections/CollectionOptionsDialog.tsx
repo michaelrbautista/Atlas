@@ -13,6 +13,7 @@ import EditProgramForm from "@/components/program/creator/EditProgramForm"
 import Image from "next/image"
 import { Table } from "@tanstack/react-table"
 import EditExerciseForm from "@/components/exercise/creator/EditExerciseForm"
+import EditCollectionForm from "@/components/collections/creator/EditCollectionForm"
 
 const CollectionOptionsDialog = ({
     collection,
@@ -67,12 +68,11 @@ const CollectionOptionsDialog = ({
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
                 {dialogType == "edit" ? (
-                    // <EditExerciseForm
-                    //     exercise={exercise}
-                    //     setIsOpen={setIsOpen}
-                    //     updateLibraryExercise={table.options.meta?.updateLibraryExercise!}
-                    // />
-                    <div></div>
+                    <EditCollectionForm
+                        collection={collection}
+                        setIsOpen={setIsOpen}
+                        updateCollection={table.options.meta?.updateCollection!}
+                    />
                 ) : (
                     <div className="flex flex-col gap-5 pt-5">
                         <p>Are you sure you want to delete this collection?</p>

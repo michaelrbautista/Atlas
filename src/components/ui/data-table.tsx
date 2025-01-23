@@ -15,17 +15,19 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { FetchedExercise } from "@/server-actions/models"
+import { FetchedArticle, FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction } from "react"
 import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise } from "@/server-actions/exercise"
 import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
+import { deleteCollection } from "@/server-actions/collection"
+import { deleteArticle } from "@/server-actions/articles"
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    setData: Dispatch<SetStateAction<TData[]>>
+    readonly columns: ColumnDef<TData, TValue>[]
+    readonly data: TData[]
+    readonly setData: Dispatch<SetStateAction<TData[]>>
 }
 
 export function DataTable<TData, TValue>({
@@ -102,8 +104,6 @@ export function DataTable<TData, TValue>({
                 const fetchedData = data as FetchedExercise[]
                 setData(
                     fetchedData.filter(exercise => {
-                        exercise.id !== programExerciseId
-
                         // Decrement exercises on UI
                         if (exercise.id !== programExerciseId) {
                             if (exercise.exercise_number > exerciseNumber) {
@@ -133,6 +133,37 @@ export function DataTable<TData, TValue>({
                 setData(
                     fetchedData.filter(listExercise =>
                         listExercise.id !== exercise.id
+                    ) as TData[]
+                );
+            },
+            updateCollection: (newCollection: Tables<"collections">) => {
+                const updatedCollections = data.map((collection) => {
+                    const fetchedCollection = collection as Tables<"collections">
+                    if (fetchedCollection.id == newCollection.id) {
+                        return newCollection as TData
+                    } else {
+                        return collection
+                    }
+                })
+                setData(updatedCollections)
+            },
+            deleteCollection: (collection: Tables<"collections">) => {
+                deleteCollection(collection.id);
+
+                const fetchedData = data as FetchedExercise[]
+                setData(
+                    fetchedData.filter(listCollection =>
+                        listCollection.id !== collection.id
+                    ) as TData[]
+                );
+            },
+            deleteArticle: (article: FetchedArticle) => {
+                deleteArticle(article.id, article.content);
+
+                const fetchedData = data as FetchedExercise[]
+                setData(
+                    fetchedData.filter(listArticle =>
+                        listArticle.id !== article.id
                     ) as TData[]
                 );
             }

@@ -3,6 +3,21 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+export async function deleteCollection(collectionId: string) {
+    const supabase = createClient();
+
+    const response = await supabase
+        .from("collections")
+        .delete()
+        .eq("id", collectionId)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete collection."
+        }
+    }
+}
+
 export async function getCreatorsCollections(userId: string, offset: number) {
     const supabase = createClient();
 

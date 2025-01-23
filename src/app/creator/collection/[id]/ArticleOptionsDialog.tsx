@@ -1,5 +1,3 @@
-"use client";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,44 +6,20 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import { Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog"
-import { useState } from "react";
-import { Tables } from "../../../../database.types";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import React, { useState } from "react"
+import { Table } from "@tanstack/react-table"
+import { FetchedArticle } from "@/server-actions/models"
 
-let copyUrl: string;
-
-if (process.env.NODE_ENV === "development") {
-    copyUrl = "http://localhost:3000"
-} else {
-    copyUrl = "https://www.useatlas.xyz"
-}
-
-const ArticleOptionsButton = ({
-    article
+const ArticleOptionsDialog = ({
+    article,
+    table
 }: {
-    article: Tables<"articles">
+    article: FetchedArticle,
+    table: Table<FetchedArticle>
 }) => {
-    const [dialogType, setDialogType] = useState<"share" | "delete">("share");
     const [isOpen, setIsOpen] = useState(false);
 
-    const returnDialogTitle = () => {
-        if (dialogType == "share") {
-            return (
-                <DialogTitle>Share Article</DialogTitle>
-            )
-        } else {
-            return (
-                <DialogTitle>Delete Article</DialogTitle>
-            )
-        }
-    }
-    
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenu>
@@ -55,18 +29,10 @@ const ArticleOptionsButton = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        onClick={() => {
-                            navigator.clipboard.writeText(`${copyUrl}/article/${article.id}`)
-                        }}
-                    >
-                        Copy link to article
-                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <DialogTrigger
                             className="w-full"
                             onClick={() => {
-                                setDialogType("delete");
                                 setIsOpen(true);
                             }}
                         >
@@ -77,14 +43,14 @@ const ArticleOptionsButton = ({
             </DropdownMenu>
             <DialogContent>
                 <DialogHeader>
-                    {returnDialogTitle()}
+                <DialogTitle>Delete Article</DialogTitle>
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-5 pt-5">
                     <p>Are you sure you want to delete this article?</p>
                     <Button
                         onClick={() => {
-                            // Delete program
+                            table.options.meta?.deleteArticle!(article);
                             setIsOpen(false);
                         }}
                         variant="destructive"
@@ -96,4 +62,4 @@ const ArticleOptionsButton = ({
         </Dialog>
     )
 }
-export default ArticleOptionsButton
+export default ArticleOptionsDialog

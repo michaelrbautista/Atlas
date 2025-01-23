@@ -3,6 +3,49 @@
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "../../database.types";
 import { redirect } from "next/navigation";
+import { TipTapNode } from "./models";
+
+export async function deleteArticle(articleId: string, content: string) {
+    const supabase = createClient();
+
+    // Loop through and delete images from article
+    const jsonContent = JSON.parse(content);
+
+    const formattedNodes = jsonContent.content as TipTapNode[];
+
+    let imagePaths: string[] = [];
+    for (let node of formattedNodes) {
+        if (node.type == "image" && node.attrs?.src) {
+            // Create path based on user
+            const splitSrc = node.attrs.src.split("/");
+            const imagePath = `${splitSrc[splitSrc.length - 2]}/${splitSrc[splitSrc.length - 1]}`;
+
+            imagePaths.push(imagePath);
+        }
+    }
+
+    const { error } = await supabase
+        .storage
+        .from("article_images")
+        .remove(imagePaths)
+
+    if (error) {
+        return {
+            error: "Couldn't delete article images."
+        }
+    }
+
+    const response = await supabase
+        .from("articles")
+        .delete()
+        .eq("id", articleId)
+
+    if (response.error) {
+        return {
+            error: "Couldn't delete article."
+        }
+    }
+}
 
 export const saveArticleImage = async (formData: FormData) => {
     const supabase = createClient();
