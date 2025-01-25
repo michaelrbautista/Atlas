@@ -156,14 +156,16 @@ export async function deleteArticle(articleId: string, content: string) {
         }
     }
 
-    const { error } = await supabase
+    if (imagePaths.length > 0) {
+        const { error } = await supabase
         .storage
         .from("article_images")
         .remove(imagePaths)
 
-    if (error) {
-        return {
-            error: "Couldn't delete article images."
+        if (error) {
+            return {
+                error: "Couldn't delete article images."
+            }
         }
     }
 

@@ -34,7 +34,8 @@ const NewArticleForm = ({
         resolver: zodResolver(ArticleSchema),
         defaultValues: {
             title: "",
-            content: ""
+            content: "",
+            free: false
         }
     })
 

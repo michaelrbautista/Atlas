@@ -35,12 +35,13 @@ const EditArticleForm = ({
         resolver: zodResolver(ArticleSchema),
         defaultValues: {
             title: article.title,
-            content: article.content
+            content: article.content,
+            free: article.free
         }
     })
 
     async function onSubmit(data: z.infer<typeof ArticleSchema>) {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         const formData = new FormData();
 
@@ -97,6 +98,7 @@ const EditArticleForm = ({
             return imagePath
         })
 
+        console.log("New images: ", newImages);
         console.log("Images to add: ", imagesToAdd);
         console.log("Images to keep: ", imagesToKeep);
         console.log("Images to remove: ", removePaths);
@@ -104,14 +106,16 @@ const EditArticleForm = ({
         // 4. Remove images
         const supabase = createClient();
 
-        const { error } = await supabase
+        if (removePaths.length > 0) {
+            const { error } = await supabase
             .storage
             .from("article_images")
             .remove(removePaths)
 
-        if (error) {
-            return {
-                error: "Couldn't delete article images."
+            if (error) {
+                return {
+                    error: "Couldn't delete article images."
+                }
             }
         }
 
@@ -120,7 +124,7 @@ const EditArticleForm = ({
 
         for (let node of newNodes) {
             if (node.type == "image" && node.attrs?.src) {
-                if (node.attrs.src.substring(0,4) == "blob") {
+                if (node.attrs.src.startsWith("blob")) {
                     const response = await fetch(node.attrs.src);
                     const blob = await response.blob();
 
@@ -152,6 +156,8 @@ const EditArticleForm = ({
                     } as TipTapNode;
 
                     updatedNodes.push(newNode);
+                } else {
+                    updatedNodes.push(node);
                 }
             } else {
                 updatedNodes.push(node);
