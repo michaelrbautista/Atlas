@@ -41,7 +41,7 @@ const EditArticleForm = ({
     })
 
     async function onSubmit(data: z.infer<typeof ArticleSchema>) {
-        // setIsLoading(true);
+        setIsLoading(true);
 
         const formData = new FormData();
 
