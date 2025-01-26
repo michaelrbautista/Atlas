@@ -49,12 +49,12 @@ const ViewContent = ({
             }).configure({ levels: [1, 2, 3] }),
             BulletList.configure({
                 HTMLAttributes: {
-                    class: "list-disc ml-2",
+                    class: "list-disc ml-5",
                 },
             }),
             OrderedList.configure({
                 HTMLAttributes: {
-                    class: "list-decimal ml-2",
+                    class: "list-decimal ml-5",
                 },
             }),
             Image.extend({
