@@ -1,5 +1,5 @@
 import Tiptap from "@/components/tiptap/Tiptap";
-import { getArticle } from "@/server-actions/articles";
+import { getArticleClient } from "@/server-actions/articles";
 
 const EditArticle = async ({ 
     params
@@ -7,7 +7,7 @@ const EditArticle = async ({
     params: { id: string }
 }) => {
     // Get article
-    const { data, error } = await getArticle(params.id);
+    const { data, error } = await getArticleClient(params.id);
 
     if (error && !data) {
         throw new Error(error);

@@ -269,7 +269,7 @@ export async function getCollectionsArticles(collectionId: string, offset: numbe
         }
 }
 
-export const getArticle = async (articleId: string) => {
+export const getArticleClient = async (articleId: string) => {
     const supabase = createClient();
 
     const { data, error } = await supabase
@@ -299,6 +299,34 @@ export const getArticle = async (articleId: string) => {
     return {
         data: data
     }
+}
+
+export const getArticle = async (articleId: string) => {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+        .from("articles")
+        .select(`
+            id,
+            collection_id,
+            title,
+            content,
+            free,
+            image_url,
+            image_path,
+            created_by:users!articles_created_by_fkey(
+                id,
+                full_name
+            )
+        `)
+        .eq("id", articleId)
+        .single()
+    
+    if (error && !data) {
+        throw new Error(error.message);
+    }
+
+    return data
 }
 
 export const redirectToEditArticle = async (id: string) => {

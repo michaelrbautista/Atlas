@@ -13,6 +13,8 @@ import React, { useState } from "react"
 import { Table } from "@tanstack/react-table"
 import { FetchedArticle } from "@/server-actions/models"
 import { redirectToEditArticle } from "@/server-actions/articles";
+import { useUserContext } from "@/context";
+import { cn } from "@/lib/utils";
 
 const ArticleOptionsButton = ({
     article,
@@ -23,11 +25,17 @@ const ArticleOptionsButton = ({
 }) => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const userContext = useUserContext();
+
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
+                    <Button
+                        variant="ghost"
+                        // className="h-8 w-8 p-0"
+                        className={cn("h-8 w-8 p-0", userContext.user?.id != article.created_by?.id && "hidden")}
+                    >
                         <MoreHorizontal className="h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
