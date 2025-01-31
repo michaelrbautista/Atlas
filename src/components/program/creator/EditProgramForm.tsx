@@ -37,7 +37,7 @@ const EditProgramForm = ({
             description: program.description ?? "",
             weeks: program.weeks,
             free: program.free,
-            // price: program.price,
+            price: program.price,
             private: program.private
         }
     })
@@ -65,9 +65,9 @@ const EditProgramForm = ({
 
         formData.append("free", data.free.toString());
 
-        // if (data.price) {
-        //     formData.append("price", data.price.toString());
-        // }
+        if (data.price) {
+            formData.append("price", data.price.toString());
+        }
 
         let { data: programData, error: programError } = await editProgram(program, formData);
 

@@ -310,7 +310,7 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
             title: formData.get("title") as string,
             description: formData.get("description") as string,
             weeks: parseInt(formData.get("weeks") as string),
-            private: (formData.get("free") === "true"),
+            private: (formData.get("private") === "true"),
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
             image_url: imageUrl,
@@ -321,7 +321,7 @@ export async function editProgram(program: Tables<"programs">, formData: FormDat
             title: formData.get("title") as string,
             description: formData.get("description") as string,
             weeks: parseInt(formData.get("weeks") as string),
-            private: (formData.get("free") === "true"),
+            private: (formData.get("private") === "true"),
             free: (formData.get("free") === "true"),
             price: parseFloat(formData.get("price") as string),
         }

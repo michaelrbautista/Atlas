@@ -34,7 +34,7 @@ const NewProgramForm = ({
             description: "",
             weeks: 1,
             free: false,
-            // price: 1.00,
+            price: 1.00,
             private: false
         }
     })
