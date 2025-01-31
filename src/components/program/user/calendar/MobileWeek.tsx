@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils"
 import MobileDay from "./MobileDay"
-import { Tables } from "../../../../../database.types"
 import { Dispatch, SetStateAction } from "react"
 
 const MobileWeek = ({
@@ -28,7 +27,7 @@ const MobileWeek = ({
     ]
 
     return (
-        <div className="flex flex-row resize-none">
+        <div className="flex flex-row items-center resize-none">
             <div className="flex h-full min-w-5 items-center justify-center">
                 <p className={cn("text-xs font-semibold", disabled ? "text-systemGray4" : "text-systemGray2")}>{week}</p>
             </div>
