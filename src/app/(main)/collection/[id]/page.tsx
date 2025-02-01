@@ -11,7 +11,7 @@ const Collection = async ({
     const collection = await getCollectionServer(params.id);
 
     return (
-        <div className="flex flex-col w-full sm:max-w-lg px-5 py-20 sm:py-10 gap-3 sm:gap-10">
+        <div className="flex flex-col w-full sm:max-w-lg px-5 py-5 sm:py-10 gap-3 sm:gap-10">
             <div>
                 <p className="text-primaryText text-3xl font-bold">{collection?.title}</p>
                 <p className="text-secondaryText py-2">{collection?.description}</p>

@@ -58,9 +58,9 @@ const Article = async ({
     }
 
     return (
-        <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
+        <div className="flex flex-col w-full max-w-lg px-5 pb-20 gap-10 sm:gap-10">
             <div className="flex flex-col items-start pb-5">
-                <div className="flex flex-row w-full h-16 items-center justify-end py-5">
+                <div className="flex flex-row w-full items-center justify-end py-5">
                     <ArticleOptionsButton
                         article={article}
                     />
