@@ -53,38 +53,31 @@ const creatorRoutes = [
 
 const Sidebar = () => {
     // Get user from context
-    const {
-        user: contextUser,
-        isLoading: contextIsLoading   
-    } = useUserContext();
+    const userContext = useUserContext();
     
     return (
         <aside className="sticky left-0 top-0 z-50 h-screen w-64 shrink-0 hidden lg:flex flex-col text-white bg-background border-r-[1px] pb-2">
             <Logo></Logo>
-            {!contextIsLoading && (
+            {!userContext.isLoading && (
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex flex-col gap-10 pt-5">
-                        <SidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></SidebarRoutes>
-                        {contextUser?.payments_enabled && (
+                        <SidebarRoutes routes={userContext.user ? userRoutes : anonRoutes}></SidebarRoutes>
+                        {userContext.user?.stripe_price_id && (
                             <div className="flex flex-col gap-2">
                                 <p className="text-secondaryText text-xs font-bold px-5">Creator</p>
                                 <SidebarRoutes routes={creatorRoutes}></SidebarRoutes>
                             </div>
                         )}
                     </div>
-                    {(contextUser) ? (
+                    {(userContext.user) ? (
                         <div className="w-full flex flex-col gap-5">
-                            {(!contextUser.stripe_price_id &&
+                            {(!userContext.user.stripe_price_id &&
                                 <div className="px-5">
                                     <BecomeCreatorButton />
                                 </div>
                             )}
                             <div className="flex flex-row gap-2 px-2 justify-between items-center">
-                                <UserInfo
-                                    id={contextUser.id}
-                                    fullName={contextUser.full_name}
-                                    username={contextUser.username}
-                                />
+                                <UserInfo />
                             </div>
                         </div>
                     ) : (

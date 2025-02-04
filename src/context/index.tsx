@@ -104,7 +104,7 @@ export default function UserContextProvider({ children }: Readonly<{
         isLoading: isLoading,
         login: login,
         logout: logout
-    }), [isLoading]);
+    }), [isLoading, user]);
 
     return (
         <UserContext.Provider value={valueObject}>

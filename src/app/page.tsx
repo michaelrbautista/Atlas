@@ -9,29 +9,32 @@ import Logo from "@/components/misc/Logo";
 import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
-import { checkAuth } from "@/server-actions/auth";
+import { checkAuth, redirectToExplore } from "@/server-actions/auth";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import LoadImage from "@/components/misc/BlurImage";
+import { useUserContext } from "@/context";
 
 const Page = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [showSignIn, setShowSignIn] = useState(false);
     const [showCreateAccount, setShowCreateAccount] = useState(false);
 
-    const [showSignUp, setShowSignUp] = useState(false);
+    const userContext = useUserContext();
 
     useEffect(() => {
-        const getAuthSession = async () => {
-            const currentSession = await checkAuth();
-      
-            if (currentSession) {
-                setIsLoading(false);
+        const checkSession = async () => {
+            if (!userContext.isLoading) {
+                if (userContext.user) {
+                    redirectToExplore();
+                } else {
+                    setIsLoading(false);
+                }
             }
         }
       
-        getAuthSession();
-    }, []);
+        checkSession();
+    }, [userContext.isLoading]);
 
     if (isLoading) {
         return (

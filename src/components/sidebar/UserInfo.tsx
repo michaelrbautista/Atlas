@@ -21,21 +21,18 @@ import { Ellipsis } from "lucide-react";
 import { logout } from "@/server-actions/auth";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
+import { useUserContext } from "@/context";
 
-const UserInfo = ({
-    id,
-    fullName,
-    username
-}: {
-    id: string,
-    fullName: string,
-    username: string
-}) => {
+const UserInfo = () => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
     const { toast } = useToast();
 
+    const userContext = useUserContext();
+
     async function clientLogout() {
+        userContext.logout();
+
         const error = await logout();
 
         if (error) {
@@ -59,14 +56,14 @@ const UserInfo = ({
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="userInfo">
                         <div className="flex flex-col p-2 items-start">
-                            <p className="text-foreground text-base font-bold line-clamp-1">{fullName}</p>
-                            <p className="text-muted-foreground text-sm font-normal line-clamp-1">@{username}</p>
+                            <p className="text-foreground text-base font-bold line-clamp-1">{userContext.user?.full_name}</p>
+                            <p className="text-muted-foreground text-sm font-normal line-clamp-1">@{userContext.user?.username}</p>
                         </div>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                        <Link href={`/${username}`} className="w-full h-full px-2 py-1.5 text-start cursor-pointer">View profile</Link>
+                        <Link href={`/${userContext.user?.username}`} className="w-full h-full px-2 py-1.5 text-start cursor-pointer">View profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Button

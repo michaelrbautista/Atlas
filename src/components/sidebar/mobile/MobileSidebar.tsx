@@ -16,7 +16,7 @@ import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
 import { useUserContext } from "@/context";
 import UserDropdown from "./UserDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const anonRoutes = [
     // {
@@ -48,7 +48,15 @@ const MobileSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Get user from context
-    const { user: contextUser } = useUserContext();
+    const userContext = useUserContext();
+
+    useEffect(() => {
+        const checkUser = () => {
+            console.log("USER: ", userContext.user);
+        }
+
+        checkUser();
+    }, [userContext.isLoading])
 
     return (
         <div className="bg-systemBackground sticky top-0 w-full z-50 flex lg:hidden h-16 text-white">
@@ -62,14 +70,14 @@ const MobileSidebar = () => {
                     <div className="flex flex-col h-full pb-5">
                         <Logo></Logo>
                         <div className="flex flex-col h-full justify-between">
-                            <MobileSidebarRoutes routes={contextUser ? userRoutes : anonRoutes}></MobileSidebarRoutes>
-                            {(contextUser !== null) ? (
+                            <MobileSidebarRoutes routes={userContext.user ? userRoutes : anonRoutes}></MobileSidebarRoutes>
+                            {(userContext.user !== null) ? (
                                 <div className="px-5 flex flex-row justify-between items-center">
                                     <div className="flex flex-col p-2 items-start">
-                                        <p className="text-foreground text-base font-bold line-clamp-1">{contextUser.full_name}</p>
-                                        <p className="text-muted-foreground text-sm font-normal line-clamp-1">@{contextUser.username}</p>
+                                        <p className="text-foreground text-base font-bold line-clamp-1">{userContext.user.full_name}</p>
+                                        <p className="text-muted-foreground text-sm font-normal line-clamp-1">@{userContext.user.username}</p>
                                     </div>
-                                    <UserDropdown username={contextUser.username} setIsOpen={setIsOpen} />
+                                    <UserDropdown username={userContext.user.username} setIsOpen={setIsOpen} />
                                 </div>
                             ) : (
                                 <div className="px-5 flex flex-col gap-5">

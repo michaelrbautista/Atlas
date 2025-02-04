@@ -22,6 +22,10 @@ export async function getSubscriptionIds(userId: string) {
     }
 }
 
+export async function redirectToExplore() {
+    return redirect("/explore");
+}
+
 export async function checkAuth() {
     const supabase = createClient();
 

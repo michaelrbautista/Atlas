@@ -12,6 +12,7 @@ import { logout } from "@/server-actions/auth";
 import { useToast } from "../../ui/use-toast";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
+import { useUserContext } from "@/context";
 
 const UserDropdown = ({
     username,
@@ -22,7 +23,13 @@ const UserDropdown = ({
 }) => {
     const { toast } = useToast();
 
+    const userContext = useUserContext();
+
     async function clientLogout() {
+        userContext.logout();
+
+        console.log(userContext.user);
+
         const error = await logout();
 
         if (error) {
