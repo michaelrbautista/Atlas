@@ -41,8 +41,6 @@ const CreatorProgramWorkout = ({
                 return
             }
 
-            console.log(data!.workout_exercises)
-
             setWorkout(data);
             setExercises(data!.workout_exercises)
             setIsLoading(false);
@@ -97,7 +95,7 @@ const CreatorProgramWorkout = ({
                                 </Button>
                                 <AddExerciseButton
                                     addNewExercise={addNewTableExercise}
-                                    workoutId={params.id}
+                                    programWorkoutId={params.id}
                                     exerciseNumber={exercises.length + 1}
                                 />
                             </div>

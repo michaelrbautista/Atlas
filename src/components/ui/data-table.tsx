@@ -21,7 +21,7 @@ import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise
 import { deleteProgram } from "@/server-actions/program"
 import { Tables } from "../../../database.types"
 import { deleteLibraryWorkout } from "@/server-actions/workout"
-import { deleteCollection } from "@/server-actions/collection"
+import { decrementCollectionNumbers, deleteCollection } from "@/server-actions/collection"
 import { deleteArticle } from "@/server-actions/articles"
 
 interface DataTableProps<TData, TValue> {
@@ -148,13 +148,25 @@ export function DataTable<TData, TValue>({
                 setData(updatedCollections)
             },
             deleteCollection: (collection: Tables<"collections">) => {
+                // Delete exercise from program
                 deleteCollection(collection.id);
 
-                const fetchedData = data as FetchedExercise[]
+                // Decrement exercises
+                decrementCollectionNumbers(collection.collection_number, collection.created_by);
+
+                const fetchedData = data as Tables<"collections">[]
                 setData(
-                    fetchedData.filter(listCollection =>
-                        listCollection.id !== collection.id
-                    ) as TData[]
+                    fetchedData.filter(listCollection => {
+                        // listCollection.id !== collection.id
+                        // Decrement exercises on UI
+                        if (listCollection.id !== collection.id) {
+                            if (listCollection.collection_number > collection.collection_number) {
+                                listCollection.collection_number -= 1
+                            }
+
+                            return listCollection
+                        }
+                    }) as TData[]
                 );
             },
             deleteArticle: (article: FetchedArticle) => {

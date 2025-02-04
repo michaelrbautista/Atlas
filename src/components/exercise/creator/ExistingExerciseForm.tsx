@@ -51,9 +51,6 @@ const ExistingExerciseForm = ({
 
         const formData = new FormData();
 
-        console.log(workoutId);
-        console.log(programWorkoutId);
-
         // workout id
         if (workoutId) {
             formData.append("workoutId", workoutId);

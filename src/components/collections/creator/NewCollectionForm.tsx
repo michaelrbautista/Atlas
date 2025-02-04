@@ -17,9 +17,11 @@ import { useToast } from "../../ui/use-toast";
 
 const NewCollectionForm = ({
     setIsOpen,
+    collectionNumber,
     addCollection
 }: {
     setIsOpen: Dispatch<SetStateAction<boolean>>,
+    collectionNumber: number,
     addCollection: (collection: Tables<"collections">) => void
 }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +50,9 @@ const NewCollectionForm = ({
         if (data.description) {
             formData.append("description", data.description);
         }
+
+        // Collection number
+        formData.append("collectionNumber", collectionNumber.toString());
 
         // Create collection
         let { data: collectionData, error: collectionError } = await createCollection(formData);

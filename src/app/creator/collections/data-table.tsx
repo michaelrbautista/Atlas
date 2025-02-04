@@ -16,16 +16,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise, udpateOrderOfExercises } from "@/server-actions/exercise"
-import { deleteProgram } from "@/server-actions/program"
-import { Tables } from "../../../../../../database.types"
-import { deleteLibraryWorkout } from "@/server-actions/workout"
+import { Tables } from "../../../../database.types"
 import { Reorder } from "framer-motion";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { udpateOrderOfCollections } from "@/server-actions/collection"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -49,45 +46,47 @@ export function ReorderDataTable<TData, TValue>({
         getCoreRowModel: getCoreRowModel()
     })
 
-    type ExercisesForm = {
-        exercises: Row<TData>[]
+    type CollectionsForm = {
+        collections: Row<TData>[]
     }
 
-    const form = useForm<ExercisesForm>({
+    const form = useForm<CollectionsForm>({
         defaultValues: {
-            exercises: table.getRowModel().rows
+            collections: table.getRowModel().rows
         }
     })
 
     const { control } = form;
     const { fields, move } = useFieldArray({
         control,
-        name: "exercises"
+        name: "collections"
     });
 
     const [active, setActive] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
     const saveOrder = async () => {
-        const newExercises = fields.map((row, index) => {
-            const exercise = row.original as FetchedExercise;
-            exercise.exercise_number = index + 1;
-            return exercise
+        const newCollections = fields.map((row, index) => {
+            const collection = row.original as Tables<"collections">;
+            collection.collection_number = index + 1;
+            return collection
         })
-        setData(newExercises as TData[]);
+        setData(newCollections as TData[]);
 
-        await udpateOrderOfExercises(newExercises);
+        // Update order
+        await udpateOrderOfCollections(newCollections);
 
         setIsReordering(false);
     }
 
     return (
         <div className="flex flex-col">
-            <div className="flex justify-between items-center pb-5 pt-5">
-                <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
+            <div className="flex justify-between items-center pb-5">
+                <p className="text-foreground text-2xl sm:text-2xl font-bold">Collections</p>
                 <div className="flex flex-row gap-5">
                     <Button
                         variant={isLoading ? "disabled" : "secondary"}
+                        size="sm"
                         disabled={isLoading}
                         onClick={() => {
                             setIsReordering(false);
@@ -97,6 +96,7 @@ export function ReorderDataTable<TData, TValue>({
                     </Button>
                     <Button
                         variant={isLoading ? "disabled" : "systemBlue"}
+                        size="sm"
                         disabled={isLoading}
                         onClick={() => {
                             saveOrder();

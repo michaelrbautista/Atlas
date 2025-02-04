@@ -62,6 +62,7 @@ export type Database = {
       }
       collections: {
         Row: {
+          collection_number: number
           created_at: string
           created_by: string
           description: string | null
@@ -69,6 +70,7 @@ export type Database = {
           title: string
         }
         Insert: {
+          collection_number?: number
           created_at?: string
           created_by?: string
           description?: string | null
@@ -76,6 +78,7 @@ export type Database = {
           title: string
         }
         Update: {
+          collection_number?: number
           created_at?: string
           created_by?: string
           description?: string | null
@@ -478,6 +481,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrement_collection: {
+        Args: {
+          user_id: string
+          deleted_collection_number: number
+        }
+        Returns: undefined
+      }
       decrement_library_workout_exercises: {
         Args: {
           workout_id_input: string

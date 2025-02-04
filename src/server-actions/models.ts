@@ -66,6 +66,7 @@ export type FetchedCollection = {
     created_at: string;
     title: string;
     description: string | null;
+    collection_number: number;
     articles: FetchedArticle[] | null;
 }
 

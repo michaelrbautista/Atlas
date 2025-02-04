@@ -50,14 +50,6 @@ const MobileSidebar = () => {
     // Get user from context
     const userContext = useUserContext();
 
-    useEffect(() => {
-        const checkUser = () => {
-            console.log("USER: ", userContext.user);
-        }
-
-        checkUser();
-    }, [userContext.isLoading])
-
     return (
         <div className="bg-systemBackground sticky top-0 w-full z-50 flex lg:hidden h-16 text-white">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>

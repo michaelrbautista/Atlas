@@ -14,8 +14,10 @@ import { Tables } from "../../../../database.types";
 import NewCollectionForm from "./NewCollectionForm";
 
 const NewCollectionButton = ({
+    collectionNumber,
     addCollection
 }: {
+    collectionNumber: number,
     addCollection: (collection: Tables<"collections">) => void
 }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +32,11 @@ const NewCollectionButton = ({
                     <DialogTitle>New Collection</DialogTitle>
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
-                <NewCollectionForm setIsOpen={setIsOpen} addCollection={addCollection} />
+                <NewCollectionForm
+                    setIsOpen={setIsOpen}
+                    collectionNumber={collectionNumber}
+                    addCollection={addCollection}
+                />
             </DialogContent>
         </Dialog>
     );

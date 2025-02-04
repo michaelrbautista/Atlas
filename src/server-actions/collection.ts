@@ -2,6 +2,41 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Tables } from "../../database.types";
+
+export async function decrementCollectionNumbers(deletedCollectionNumber: number, userId: string) {
+    const supabase = createClient();
+    
+    const { data, error } = await supabase
+        .rpc("decrement_collection", {
+            user_id: userId,
+            deleted_collection_number: deletedCollectionNumber
+        })
+
+    if (error && !data) {
+        return {
+            error: "Couldn't decrement exercises."
+        }
+    }
+}
+
+export async function udpateOrderOfCollections(collections: Tables<"collections">[]) {
+    const supabase = createClient();
+
+    collections.map(async (collection) => {
+        const { data, error } = await supabase
+            .from("collections")
+            .update({
+                collection_number: collection.collection_number
+            })
+            .eq("id", collection.id)
+
+        if (error && !data) {
+            console.log(error);
+            return
+        }
+    })
+}
 
 export async function deleteCollection(collectionId: string) {
     const supabase = createClient();
@@ -28,6 +63,7 @@ export async function getCreatorsCollections(userId: string, offset: number) {
             created_at,
             title,
             description,
+            collection_number,
             articles(
                 id,
                 collection_id,
@@ -43,7 +79,7 @@ export async function getCreatorsCollections(userId: string, offset: number) {
             )
         `)
         .eq("created_by", userId)
-        .order("created_at", { ascending: false })
+        .order("collection_number", { ascending: true })
         .range(offset, offset + 9)
     
     if (error && !data) {
@@ -91,6 +127,7 @@ export async function getCollectionServer(collectionId: string) {
             created_by,
             title,
             description,
+            collection_number,
             articles(
                 id,
                 collection_id,
@@ -127,6 +164,7 @@ export async function getCollection(collectionId: string) {
             created_by,
             title,
             description,
+            collection_number,
             articles(
                 id,
                 collection_id,
@@ -165,7 +203,8 @@ export async function createCollection(formData: FormData) {
 
     let newCollection = {
         title: formData.get("title") as string,
-        description: formData.get("description") as string
+        description: formData.get("description") as string,
+        collection_number: parseInt(formData.get("collectionNumber") as string)
     }
 
     // Add to workouts

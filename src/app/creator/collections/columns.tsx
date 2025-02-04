@@ -17,6 +17,10 @@ declare module '@tanstack/react-table' {
 
 export const columns: ColumnDef<Tables<"collections">>[] = [
     {
+        accessorKey: "collection_number",
+        header: "#",
+    },
+    {
         accessorKey: "title",
         header: "Title",
     },
