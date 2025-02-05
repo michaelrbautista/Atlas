@@ -101,59 +101,51 @@ const User = ({
         )
     } else {
         return (
-            <>
-                <Head>
-                    <meta
-                        name="apple-itunes-app"
-                        content="app-id=6484401731"
-                    />
-                </Head>
-                <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
-                    <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
-                        {(!user.profile_picture_url) ? (
-                            // Replace with placeholder image
-                            <div className="bg-systemGray5 shrink-0 h-20 w-20 rounded-full flex items-center justify-center">
-                                <Users className="text-secondaryText" />
-                            </div>
-                        ) : (
-                            <div className="relative w-[80px] h-[80px] shrink-0">
-                                <Image
-                                    className="rounded-full"
-                                    fill
-                                    src={profilePictureUrl}
-                                    alt="profilePicture"
-                                    style={{objectFit: "cover"}}
-                                    priority
-                                />
-                            </div>
-                        )}
-                        <div className="flex flex-col w-full">
-                            <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
-                            <p className="text-secondaryText text-base">@{user.username}</p>
+            <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
+                    {(!user.profile_picture_url) ? (
+                        // Replace with placeholder image
+                        <div className="bg-systemGray5 shrink-0 h-20 w-20 rounded-full flex items-center justify-center">
+                            <Users className="text-secondaryText" />
                         </div>
+                    ) : (
+                        <div className="relative w-[80px] h-[80px] shrink-0">
+                            <Image
+                                className="rounded-full"
+                                fill
+                                src={profilePictureUrl}
+                                alt="profilePicture"
+                                style={{objectFit: "cover"}}
+                                priority
+                            />
+                        </div>
+                    )}
+                    <div className="flex flex-col w-full">
+                        <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
+                        <p className="text-secondaryText text-base">@{user.username}</p>
                     </div>
-                    <p className="text-primaryText text-base">{user.bio}</p>
-                    {userContext.user?.id == user.id ? (
-                        <EditProfileButton />
-                    ) : user.stripe_price_id && (
-                        getSubscribeButton()  
-                    )}
-                    {user.stripe_price_id && (
-                        <Tabs defaultValue="programs">
-                            <TabsList className="w-full">
-                                <TabsTrigger className="w-full" value="programs">Programs</TabsTrigger>
-                                <TabsTrigger className="w-full" value="collections">Collections</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="programs">
-                                <CreatorProgramList user={user} />
-                            </TabsContent>
-                            <TabsContent value="collections">
-                                <CollectionList user={user} />
-                            </TabsContent>
-                        </Tabs>
-                    )}
                 </div>
-            </>
+                <p className="text-primaryText text-base">{user.bio}</p>
+                {userContext.user?.id == user.id ? (
+                    <EditProfileButton />
+                ) : user.stripe_price_id && (
+                    getSubscribeButton()  
+                )}
+                {user.stripe_price_id && (
+                    <Tabs defaultValue="programs">
+                        <TabsList className="w-full">
+                            <TabsTrigger className="w-full" value="programs">Programs</TabsTrigger>
+                            <TabsTrigger className="w-full" value="collections">Collections</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="programs">
+                            <CreatorProgramList user={user} />
+                        </TabsContent>
+                        <TabsContent value="collections">
+                            <CollectionList user={user} />
+                        </TabsContent>
+                    </Tabs>
+                )}
+            </div>
         )
     }
 }
