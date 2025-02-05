@@ -104,7 +104,7 @@ const User = ({
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <Head>
                     <meta
-                        name="atlas-app"
+                        name="apple-itunes-app"
                         content="app-id=6484401731"
                     />
                 </Head>
