@@ -103,7 +103,10 @@ const User = ({
         return (
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <Head>
-                    <meta name="apple-itunes-app" content="app-id=6484401731, app-argument=https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" />
+                    <meta
+                        name="atlas-app"
+                        content="app-id=6484401731"
+                    />
                 </Head>
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(!user.profile_picture_url) ? (
