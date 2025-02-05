@@ -28,6 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark h-full">
+      <head>
+        <meta
+          name="apple-itunes-app"
+          content="app-id=6484401731"
+        />
+      </head>
       <body className={cn(
         "bg-systemBackground h-full font-sans antialiased overscroll-none", 
         inter.variable

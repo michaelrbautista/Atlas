@@ -1,7 +1,6 @@
 import "../globals.css";
 import MobileSidebar from "@/components/sidebar/mobile/MobileSidebar";
 import Sidebar from "@/components/sidebar/Sidebar";
-import Head from "next/head";
 
 export default function UserLayout({
   children,
@@ -10,6 +9,12 @@ export default function UserLayout({
 }>) {
   return (
     <div className="flex">
+        <head>
+          <meta
+            name="apple-itunes-app"
+            content="app-id=6484401731"
+          />
+        </head>
         <Sidebar></Sidebar>
         <div className="flex flex-col w-full items-start sm:items-center">
           <MobileSidebar></MobileSidebar>
