@@ -15,6 +15,7 @@ import SubscribeButton from "@/components/profile/user/SubscribeButton";
 import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
 import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
 import CollectionList from "@/components/collections/user/CollectionList";
+import Head from "next/head";
 
 const User = ({ 
     params
@@ -95,12 +96,15 @@ const User = ({
     if (isLoading || !user || userContext.isLoading) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
-            <Spinner></Spinner>
-        </div>
+                <Spinner></Spinner>
+            </div>
         )
     } else {
         return (
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
+                <Head>
+                    <meta name="apple-itunes-app" content="app-id=6484401731, app-argument=https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731" />
+                </Head>
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(!user.profile_picture_url) ? (
                         // Replace with placeholder image
