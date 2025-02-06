@@ -24,7 +24,7 @@ const MobileBanner = () => {
         }
     }, []);
 
-    if (isOpen && browser != "Safari" && platform != "desktop" && os == "iOS") {
+    if (isOpen) {
         return (
             <div className="sticky top-0 z-50 flex flex-row sm:hidden w-full justify-between p-5">
                 <div className="flex flex-row gap-2 items-center">
@@ -39,6 +39,9 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
+                        <p>{browser}</p>
+                        <p>{os}</p>
+                        <p>{platform}</p>
                     </div>
                 </div>
                 <div className="h-full flex items-center">
