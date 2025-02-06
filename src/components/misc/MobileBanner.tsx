@@ -7,6 +7,7 @@ import Bowser from "bowser";
 
 const MobileBanner = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const [engine, setEngine] = useState("");
     const [browser, setBrowser] = useState("");
     const [os, setOs] = useState("");
     const [platform, setPlatform] = useState("");
@@ -14,10 +15,13 @@ const MobileBanner = () => {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const browserInfo = Bowser.getParser(window.navigator.userAgent);
+
+            const engineString = browserInfo.getEngineName();
             const browserString = browserInfo.getBrowserName();
             const osString = browserInfo.getOSName();
             const platformString = browserInfo.getPlatformType();
 
+            setEngine(engineString);
             setBrowser(browserString);
             setOs(osString);
             setPlatform(platformString);
@@ -39,6 +43,7 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
+                        <p>{engine}</p>
                         <p>{browser}</p>
                         <p>{os}</p>
                         <p>{platform}</p>
