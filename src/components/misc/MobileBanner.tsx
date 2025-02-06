@@ -21,7 +21,7 @@ const MobileBanner = () => {
             const osString = browserInfo.getOSName();
             const platformString = browserInfo.getPlatformType();
 
-            console.log(browserInfo);
+            console.log(uaString);
 
             setUa(uaString);
             setBrowser(browserString);
@@ -45,6 +45,7 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
+                        {/* <p>{ua}</p> */}
                     </div>
                 </div>
                 <div className="h-full flex items-center">

@@ -12,7 +12,7 @@ export default function UserLayout({
     <div className="flex">
         <Sidebar></Sidebar>
         <div className="flex flex-col w-full items-start sm:items-center">
-          {/* <MobileBanner /> */}
+          <MobileBanner />
           <MobileSidebar></MobileSidebar>
           {children}
         </div>
