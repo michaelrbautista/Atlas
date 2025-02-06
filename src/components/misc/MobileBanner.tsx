@@ -7,7 +7,7 @@ import Bowser from "bowser";
 
 const MobileBanner = () => {
     const [isOpen, setIsOpen] = useState(true);
-    const [engine, setEngine] = useState("");
+    const [ua, setUa] = useState("");
     const [browser, setBrowser] = useState("");
     const [os, setOs] = useState("");
     const [platform, setPlatform] = useState("");
@@ -16,12 +16,14 @@ const MobileBanner = () => {
         if (typeof window !== "undefined") {
             const browserInfo = Bowser.getParser(window.navigator.userAgent);
 
-            const engineString = browserInfo.getEngineName();
+            const uaString = browserInfo.getUA();
             const browserString = browserInfo.getBrowserName();
             const osString = browserInfo.getOSName();
             const platformString = browserInfo.getPlatformType();
 
-            setEngine(engineString);
+            console.log(browserInfo);
+
+            setUa(uaString);
             setBrowser(browserString);
             setOs(osString);
             setPlatform(platformString);
@@ -43,10 +45,10 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
-                        <p>{engine}</p>
-                        <p>{browser}</p>
+                        <p>{ua}</p>
+                        {/* <p>{browser}</p>
                         <p>{os}</p>
-                        <p>{platform}</p>
+                        <p>{platform}</p> */}
                     </div>
                 </div>
                 <div className="h-full flex items-center">
