@@ -30,7 +30,7 @@ const MobileBanner = () => {
         }
     }, []);
 
-    if (isOpen && !ua.includes("Instagram")) {
+    if (isOpen && ua.includes("Instagram")) {
         return (
             <div className="sticky top-0 z-50 flex flex-row sm:hidden w-full justify-between p-5">
                 <div className="flex flex-row gap-2 items-center">
