@@ -30,7 +30,7 @@ const MobileBanner = () => {
         }
     }, []);
 
-    if (isOpen) {
+    if (isOpen && (document.querySelectorAll(`meta[content="app-id=6484401731"]`))) {
         return (
             <div className="sticky top-0 z-50 flex flex-row sm:hidden w-full justify-between p-5">
                 <div className="flex flex-row gap-2 items-center">
@@ -45,10 +45,6 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
-                        <p>{ua}</p>
-                        {/* <p>{browser}</p>
-                        <p>{os}</p>
-                        <p>{platform}</p> */}
                     </div>
                 </div>
                 <div className="h-full flex items-center">
