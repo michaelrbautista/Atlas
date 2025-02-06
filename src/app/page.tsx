@@ -11,7 +11,7 @@ import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
 import { checkAuth, redirectToExplore } from "@/server-actions/auth";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import LoadImage from "@/components/misc/BlurImage";
+import BlurImage from "@/components/misc/BlurImage";
 import { useUserContext } from "@/context";
 
 const Page = () => {
@@ -69,7 +69,7 @@ const Page = () => {
                             
                         </div>
                         <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
-                            <LoadImage
+                            <BlurImage
                                 alt="firstLandingPage"
                                 src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.png?t=2025-01-16T04%3A48%3A38.958Z"
                                 contentMode="contain"
@@ -89,7 +89,7 @@ const Page = () => {
                         </Dialog>
                         <div className="flex flex-col gap-10">
                             <div className="relative flex items-center w-[350px] h-[300px] sm:w-[600px] sm:h-[400px]">
-                                <LoadImage
+                                <BlurImage
                                     alt="secondLandingPage"
                                     src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.png?t=2025-01-16T04%3A48%3A48.462Z"
                                     contentMode="contain"
@@ -104,7 +104,7 @@ const Page = () => {
                         </div>
                         <div className="flex flex-col items-center gap-10">
                             <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
-                                <LoadImage
+                                <BlurImage
                                     alt="thirdLandingPage"
                                     src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.png"
                                     contentMode="contain"

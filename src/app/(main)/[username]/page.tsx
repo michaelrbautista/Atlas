@@ -15,7 +15,7 @@ import SubscribeButton from "@/components/profile/user/SubscribeButton";
 import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
 import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
 import CollectionList from "@/components/collections/user/CollectionList";
-import Head from "next/head";
+import BlurImage from "@/components/misc/BlurImage";
 
 const User = ({ 
     params
@@ -105,27 +105,29 @@ const User = ({
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
                     {(!user.profile_picture_url) ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-20 w-20 rounded-full flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-20 w-20 sm:h-28 sm:w-28 rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
                         </div>
                     ) : (
-                        <div className="relative w-[80px] h-[80px] shrink-0">
-                            <Image
-                                className="rounded-full"
-                                fill
-                                src={profilePictureUrl}
+                        <div className="relative w-[80px] h-[80px] sm:h-28 sm:w-28 shrink-0">
+                            <BlurImage
                                 alt="profilePicture"
-                                style={{objectFit: "cover"}}
-                                priority
+                                src={profilePictureUrl}
+                                contentMode="cover"
+                                sizes="(max-width: 640px) 80px, 80px"
+                                className="rounded-full"
+                                canSelect={false}
                             />
                         </div>
                     )}
-                    <div className="flex flex-col w-full">
-                        <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
-                        <p className="text-secondaryText text-base">@{user.username}</p>
+                    <div className="flex flex-col gap-5">
+                        <div className="flex flex-col w-full">
+                            <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
+                            <p className="text-secondaryText text-base">@{user.username}</p>
+                        </div>
+                        <p className="text-primaryText text-base">{user.bio}</p>
                     </div>
                 </div>
-                <p className="text-primaryText text-base">{user.bio}</p>
                 {userContext.user?.id == user.id ? (
                     <EditProfileButton />
                 ) : user.stripe_price_id && (
