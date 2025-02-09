@@ -1,7 +1,6 @@
 import ArticleList from "@/components/articles/user/ArticleList";
 import { getCollectionServer } from "@/server-actions/collection";
 
-
 const Collection = async ({ 
     params
 }: {

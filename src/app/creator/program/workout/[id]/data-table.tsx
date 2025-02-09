@@ -18,14 +18,11 @@ import {
 } from "@/components/ui/table"
 import { FetchedExercise } from "@/server-actions/models"
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { decrementProgramExercises, deleteLibraryExercise, deleteProgramExercise, udpateOrderOfExercises } from "@/server-actions/exercise"
-import { deleteProgram } from "@/server-actions/program"
-import { Tables } from "../../../../../../database.types"
-import { deleteLibraryWorkout } from "@/server-actions/workout"
 import { Reorder } from "framer-motion";
-import { useFieldArray, useForm, useFormContext } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { udpateOrderOfExercises } from "@/server-actions/exercise"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -41,7 +38,7 @@ export function ReorderDataTable<TData, TValue>({
     setData,
     isReordering,
     setIsReordering
-}: DataTableProps<TData, TValue>) {
+}: Readonly<DataTableProps<TData, TValue>>) {
     
     const table = useReactTable({
         data,
@@ -66,7 +63,6 @@ export function ReorderDataTable<TData, TValue>({
     });
 
     const [active, setActive] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
 
     const saveOrder = async () => {
         const newExercises = fields.map((row, index) => {
@@ -87,8 +83,8 @@ export function ReorderDataTable<TData, TValue>({
                 <p className="text-foreground text-md sm:text-lg font-bold">Exercises</p>
                 <div className="flex flex-row gap-5">
                     <Button
-                        variant={isLoading ? "disabled" : "secondary"}
-                        disabled={isLoading}
+                        variant={isReordering ? "disabled" : "secondary"}
+                        disabled={isReordering}
                         onClick={() => {
                             setIsReordering(false);
                         }}
@@ -96,15 +92,15 @@ export function ReorderDataTable<TData, TValue>({
                         Cancel
                     </Button>
                     <Button
-                        variant={isLoading ? "disabled" : "systemBlue"}
-                        disabled={isLoading}
+                        variant={isReordering ? "disabled" : "systemBlue"}
+                        disabled={isReordering}
                         onClick={() => {
                             saveOrder();
                             setIsReordering(false);
                         }}
                     >
-                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {!isLoading && "Save"}
+                        {isReordering && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {!isReordering && "Save"}
                     </Button>
                 </div>
             </div>
@@ -134,7 +130,7 @@ export function ReorderDataTable<TData, TValue>({
                             as="tbody"
                             values={fields}
                             onReorder={(e) => {
-                                e.map((row, index) => {
+                                e.forEach((row, index) => {
                                     const activeElement = fields[active];
                                     if (row === activeElement) {
                                         move(active, index);

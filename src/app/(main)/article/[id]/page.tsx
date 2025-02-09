@@ -1,12 +1,7 @@
 import { getArticle } from "@/server-actions/articles"
-import { useEffect, useState } from "react"
-import { useToast } from "@/components/ui/use-toast"
-import { Loader2 } from "lucide-react"
 import ViewContent from "@/components/tiptap/ViewContent"
-import { FetchedArticle } from "@/server-actions/models"
 import ArticleOptionsButton from "@/components/articles/creator/ArticleOptionsButton"
-import { useUserContext } from "@/context"
-import { checkIfSubscribed, getUser } from "@/server-actions/user"
+import { checkIfSubscribed, getCurrentUser } from "@/server-actions/user"
 import { Button } from "@/components/ui/button"
 
 const Article = async ({ 
@@ -14,44 +9,18 @@ const Article = async ({
 }: {
     params: { id: string }
 }) => {
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [article, setArticle] = useState<FetchedArticle | null>(null);
-    // const [articleContent, setArticleContent] = useState("");
-
-    // const { toast } = useToast();
-
-    // const userContext = useUserContext();
-
-    // useEffect(() => {
-    //     const getArticleContent = async () => {
-    //         setIsLoading(true);
-
-    //         // Get article
-    //         const { data, error } = await getArticle(params.id);
-
-    //         if (error && !data) {
-    //             toast({
-    //                 title: "An error occurred.",
-    //                 description: error
-    //             })
-    //             return
-    //         }
-
-    //         setArticle(data!);
-    //         setArticleContent(data!.content);
-    //         setIsLoading(false);
-    //     }
-
-    //     getArticleContent();
-    // }, []);
-
     // Get article
     const article = await getArticle(params.id);
+
+    // Get current user
+    const currentUser = await getCurrentUser();
 
     // Check if subscribed
     let isSubscribed;
 
-    if (article.created_by?.id) {
+    if (article.created_by?.id == currentUser.id) {
+        isSubscribed = true;
+    } else if (article.created_by?.id) {
         isSubscribed = await checkIfSubscribed(article.created_by.id);
     } else {
         isSubscribed = false;

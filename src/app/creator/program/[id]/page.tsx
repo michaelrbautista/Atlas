@@ -8,7 +8,6 @@ import { createClient } from "@/utils/supabase/client";
 import Calendar from "@/components/program/creator/calendar/Calendar";
 import { useToast } from "@/components/ui/use-toast";
 import ProgramOptionsButton from "@/components/program/creator/ProgramOptionsButton";
-import { BadgeList } from "@/components/program/user/BadgeList";
 import { InfoList } from "@/components/program/user/InfoList";
 
 const ViewCreatorProgram = ({ 
@@ -19,7 +18,6 @@ const ViewCreatorProgram = ({
     const [isLoading, setIsLoading] = useState(false);
     const [program, setProgram] = useState<Tables<"programs">>();
     const [programImageUrl, setProgramImageUrl] = useState<string>("");
-    const [creator, setCreator] = useState<Tables<"users">>();
 
     const { toast } = useToast();
 
@@ -51,24 +49,6 @@ const ViewCreatorProgram = ({
             if (programData?.image_url) {
                 setProgramImageUrl(programData.image_url);
             }
-
-            // Get program creator
-            const { data: creatorData, error: creatorError } = await supabase
-                .from("users")
-                .select()
-                .eq("id", programData.created_by)
-                .single()
-
-            if (creatorError || !creatorData) {
-                toast({
-                    title: "An error occurred.",
-                    description: creatorError.message
-                })
-                setIsLoading(false);
-                return
-            }
-
-            setCreator(creatorData);
 
             // Get current user
             const { data: { user }} = await supabase.auth.getUser();

@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Dumbbell } from "lucide-react"
 import React from "react"
 import { Tables } from "../../../../../database.types"
-import Image from "next/image"
 import ProgramOptionsDialog from "./ProgramOptionsDialog"
 import { redirectToCreatorsProgram } from "@/server-actions/program"
+import BlurImage from "@/components/misc/BlurImage"
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -15,11 +15,6 @@ declare module '@tanstack/react-table' {
         deleteProgram?: (program: Tables<"programs">) => void;
     }
 }
-
-const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-});
 
 export const columns: ColumnDef<Tables<"programs">>[] = [
     {
@@ -35,14 +30,14 @@ export const columns: ColumnDef<Tables<"programs">>[] = [
                         <Dumbbell className="text-secondaryText" />
                     </div>
                 ) : (
-                    <div className="relative flex items-center w-[60px] h-[60px]">
-                        <Image
-                            className="rounded-md"
-                            fill
+                    <div className="relative w-[80px] h-[80px] shrink-0">
+                        <BlurImage
+                            alt="profilePicture"
                             src={program.image_url}
-                            alt="programImage"
-                            style={{objectFit: "cover"}}
-                            priority
+                            contentMode="cover"
+                            sizes="(max-width: 640px) 80px, 80px"
+                            className="rounded-md"
+                            canSelect={false}
                         />
                     </div>
                 )

@@ -25,7 +25,7 @@ export const columns: ColumnDef<Tables<"workouts">>[] = [
     },
     {
         id: "view",
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const workout = row.original
 
             return (

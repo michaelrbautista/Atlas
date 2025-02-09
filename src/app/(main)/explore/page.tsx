@@ -1,5 +1,4 @@
 import AllUsers from "@/components/explore/AllUsers";
-import NewPrograms from "@/components/explore/NewPrograms";
 import Search from "@/components/explore/Search";
 import SearchResultsList from "@/components/explore/SearchResultsList";
 

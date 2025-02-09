@@ -1,6 +1,5 @@
 import SubscriptionList from "@/components/subscriptions/SubscriptionList"
 
-
 const Page = async () => {
     return (
         <div className="h-full w-full max-w-xl px-5 py-20 sm:py-10">

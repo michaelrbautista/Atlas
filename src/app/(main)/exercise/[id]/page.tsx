@@ -31,4 +31,5 @@ const Exercise = async ({
         </div>
     )
 }
+
 export default Exercise

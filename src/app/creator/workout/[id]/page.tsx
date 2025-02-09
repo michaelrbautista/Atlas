@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Menu } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import AddExerciseButton from "@/components/exercise/creator/AddExerciseButton";
@@ -12,7 +12,6 @@ import { FetchedExercise, FetchedWorkout } from "@/server-actions/models";
 
 import { columns } from "../../program/workout/[id]/columns";
 import { Button } from "@/components/ui/button";
-import { TableCell, TableRow } from "@/components/ui/table";
 import { ReorderDataTable } from "../../program/workout/[id]/data-table";
 import { reorderColumns } from "../../program/workout/[id]/reorderColumns";
 import { DataTable } from "@/components/ui/data-table";

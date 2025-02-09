@@ -23,6 +23,8 @@ const MobileBanner = () => {
 
             console.log(uaString);
 
+            console.log(ua.includes("Instagram"));
+
             setUa(uaString);
             setBrowser(browserString);
             setOs(osString);

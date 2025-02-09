@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "../globals.css";
 import MobileSidebar from "@/components/sidebar/mobile/MobileSidebar";
 import Sidebar from "@/components/sidebar/Sidebar";

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { Dumbbell } from "lucide-react";
 import MobileCalendar from "@/components/program/user/calendar/MobileCalendar";
-import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
+import { getProgram } from "@/server-actions/program";
 import { checkIfSubscribed, getUser } from "@/server-actions/user";
-import { Button } from "@/components/ui/button";
 import { InfoList } from "@/components/program/user/InfoList";
 import { Separator } from "@/components/ui/separator";
 
@@ -20,28 +19,6 @@ const Program = async ({
 
     // Check if user is subscribed to creator
     const isSubscribed = await checkIfSubscribed(creator.id);
-
-    let isSaved = false;
-
-    if (isSubscribed) {
-        isSaved = await checkIfProgramIsPurchased(params.id);
-    }
-
-    const returnButton = () => {
-        if (!isSubscribed) {
-            return (
-                <Button variant="secondary" size="sm" disabled>Subscribers only</Button>
-            )
-        } else if (!isSaved) {
-            return (
-                <Button variant="systemBlue" size="sm">Save</Button>
-            )
-        } else {
-            return (
-                <Button variant="secondary" size="sm" disabled>Saved</Button>
-            )
-        }
-    }
 
     return (
         <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
@@ -64,7 +41,6 @@ const Program = async ({
                             />
                         </div>
                     )}
-                    {/* {returnButton()} */}
                 </div>
                 <div className="flex flex-col w-full h-full items-start justify-between">
                     <p className="text-primaryText text-lg font-bold">{program?.title}</p>

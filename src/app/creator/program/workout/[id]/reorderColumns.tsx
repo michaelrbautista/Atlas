@@ -1,18 +1,15 @@
 "use client"
 
 import { FetchedExercise } from "@/server-actions/models"
-import { ColumnDef, RowData } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table"
 import React from "react"
-import ProgramExerciseOptionsDialog from "./ProgramExerciseOptionsDialog"
 import PlayExerciseVideoButton from "@/components/exercise/user/PlayExerciseVideoButton"
 import { Menu } from "lucide-react"
 
 export const reorderColumns: ColumnDef<FetchedExercise>[] = [
     {
         header: "Reorder",
-        cell: ({ row }) => {
-            const exercise = row.original
-
+        cell: () => {
             return (
                 <Menu size={20}/>
             )

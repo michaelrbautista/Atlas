@@ -1,6 +1,4 @@
 "use client"
-
-import { FetchedExercise } from "@/server-actions/models"
 import { ColumnDef } from "@tanstack/react-table"
 import React from "react"
 import { Menu } from "lucide-react"
@@ -9,7 +7,7 @@ import { Tables } from "../../../../database.types"
 export const reorderColumns: ColumnDef<Tables<"collections">>[] = [
     {
         header: "Reorder",
-        cell: ({ row }) => {
+        cell: () => {
             return (
                 <Menu size={20}/>
             )

@@ -9,10 +9,7 @@ import { MoreHorizontal } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import { Tables } from "../../../../database.types"
-import EditProgramForm from "@/components/program/creator/EditProgramForm"
-import Image from "next/image"
 import { Table } from "@tanstack/react-table"
-import EditExerciseForm from "@/components/exercise/creator/EditExerciseForm"
 import EditCollectionForm from "@/components/collections/creator/EditCollectionForm"
 
 const CollectionOptionsDialog = ({

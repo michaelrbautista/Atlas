@@ -9,8 +9,7 @@ import Logo from "@/components/misc/Logo";
 import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CreateAccountForm from "@/components/auth/CreateAccountForm";
 import SignInForm from "@/components/auth/SignInForm";
-import { checkAuth, redirectToExplore } from "@/server-actions/auth";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { redirectToExplore } from "@/server-actions/auth";
 import BlurImage from "@/components/misc/BlurImage";
 import { useUserContext } from "@/context";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { Users } from "lucide-react";
-import Image from "next/image";
 import { getSubscription, getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditProfileButton from "@/components/profile/creator/EditProfileButton";

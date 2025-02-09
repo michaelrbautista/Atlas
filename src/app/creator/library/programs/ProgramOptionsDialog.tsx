@@ -11,8 +11,7 @@ import { Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import { Tables } from "../../../../../database.types"

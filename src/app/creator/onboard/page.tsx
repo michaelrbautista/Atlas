@@ -14,7 +14,7 @@ const OnboardCreator = () => {
     const [user, setUser] = useState<Tables<"users"> | null>(null);
     const [stripeAccountId, setStripeAccountId] = useState("");
     const [paymentsEnabled, setPaymentsEnabled] = useState(false);
-    const [subscriptionPriceIsSet, setSubscriptionPriceIsSet] = useState(false);
+    // const [subscriptionPriceIsSet, setSubscriptionPriceIsSet] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +51,7 @@ const OnboardCreator = () => {
                 // Check if stripe account was created
                 if (userData.stripe_account_id) {
                     setStripeAccountId(userData.stripe_account_id);
-                    setSubscriptionPriceIsSet(userData.stripe_price_id != null);
+                    // setSubscriptionPriceIsSet(userData.stripe_price_id != null);
                     checkPaymentsEnabled(userData.stripe_account_id);
                 } else {
                     console.log("Stripe account not created.");
