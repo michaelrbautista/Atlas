@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
 import NewLibraryWorkoutButton from "../../../../components/workout/creator/library/NewLibraryWorkoutButton";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
+import { useColumns } from "./columns";
 
 const LibraryWorkouts = () => {
     const [workouts, setWorkouts] = useState<Tables<"workouts">[]>([]);
@@ -51,6 +51,9 @@ const LibraryWorkouts = () => {
         setWorkouts(newWorkouts);
     }, []);
 
+    const columns = useColumns();
+    const data = useMemo(() => workouts, [workouts]);
+
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
@@ -58,7 +61,7 @@ const LibraryWorkouts = () => {
             </div>
             <DataTable
                 columns={columns}
-                data={workouts}
+                data={data}
                 setData={setWorkouts}
             />
         </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { getCreatorsExercises } from "@/server-actions/exercise";
 import CreateExerciseButton from "@/components/exercise/creator/CreateExerciseButton";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
+import { useColumns } from "./columns";
 
 const LibraryExercises = () => {
     const [exercises, setExercises] = useState<Tables<"exercises">[]>([])
@@ -25,6 +25,9 @@ const LibraryExercises = () => {
         setExercises(newExercises);
     }, []);
 
+    const columns = useColumns();
+    const data = useMemo(() => exercises, [exercises]);
+
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
@@ -32,7 +35,7 @@ const LibraryExercises = () => {
             </div>
             <DataTable
                 columns={columns}
-                data={exercises}
+                data={data}
                 setData={setExercises}
             />
         </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import NewProgramButton from "../../../../components/program/creator/NewProgramButton";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
-import { columns } from "./columns";
+import { useColumns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 
 const LibraryPrograms = () => {
@@ -51,6 +51,9 @@ const LibraryPrograms = () => {
         setPrograms(newPrograms);
     }, []);
 
+    const columns = useColumns();
+    const data = useMemo(() => programs, [programs]);
+
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
@@ -58,7 +61,7 @@ const LibraryPrograms = () => {
             </div>
             <DataTable
                 columns={columns}
-                data={programs}
+                data={data}
                 setData={setPrograms}
             />
         </div>
