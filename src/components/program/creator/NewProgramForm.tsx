@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, memo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { createProgram } from '@/server-actions/program';
 import { Tables } from '../../../../database.types';
@@ -220,4 +220,4 @@ const NewProgramForm = ({
     )
 }
 
-export default NewProgramForm
+export default memo(NewProgramForm)

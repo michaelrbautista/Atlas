@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link"
 import { Tables } from "../../../../../database.types"
 import { Loader2 } from "lucide-react"
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, memo, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -117,4 +115,4 @@ const ExistingWorkoutList = ({
     )
 }
 
-export default ExistingWorkoutList
+export default memo(ExistingWorkoutList)

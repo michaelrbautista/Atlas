@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import MobileDay from "./MobileDay"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, memo } from "react"
 
 const MobileWeek = ({
     week,
@@ -48,4 +48,4 @@ const MobileWeek = ({
         </div>
     )
 }
-export default MobileWeek
+export default memo(MobileWeek)

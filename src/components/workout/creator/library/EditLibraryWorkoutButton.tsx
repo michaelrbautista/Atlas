@@ -8,10 +8,9 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Button } from "../../../ui/button";
 import EditLibraryWorkoutForm from "./EditLibraryWorkoutForm";
-import { FetchedWorkout } from "@/server-actions/models";
 import { Tables } from "../../../../../database.types";
 
 const EditLibraryWorkoutButton = ({
@@ -44,4 +43,4 @@ const EditLibraryWorkoutButton = ({
         </Dialog>
     )
 }
-export default EditLibraryWorkoutButton
+export default memo(EditLibraryWorkoutButton)

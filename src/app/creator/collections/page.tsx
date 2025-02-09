@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
@@ -50,10 +50,10 @@ const Collections = () => {
         getCreatorsPrograms();
     }, []);
 
-    const addCollection = (collection: Tables<"collections">) => {
+    const addCollection = useCallback((collection: Tables<"collections">) => {
         const newCollections = [...collections, collection];
         setCollections(newCollections);
-    }
+    }, []);
 
     return (
         <div className="h-full w-full px-5 py-20 sm:py-10">

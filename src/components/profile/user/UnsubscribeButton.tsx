@@ -3,8 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import { Tables } from "../../../../database.types";
+import { memo, useCallback, useState } from "react";
 
 const UnsubscribeButton = ({
     connectedAccountId,
@@ -69,4 +68,4 @@ const UnsubscribeButton = ({
         </Dialog>
     )
 }
-export default UnsubscribeButton
+export default memo(UnsubscribeButton)

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Skeleton } from "../../ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { Tables } from "../../../../database.types";
@@ -89,4 +89,4 @@ const CollectionList = ({
     }
 }
  
-export default CollectionList;
+export default memo(CollectionList);

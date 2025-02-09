@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, memo } from "react";
 
 const MobileDay = ({
     week,
@@ -17,8 +17,6 @@ const MobileDay = ({
         day: string;
     }>>
 }) => {
-    
-
     return (
         <div 
             className={cn("flex items-center justify-center rounded-full h-10 w-10 p-2 cursor-pointer",
@@ -35,4 +33,4 @@ const MobileDay = ({
         </div>
     )
 }
-export default MobileDay
+export default memo(MobileDay)

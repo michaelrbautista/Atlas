@@ -15,7 +15,7 @@ import { Dialog,
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog"
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Tables } from "../../../../database.types";
 import EditProgramForm from "./EditProgramForm";
 import { deleteProgram } from "@/server-actions/program";
@@ -114,4 +114,4 @@ const ProgramOptionsButton = ({
         </Dialog>
     )
 }
-export default ProgramOptionsButton
+export default memo(ProgramOptionsButton)

@@ -1,4 +1,3 @@
-import { useUserContext } from "@/context";
 import { FetchedCollection } from "@/server-actions/models";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -8,9 +7,9 @@ const CollectionItem = ({
 }: {
     collection: FetchedCollection
 }) => {
-    const {
-        subscriptions
-    } = useUserContext();
+    // const {
+    //     subscriptions
+    // } = useUserContext();
 
     return (
         <Link href={`/collection/${collection.id}`} className="flex flex-row gap-5 py-5 border-b-[1px]">

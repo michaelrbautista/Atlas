@@ -8,27 +8,12 @@ import Bowser from "bowser";
 const MobileBanner = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [ua, setUa] = useState("");
-    const [browser, setBrowser] = useState("");
-    const [os, setOs] = useState("");
-    const [platform, setPlatform] = useState("");
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             const browserInfo = Bowser.getParser(window.navigator.userAgent);
-
             const uaString = browserInfo.getUA();
-            const browserString = browserInfo.getBrowserName();
-            const osString = browserInfo.getOSName();
-            const platformString = browserInfo.getPlatformType();
-
-            console.log(uaString);
-
-            console.log(ua.includes("Instagram"));
-
             setUa(uaString);
-            setBrowser(browserString);
-            setOs(osString);
-            setPlatform(platformString);
         }
     }, []);
 
@@ -47,7 +32,6 @@ const MobileBanner = () => {
                     <div>
                         <p className="font-semibold">Atlas: Health and Fitness</p>
                         <p className="text-xs text-secondaryText">iOS app</p>
-                        {/* <p>{ua}</p> */}
                     </div>
                 </div>
                 <div className="h-full flex items-center">

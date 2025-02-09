@@ -13,11 +13,8 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
-import LogoutButton from "../auth/LogoutButton";
-import { Ellipsis } from "lucide-react";
 import { logout } from "@/server-actions/auth";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";

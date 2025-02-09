@@ -1,31 +1,26 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell, Lock } from "lucide-react";
 import { FetchedProgram } from "@/server-actions/models";
-import { useUserContext } from "@/context";
+import BlurImage from "@/components/misc/BlurImage";
 
 const ProgramItem = ({
     program
 }: {
     program: FetchedProgram
 }) => {
-    const {
-        subscriptions
-    } = useUserContext();
-
     return (
         <Link href={`/program/${program.id}`} className="flex flex-row gap-5 py-5 border-b-[1px]">
             {program.image_url ? (
-                <div className="relative flex items-center w-[120px] h-[120px] shrink-0">
-                    <Image
-                        className="rounded-xl shrink-0"
-                        fill
+                <div className="relative w-[120px] h-[120px] shrink-0">
+                    <BlurImage
+                        alt="profilePicture"
                         src={program.image_url}
-                        alt="programImage"
-                        style={{objectFit: "cover"}}
-                        priority
+                        contentMode="cover"
+                        sizes="120px"
+                        className="rounded-xl"
+                        canSelect={false}
                     />
                 </div>
             ) : (

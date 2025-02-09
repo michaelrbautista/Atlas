@@ -1,7 +1,7 @@
 "use client";
 
 import NewProgramButton from "../../../../components/program/creator/NewProgramButton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
@@ -46,10 +46,10 @@ const LibraryPrograms = () => {
         getTeamPrograms();
     }, []);
 
-    const addProgram = (program: Tables<"programs">) => {
+    const addProgram = useCallback((program: Tables<"programs">) => {
         const newPrograms = [program, ...programs];
         setPrograms(newPrograms);
-    }
+    }, []);
 
     return (
         <div className="flex flex-col gap-5 h-full w-full">

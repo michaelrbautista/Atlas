@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import Week from "./Week"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -67,37 +67,37 @@ const Calendar = ({
         getWorkouts();
     }, [currentPage]);
 
-    const removeWorkout = (workoutId: string) => {
+    const removeWorkout = useCallback((workoutId: string) => {
         setWorkouts(workouts => workouts.filter(workout => workout.id !== workoutId));
-    }
+    }, []);
 
-    const addWorkout = (workout: Tables<"program_workouts">) => {
+    const addWorkout = useCallback((workout: Tables<"program_workouts">) => {
         setWorkouts([...workouts, workout]);
-    }
+    }, []);
 
-    const calculateStartWeek = () => {
+    const calculateStartWeek = useCallback(() => {
         return 1 + (4 * (currentPage - 1));
-    }
+    }, []);
 
-    const calculateEndWeek = () => {
+    const calculateEndWeek = useCallback(() => {
         return 4 + (4 * (currentPage - 1));
-    }
+    }, []);
 
-    const incrementWeeks = () => {
+    const incrementWeeks = useCallback(() => {
         setCurrentPage(currentPage => currentPage + 1);
 
         if (currentPage == pages) {
             setIsEnd(true);
         }
-    }
+    }, []);
 
-    const decrementWeeks = () => {
+    const decrementWeeks = useCallback(() => {
         setCurrentPage(currentPage => currentPage - 1);
 
         if (currentPage < pages) {
             setIsEnd(false);
         }
-    }
+    }, []);
 
     return (
         <div className="flex flex-col pb-10">
@@ -140,4 +140,4 @@ const Calendar = ({
         </div>
     )
 }
-export default Calendar
+export default memo(Calendar)

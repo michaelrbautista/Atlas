@@ -1,18 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger
+    DialogTitle
 } from "../../ui/dialog"
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
-import { Ellipsis, Loader2 } from "lucide-react";
-import { Button } from "../../ui/button";
+import { Loader2 } from "lucide-react";
 import { useToast } from "../../ui/use-toast";
 
 const ExerciseItem = ({
@@ -108,4 +106,4 @@ const ExerciseItem = ({
         )
     }
 }
-export default ExerciseItem
+export default memo(ExerciseItem)

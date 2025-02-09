@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import AddExerciseButton from "@/components/exercise/creator/AddExerciseButton";
 import { Separator } from "@/components/ui/separator";
@@ -56,17 +56,17 @@ const CreatorLibraryWorkout = ({
         getWorkout();
     }, []);
 
-    const updateWorkout = (updatedWorkout: Tables<"workouts">) => {
+    const updateWorkout = useCallback((updatedWorkout: Tables<"workouts">) => {
         setWorkout({
             ...workout!,
             title: updatedWorkout.title,
             description: updatedWorkout.description
         })
-    }
+    }, []);
 
-    const addNewTableExercise = (newExercise: FetchedExercise) => {
+    const addNewTableExercise = useCallback((newExercise: FetchedExercise) => {
         setExercises(exercises => [...exercises, newExercise]);
-    }
+    }, []);
 
     if (isLoading || !workout) {
         return (

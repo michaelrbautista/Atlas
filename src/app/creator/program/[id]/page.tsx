@@ -1,7 +1,7 @@
 "use client";
 
 import { Dumbbell, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
@@ -69,9 +69,9 @@ const ViewCreatorProgram = ({
     }, []);
 
     // TODO: update program function
-    const updateProgram = (newProgram: Tables<"programs">) => {
+    const updateProgram = useCallback((newProgram: Tables<"programs">) => {
         setProgram(newProgram);
-    }
+    }, []);
 
     if (isLoading || !program) {
         return (

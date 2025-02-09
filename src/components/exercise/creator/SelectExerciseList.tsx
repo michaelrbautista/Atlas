@@ -1,11 +1,10 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, memo, useCallback, useEffect, useState } from "react"
 import { Tables } from "../../../../database.types";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import CreateExerciseButton from "./CreateExerciseButton";
 import ExistingExerciseForm from "./ExistingExerciseForm";
 import { useToast } from "../../ui/use-toast";
 import { FetchedExercise } from "@/server-actions/models";
@@ -66,9 +65,9 @@ const SelectExerciseList = ({
         getExercises();
     }, []);
 
-    const selectExercise = (exercise: Tables<"exercises"> | null) => {
+    const selectExercise = useCallback((exercise: Tables<"exercises"> | null) => {
         setSelectedExercise(exercise);
-    }
+    }, []);
 
     if (selectedExercise) {
         return (
@@ -119,4 +118,4 @@ const SelectExerciseList = ({
         )
     }
 }
-export default SelectExerciseList
+export default memo(SelectExerciseList)

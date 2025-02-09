@@ -1,5 +1,6 @@
 import { searchUsers } from "@/server-actions/search"
 import UserItem from "../subscriptions/UserItem";
+import { memo } from "react";
 
 const SearchResultsList = async ({
     query
@@ -23,4 +24,4 @@ const SearchResultsList = async ({
         </div>
     )
 }
-export default SearchResultsList
+export default memo(SearchResultsList)

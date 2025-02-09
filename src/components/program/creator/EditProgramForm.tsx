@@ -8,12 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, memo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { editProgram } from '@/server-actions/program';
 import { Tables } from '../../../../database.types';
 import { useToast } from '../../ui/use-toast';
-import { Separator } from '../../ui/separator';
 import { Switch } from '../../ui/switch';
 
 const EditProgramForm = ({
@@ -221,4 +220,4 @@ const EditProgramForm = ({
     )
 }
 
-export default EditProgramForm
+export default memo(EditProgramForm)

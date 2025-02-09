@@ -9,7 +9,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Tables } from "../../../../database.types";
 import NewCollectionForm from "./NewCollectionForm";
 
@@ -42,4 +42,4 @@ const NewCollectionButton = ({
     );
 }
  
-export default NewCollectionButton;
+export default memo(NewCollectionButton);

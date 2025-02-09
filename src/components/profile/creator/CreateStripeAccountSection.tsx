@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, memo, useState } from "react";
 import { Button, buttonVariants } from "../../ui/button";
 import { Loader2 } from "lucide-react";
 import { updateStripeAccountId } from "@/server-actions/creator";
@@ -60,4 +60,4 @@ const CreateStripeAccountSection = ({
     }
 }
  
-export default CreateStripeAccountSection;
+export default memo(CreateStripeAccountSection);

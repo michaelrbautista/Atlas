@@ -25,7 +25,7 @@ export const columns: ColumnDef<FetchedArticle>[] = [
     },
     {
         id: "view",
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const article = row.original
 
             return (

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import MobileWeek from "./MobileWeek";
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
@@ -75,29 +75,29 @@ const MobileCalendar = ({
         setDayWorkouts(workouts.filter(workout => workout.week == selectedDay.week && workout.day == selectedDay.day))
     }, [selectedDay]);
 
-    const calculateStartWeek = () => {
+    const calculateStartWeek = useCallback(() => {
         return 1 + (4 * (currentPage - 1));
-    }
+    }, []);
 
-    const calculateEndWeek = () => {
+    const calculateEndWeek = useCallback(() => {
         return 4 + (4 * (currentPage - 1));
-    }
+    }, []);
 
-    const incrementWeeks = () => {
+    const incrementWeeks = useCallback(() => {
         setCurrentPage(currentPage => currentPage + 1);
 
         if (currentPage == pages) {
             setIsEnd(true);
         }
-    }
+    }, []);
 
-    const decrementWeeks = () => {
+    const decrementWeeks = useCallback(() => {
         setCurrentPage(currentPage => currentPage - 1);
 
         if (currentPage < pages) {
             setIsEnd(false);
         }
-    }
+    }, []);
 
     return (
         <div className="flex flex-col">
@@ -162,4 +162,4 @@ const MobileCalendar = ({
         </div>
     )
 }
-export default MobileCalendar
+export default memo(MobileCalendar)

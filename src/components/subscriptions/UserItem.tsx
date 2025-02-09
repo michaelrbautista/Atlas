@@ -1,6 +1,4 @@
 import { Users } from "lucide-react"
-import { Tables } from "../../../database.types"
-import Image from "next/image"
 import Link from "next/link"
 import BlurImage from "../misc/BlurImage"
 

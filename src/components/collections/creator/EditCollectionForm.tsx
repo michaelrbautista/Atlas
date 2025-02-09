@@ -8,11 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, memo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Tables } from "../../../../database.types";
-import { createCollection, editCollection } from "@/server-actions/collection";
+import { editCollection } from "@/server-actions/collection";
 import { useToast } from "../../ui/use-toast";
 
 const EditCollectionForm = ({
@@ -116,4 +116,4 @@ const EditCollectionForm = ({
     )
 }
 
-export default EditCollectionForm
+export default memo(EditCollectionForm)

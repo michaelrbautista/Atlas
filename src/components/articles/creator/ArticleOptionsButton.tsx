@@ -33,7 +33,6 @@ const ArticleOptionsButton = ({
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        // className="h-8 w-8 p-0"
                         className={cn("h-8 w-8 p-0", userContext.user?.id != article.created_by?.id && "hidden")}
                     >
                         <MoreHorizontal className="h-4 w-4" />

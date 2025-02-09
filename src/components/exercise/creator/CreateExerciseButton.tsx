@@ -9,7 +9,7 @@ import {
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet"
-import { useState } from "react";
+import { memo, useState } from "react";
 import CreateExerciseForm from "./CreateExerciseForm";
 import { Tables } from "../../../../database.types";
 
@@ -40,4 +40,4 @@ const CreateExerciseButton = ({
         </Sheet>
     )
 }
-export default CreateExerciseButton
+export default memo(CreateExerciseButton)

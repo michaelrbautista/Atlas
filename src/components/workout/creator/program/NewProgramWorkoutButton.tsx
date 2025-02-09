@@ -9,7 +9,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog";
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Button } from "../../../ui/button";
 import { Plus } from "lucide-react";
 import NewProgramWorkoutForm from "./NewProgramWorkoutForm";
@@ -72,4 +72,4 @@ const NewProgramWorkoutButton = ({
         </Dialog>
     )
 }
-export default NewProgramWorkoutButton
+export default memo(NewProgramWorkoutButton)

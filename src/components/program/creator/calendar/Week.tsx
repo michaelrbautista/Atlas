@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils"
 import Day from "./Day"
 import { Tables } from "../../../../../database.types"
+import { memo } from "react";
 
 const Week = ({
     programId,
@@ -52,4 +53,4 @@ const Week = ({
         </div>
     )
 }
-export default Week
+export default memo(Week)

@@ -9,7 +9,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { Tables } from "../../../../../database.types";
 import NewLibraryWorkoutForm from "./NewLibraryWorkoutForm";
@@ -40,4 +40,4 @@ const NewLibraryWorkoutButton = ({
     );
 }
  
-export default NewLibraryWorkoutButton;
+export default memo(NewLibraryWorkoutButton);

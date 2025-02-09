@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddExerciseButton from "@/components/exercise/creator/AddExerciseButton";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
@@ -49,16 +49,16 @@ const CreatorProgramWorkout = ({
         getWorkout();
     }, []);
 
-    const updateWorkout = (updatedWorkout: FetchedWorkout) => {
+    const updateWorkout = useCallback((updatedWorkout: FetchedWorkout) => {
         const oldWorkout = workout
         oldWorkout!.title = updatedWorkout.title
         oldWorkout!.description = updatedWorkout.description
         setWorkout(oldWorkout)
-    }
+    }, []);
 
-    const addNewTableExercise = (exercise: FetchedExercise) => {
+    const addNewTableExercise = useCallback((exercise: FetchedExercise) => {
         setExercises(exercises => [...exercises, exercise]);
-    }
+    }, []);
 
     if (isLoading || !workout) {
         return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import SignInForm from "../../auth/SignInForm";
 import {
     Dialog,
@@ -62,4 +62,4 @@ const LoggedOutPurchaseButton = ({
         </Dialog>
     )
 }
-export default LoggedOutPurchaseButton
+export default memo(LoggedOutPurchaseButton)

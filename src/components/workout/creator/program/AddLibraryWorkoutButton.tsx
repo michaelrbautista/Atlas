@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-import { Dispatch, SetStateAction, useState } from "react";
-import { Label } from "@/components/ui/label";
+import { Dispatch, SetStateAction, memo, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { Loader2 } from "lucide-react";
 import { addLibraryWorkoutToProgram } from "@/server-actions/workout";
@@ -58,4 +56,4 @@ const AddLibraryWorkoutButton = ({
     )
 }
 
-export default AddLibraryWorkoutButton
+export default memo(AddLibraryWorkoutButton)

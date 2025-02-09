@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "../../../../../database.types";
 import { useToast } from "@/components/ui/use-toast";
@@ -46,10 +46,10 @@ const LibraryWorkouts = () => {
         getCreatorsPrograms();
     }, []);
 
-    const addWorkout = (workout: Tables<"workouts">) => {
+    const addWorkout = useCallback((workout: Tables<"workouts">) => {
         const newWorkouts = [workout, ...workouts];
         setWorkouts(newWorkouts);
-    }
+    }, []);
 
     return (
         <div className="flex flex-col gap-5 h-full w-full">

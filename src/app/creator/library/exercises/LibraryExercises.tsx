@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { getCreatorsExercises } from "@/server-actions/exercise";
 import CreateExerciseButton from "@/components/exercise/creator/CreateExerciseButton";
@@ -20,10 +20,10 @@ const LibraryExercises = () => {
         getExercises();
     }, []);
 
-    const addExercise = (exercise: Tables<"exercises">) => {
+    const addExercise = useCallback((exercise: Tables<"exercises">) => {
         const newExercises = [...exercises, exercise];
         setExercises(newExercises);
-    }
+    }, []);
 
     return (
         <div className="flex flex-col gap-5 h-full w-full">

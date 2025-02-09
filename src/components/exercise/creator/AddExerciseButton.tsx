@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { useState } from "react";
-import { Tables } from "../../../../database.types";
+import { memo, useState } from "react";
 import SelectExerciseList from "./SelectExerciseList";
 import { FetchedExercise } from "@/server-actions/models";
 
@@ -42,4 +41,4 @@ const AddExerciseButton = ({
     )
 }
 
-export default AddExerciseButton
+export default memo(AddExerciseButton)

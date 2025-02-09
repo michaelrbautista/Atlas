@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Tables } from "../../../../../database.types"
-import { useState } from "react"
+import { memo, useState } from "react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
@@ -122,4 +122,4 @@ const Day = ({
         )
     }
 }
-export default Day
+export default memo(Day)

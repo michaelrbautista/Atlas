@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
@@ -50,13 +50,13 @@ const CreatorCollection = ({
         getCollectionData();
     }, []);
 
-    const updateCollection = (updatedCollection: Tables<"collections">) => {
+    const updateCollection = useCallback((updatedCollection: Tables<"collections">) => {
         setCollection({
             ...collection!,
             title: updatedCollection.title,
             description: updatedCollection.description
         })
-    }
+    }, []);
 
     if (isLoading || !collection) {
         return (

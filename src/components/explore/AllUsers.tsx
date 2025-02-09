@@ -1,5 +1,6 @@
 import { getAllUsers } from "@/server-actions/user";
 import UserItem from "../subscriptions/UserItem";
+import { memo } from "react";
 
 const AllUsers = async () => {
     const allUsers = await getAllUsers();
@@ -21,4 +22,4 @@ const AllUsers = async () => {
     )
 }
 
-export default AllUsers
+export default memo(AllUsers)

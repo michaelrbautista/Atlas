@@ -1,10 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { logout } from "../../server-actions/auth";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { redirect } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 
 const LogoutButton = () => {
@@ -12,7 +10,7 @@ const LogoutButton = () => {
 
     const { toast } = useToast();
 
-    async function clientLogout() {
+    const clientLogout = useCallback(async () => {
         setIsLoggingOut(true);
 
         const error = await logout();
@@ -24,7 +22,7 @@ const LogoutButton = () => {
             })
             return
         }
-    }
+    }, []);
 
     if (isLoggingOut) {
         return (

@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { memo, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { createAccount, redirectToHome } from "../../server-actions/auth";
 import { CreateAccountSchema } from "@/app/schema";
-import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -184,4 +182,4 @@ const CreateAccountForm = ({
     );
 }
  
-export default CreateAccountForm;
+export default memo(CreateAccountForm);

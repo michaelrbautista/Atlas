@@ -8,7 +8,7 @@ import { Dialog,
     DialogTrigger
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { memo, useState } from "react";
 import NewProgramForm from "./NewProgramForm";
 import { Tables } from "../../../../database.types";
 
@@ -35,4 +35,4 @@ const NewProgramButton = ({
     );
 }
  
-export default NewProgramButton;
+export default memo(NewProgramButton);
