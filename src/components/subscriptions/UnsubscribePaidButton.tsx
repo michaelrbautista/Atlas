@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { Loader2 } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 
-const UnsubscribeButton = ({
+const UnsubscribePaidButton = ({
     connectedAccountId,
     subscriptionId,
     setSubscription
@@ -68,4 +68,4 @@ const UnsubscribeButton = ({
         </Dialog>
     )
 }
-export default memo(UnsubscribeButton)
+export default memo(UnsubscribePaidButton)

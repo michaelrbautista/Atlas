@@ -3,19 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
-import { Input } from '../../ui/input';
-import { Textarea } from '../../ui/textarea';
-import { Button } from "../../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Button } from "../ui/button";
 import { useEffect, useState } from 'react';
 import { Loader2, Pencil } from 'lucide-react';
 
-import { useToast } from '../../ui/use-toast';
-import { Tables } from '../../../../database.types';
+import { useToast } from '../ui/use-toast';
+import { Tables } from '../../../database.types';
 import { UserSchema } from "@/app/schema";
 import { editUser, redirectToProfile } from "@/server-actions/user";
 import Image from "next/image";
-import { Label } from "../../ui/label";
+import { Label } from "../ui/label";
 
 const EditProfileForm = ({
     user

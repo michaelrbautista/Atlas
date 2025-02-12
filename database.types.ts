@@ -287,7 +287,7 @@ export type Database = {
           is_active: boolean
           stripe_customer_id: string | null
           stripe_price_id: string | null
-          stripe_subscription_id: string
+          stripe_subscription_id: string | null
           subscribed_to: string
           subscriber: string
           tier: string
@@ -298,7 +298,7 @@ export type Database = {
           is_active?: boolean
           stripe_customer_id?: string | null
           stripe_price_id?: string | null
-          stripe_subscription_id: string
+          stripe_subscription_id?: string | null
           subscribed_to?: string
           subscriber?: string
           tier?: string
@@ -309,7 +309,7 @@ export type Database = {
           is_active?: boolean
           stripe_customer_id?: string | null
           stripe_price_id?: string | null
-          stripe_subscription_id?: string
+          stripe_subscription_id?: string | null
           subscribed_to?: string
           subscriber?: string
           tier?: string

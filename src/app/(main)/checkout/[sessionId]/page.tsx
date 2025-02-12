@@ -7,7 +7,6 @@ const ReturnPage = async ({
 } : {
     searchParams: Promise<{ [key: string]: string | undefined }>
 }) => {
-    
     const {
         creator = ""
     } = await searchParams

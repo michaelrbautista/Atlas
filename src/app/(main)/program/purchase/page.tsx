@@ -1,4 +1,4 @@
-import StripePaymentForm from "@/components/profile/user/StripePaymentForm"
+import StripePaymentForm from "@/components/subscriptions/StripePaymentForm"
 import { Tables } from "../../../../../database.types"
 import { getProgram } from "@/server-actions/program";
 import { Separator } from "@/components/ui/separator";

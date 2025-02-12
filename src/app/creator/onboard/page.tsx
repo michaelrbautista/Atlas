@@ -1,13 +1,13 @@
 "use client";
 
-import CreateStripeAccountSection from "@/components/profile/creator/CreateStripeAccountSection";
-import StripeOnboardingSection from "@/components/profile/creator/StripeOnboardingSection";
+import CreateStripeAccountSection from "@/components/profile/CreateStripeAccountSection";
+import StripeOnboardingSection from "@/components/profile/StripeOnboardingSection";
 import { useToast } from "@/components/ui/use-toast";
 import { redirectToHome, updateStripePaymentsEnabled } from "@/server-actions/creator";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateSubscriptionPrice from "@/components/profile/creator/CreateSubscriptionPrice";
+import CreateSubscriptionPrice from "@/components/profile/CreateSubscriptionPrice";
 import { Tables } from "../../../../database.types";
 
 const OnboardCreator = () => {

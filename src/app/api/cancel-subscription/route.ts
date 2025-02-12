@@ -23,8 +23,6 @@ export async function DELETE(request: NextRequest) {
             }
         );
 
-        console.log(subscription);
-
         return NextResponse.json({
             subscriptionId: subscription.id
         })

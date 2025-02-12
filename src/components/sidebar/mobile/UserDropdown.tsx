@@ -28,8 +28,6 @@ const UserDropdown = ({
     async function clientLogout() {
         userContext.logout();
 
-        console.log(userContext.user);
-
         const error = await logout();
 
         if (error) {

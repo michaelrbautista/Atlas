@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import { redirectToEditProfile } from "@/server-actions/user";
 
 const EditProfileButton = () => {

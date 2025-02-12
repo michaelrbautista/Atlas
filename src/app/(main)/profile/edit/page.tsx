@@ -1,4 +1,4 @@
-import EditProfileForm from "@/components/profile/creator/EditProfileForm"
+import EditProfileForm from "@/components/profile/EditProfileForm"
 import { getCurrentUser } from "@/server-actions/user"
 
 const page = async () => {

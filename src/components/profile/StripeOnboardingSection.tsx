@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, buttonVariants } from "../../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 

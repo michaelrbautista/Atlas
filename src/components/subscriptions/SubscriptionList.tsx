@@ -1,4 +1,4 @@
-import { getAllSubscriptions } from "@/server-actions/user";
+import { getAllSubscriptions } from "@/server-actions/subscription";
 import UserItem from "./UserItem";
 
 const SubscriptionList = async () => {

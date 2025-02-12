@@ -1,14 +1,16 @@
 "use client";
 
-import SubscriptionItem from "@/components/profile/user/SubscriptionItem"
-import { checkIfPreviouslySubscribed, getCurrentUser, getUserFromUsername } from "@/server-actions/user"
+import SubscriptionItem from "@/components/subscriptions/SubscriptionItem"
+import { checkPreviousSubscription } from "@/server-actions/subscription"
+import { getCurrentUser, getUserFromUsername } from "@/server-actions/user"
 import { ChevronLeft, Users } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../../database.types";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/misc/Spinner";
-import StripePaymentForm from "@/components/profile/user/StripePaymentForm";
+import StripePaymentForm from "@/components/subscriptions/StripePaymentForm";
+import FreeSubscriptionItem from "@/components/subscriptions/FreeSubscriptionItem";
 
 const Page = ({ 
     params
@@ -21,7 +23,7 @@ const Page = ({
     const [plan, setPlan] = useState("");
     const [subscriptionPrice, setSubscriptionPrice] = useState(0);
 
-    const [existingCustomerId, setExistingCustomerId] = useState<string | null>(null);
+    const [previousSubscription, setPreviousSubscription] = useState<Tables<"subscriptions"> | null>(null);
 
     useEffect(() => {
         const getUser = async () => {
@@ -51,13 +53,11 @@ const Page = ({
             }
 
             // Check if current user had previously subscribed
-            const previousCustomerId = await checkIfPreviouslySubscribed(data.id);
+            const previousSubscription = await checkPreviousSubscription(data.id);
 
-            if (previousCustomerId) {
-                setExistingCustomerId(previousCustomerId);
+            if (previousSubscription) {
+                setPreviousSubscription(previousSubscription);
             }
-
-            console.log(previousCustomerId);
         }
 
         getUser();
@@ -117,14 +117,20 @@ const Page = ({
                         <h1 className="text-primaryText text-3xl font-bold">
                             Choose a plan
                         </h1>
-                        <div className="flex w-full justify-center">
-                            {creator.stripe_price_id && (
+                        {creator.stripe_price_id && (
+                            <div className="flex flex-col sm:flex-row gap-5 min-h-[300px] items-center sm:justify-center">
                                 <SubscriptionItem
                                     setPlan={setPlan}
                                     subscriptionPrice={subscriptionPrice}
                                 />
-                            )}
-                        </div>
+                                <FreeSubscriptionItem
+                                    isSubscribed={previousSubscription?.tier == "free" && previousSubscription.is_active}
+                                    subscriber={currentUser.id}
+                                    subscribed_to={creator.id}
+                                    subscribed_to_username={creator.username}
+                                />
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex flex-col gap-10 w-full items-center">
@@ -150,7 +156,7 @@ const Page = ({
                                 creatorUsername={creator.username}
                                 connectedAccountId={creator.stripe_account_id!}
                                 userId={currentUser.id}
-                                customerId={existingCustomerId ?? undefined}
+                                customerId={previousSubscription?.stripe_customer_id ?? undefined}
                                 customerEmail={currentUser.email}
                             />
                         </div>

@@ -1,20 +1,22 @@
 "use client";
 
 import { Users } from "lucide-react";
-import { getSubscription, getUserFromUsername } from "@/server-actions/user";
+import { getUserFromUsername } from "@/server-actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditProfileButton from "@/components/profile/creator/EditProfileButton";
+import EditProfileButton from "@/components/profile/EditProfileButton";
 import CreatorProgramList from "@/components/program/creator/CreatorProgramList";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tables } from "../../../../database.types";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/context";
 import { Spinner } from "@/components/misc/Spinner";
-import SubscribeButton from "@/components/profile/user/SubscribeButton";
-import UnsubscribeButton from "@/components/profile/user/UnsubscribeButton";
-import LoggedOutSubscribeButton from "@/components/profile/user/LoggedOutSubscribeButton";
+import SubscribeButton from "@/components/subscriptions/SubscribeButton";
+import UnsubscribePaidButton from "@/components/subscriptions/UnsubscribePaidButton";
+import LoggedOutSubscribeButton from "@/components/subscriptions/LoggedOutSubscribeButton";
 import CollectionList from "@/components/collections/user/CollectionList";
 import BlurImage from "@/components/misc/BlurImage";
+import UnsubscribeFreeButton from "@/components/subscriptions/UnsubscribeFreeButton";
+import { getSubscription } from "@/server-actions/subscription";
 
 const User = ({ 
     params
@@ -22,7 +24,7 @@ const User = ({
     params: { username: string }
 }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState<Tables<"users"> | null>(null);
+    const [creator, setCreator] = useState<Tables<"users"> | null>(null);
     const [userSubscription, setUserSubscription] = useState<Tables<"subscriptions"> | undefined>(undefined);
 
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
@@ -39,7 +41,7 @@ const User = ({
                 return
             }
 
-            setUser(creatorData);
+            setCreator(creatorData);
 
             // Get profile picture
             const supabase = createClient();
@@ -52,7 +54,7 @@ const User = ({
                 setProfilePictureUrl(data.publicUrl);
             }
 
-            if (userContext.user?.id && userContext.user?.id != creatorData.id && userContext.user?.stripe_price_id) {
+            if (userContext.user?.id && userContext.user?.id != creatorData.id && creatorData.stripe_price_id) {
                 // Get subscription
                 const { data: subscriptionData, error: subscriptionError } = await getSubscription(creatorData.id);
 
@@ -67,19 +69,37 @@ const User = ({
             setIsLoading(false);
         }
 
-        getCreator();
+        if (userContext.user) {
+            getCreator();
+        }
     }, [userContext.user]);
 
+    const setSubscriptionAfterUnsubscribe = useCallback(() => {
+        setUserSubscription(undefined);
+    }, [])
+
     const getSubscribeButton = () => {
-        if (userSubscription?.is_active && user?.stripe_account_id) {
+        if (userSubscription?.tier == "free" && userSubscription?.is_active) {
+            // Free, active subscription
             return (
-                <UnsubscribeButton
-                    connectedAccountId={user.stripe_account_id}
+                <UnsubscribeFreeButton
+                    username={params.username}
+                    subscriber={userSubscription.subscriber}
+                    subscribed_to={userSubscription.subscribed_to}
+                    setSubscription={setSubscriptionAfterUnsubscribe}
+                />
+            )
+        } else if (userSubscription?.tier == "monthly" && userSubscription?.is_active && creator?.stripe_price_id && userSubscription?.stripe_subscription_id) {
+            // Paid, active subscription
+            return (
+                <UnsubscribePaidButton
+                    connectedAccountId={creator?.stripe_price_id}
                     subscriptionId={userSubscription.stripe_subscription_id}
-                    setSubscription={() => {setUserSubscription(undefined)}}
+                    setSubscription={setSubscriptionAfterUnsubscribe}
                 />
             )
         } else if (userContext.user) {
+            // Not subscribed
             return (
                 <SubscribeButton
                     username={params.username}
@@ -92,7 +112,7 @@ const User = ({
         }
     }
 
-    if (isLoading || !user || userContext.isLoading) {
+    if (isLoading || !creator || userContext.isLoading) {
         return (
             <div className="flex flex-col items-center justify-center h-full w-full pb-10 bg-systemBackground">
                 <Spinner></Spinner>
@@ -102,7 +122,7 @@ const User = ({
         return (
             <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 w-full">
-                    {(!user.profile_picture_url) ? (
+                    {(!creator.profile_picture_url) ? (
                         // Replace with placeholder image
                         <div className="bg-systemGray5 shrink-0 h-20 w-20 sm:h-28 sm:w-28 rounded-full flex items-center justify-center">
                             <Users className="text-secondaryText" />
@@ -121,28 +141,28 @@ const User = ({
                     )}
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col w-full">
-                            <p className="text-primaryText text-lg font-bold">{user.full_name}</p>
-                            <p className="text-secondaryText text-base">@{user.username}</p>
+                            <p className="text-primaryText text-lg font-bold">{creator.full_name}</p>
+                            <p className="text-secondaryText text-base">@{creator.username}</p>
                         </div>
-                        <p className="text-primaryText text-base">{user.bio}</p>
+                        <p className="text-primaryText text-base">{creator.bio}</p>
                     </div>
                 </div>
-                {userContext.user?.id == user.id ? (
+                {userContext.user?.id == creator.id ? (
                     <EditProfileButton />
-                ) : user.stripe_price_id && (
+                ) : creator.stripe_price_id && (
                     getSubscribeButton()  
                 )}
-                {user.stripe_price_id && (
+                {creator.stripe_price_id && (
                     <Tabs defaultValue="programs">
                         <TabsList className="w-full">
                             <TabsTrigger className="w-full" value="programs">Programs</TabsTrigger>
                             <TabsTrigger className="w-full" value="collections">Collections</TabsTrigger>
                         </TabsList>
                         <TabsContent value="programs">
-                            <CreatorProgramList user={user} />
+                            <CreatorProgramList user={creator} />
                         </TabsContent>
                         <TabsContent value="collections">
-                            <CollectionList user={user} />
+                            <CollectionList user={creator} />
                         </TabsContent>
                     </Tabs>
                 )}

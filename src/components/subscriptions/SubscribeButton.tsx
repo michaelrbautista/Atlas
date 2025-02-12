@@ -1,7 +1,7 @@
 "use client";
 
-import { redirectToSubscribe } from "@/server-actions/user";
-import { Button } from "../../ui/button";
+import { redirectToSubscribe } from "@/server-actions/subscription";
+import { Button } from "../ui/button";
 
 const SubscribeButton = ({
     username
