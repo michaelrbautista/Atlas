@@ -1,4 +1,3 @@
-import convertToSubcurrency from "@/utils/stripe/convertToSubcurrency";
 import { NextRequest, NextResponse } from "next/server";
 
 let stripeSecretKey;

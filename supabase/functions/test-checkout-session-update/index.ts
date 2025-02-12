@@ -2,6 +2,8 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
+// supabase functions deploy test-checkout-session-update
+
 // Setup type definitions for built-in Supabase Runtime APIs
 import  "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
@@ -95,10 +97,14 @@ Deno.serve(async (request) => {
                         const { error } = await supabaseClient
                             .from("subscriptions")
                             .update({
-                                "stripe_subscription_id": session?.subscription,
-                                "is_active": true
+                                "tier": "monthly",
+                                "stripe_price_id": priceId,
+                                "stripe_customer_id": customerId,
+                                "is_active": true,
+                                "stripe_subscription_id": session?.subscription
                             })
-                            .eq("stripe_customer_id", customerId)
+                            .eq("subscriber", requestMetadata.userId)
+                            .eq("subscribed_to", requestMetadata.creatorId)
 
                         if (error) {
                             throw error;

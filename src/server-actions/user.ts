@@ -40,6 +40,7 @@ export const checkIfSubscribed = async (creatorId: string) => {
         .select()
         .eq("subscriber", user.id)
         .eq("subscribed_to", creatorId)
+        .eq("is_active", true)
 
     if (error && !data) {
         console.log(error)
