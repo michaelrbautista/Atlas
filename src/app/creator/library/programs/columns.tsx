@@ -27,7 +27,7 @@ export const useColumns = () => {
                 return (
                     (!program.image_url) ? (
                         // Replace with placeholder image
-                        <div className="bg-systemGray5 shrink-0 h-[60px] w-[60px] rounded-xl flex items-center justify-center">
+                        <div className="bg-systemGray5 shrink-0 h-[80px] w-[80px] rounded-xl flex items-center justify-center">
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
