@@ -8,23 +8,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
-import { Dispatch, SetStateAction, memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { editProgram } from '@/server-actions/program';
+import { editProgram, redirectToProgram } from '@/server-actions/program';
 import { Tables } from '../../../../database.types';
 import { useToast } from '../../ui/use-toast';
 import { Switch } from '../../ui/switch';
 
-const EditProgramForm = ({
-    program,
-    updateProgram,
-    setIsOpen
+const EditProgramForm = ({ 
+    program
 }: {
-    program: Tables<"programs">,
-    updateProgram: (program: Tables<"programs">) => void
-    setIsOpen: Dispatch<SetStateAction<boolean>>
+    program: Tables<"programs">
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     const { toast } = useToast();
 
@@ -32,17 +28,18 @@ const EditProgramForm = ({
         resolver: zodResolver(ProgramSchema),
         defaultValues: {
             image: new File([], ""),
-            title: program.title,
-            description: program.description ?? "",
-            weeks: program.weeks,
-            free: program.free,
-            price: program.price,
-            private: program.private
+            title: program ? program.title : "",
+            description: program?.description ? program.description : "",
+            weeks: program ? program.weeks : 0,
+            free: program ? program.free : false,
+            paidSubscribersOnly: !program?.price,
+            price: program ? program.price : 0,
+            private: program ? program.private : false
         }
     })
 
     async function onSubmit(data: z.infer<typeof ProgramSchema>) {
-        setIsLoading(true);
+        setIsSaving(true);
 
         const formData = new FormData();
         
@@ -68,6 +65,11 @@ const EditProgramForm = ({
             formData.append("price", data.price.toString());
         }
 
+        if (!program) {
+            console.log("Couldn't get program.")
+            return
+        }
+
         let { data: programData, error: programError } = await editProgram(program, formData);
 
         if (programError && !programData) {
@@ -78,8 +80,10 @@ const EditProgramForm = ({
             return
         }
 
-        updateProgram(programData!);
-        setIsOpen(false);
+        // Redirect to new program
+        if (programData) {
+            redirectToProgram(programData.id);
+        }
     }
 
     return (
@@ -175,44 +179,60 @@ const EditProgramForm = ({
                         )}
                     />
                     <FormField
-                        control={form.control}
-                        name="free"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
-                                <FormLabel className="mt-2">Free</FormLabel>
-                                <FormControl>
-                                    <Switch
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* <FormField
-                        control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className={form.getValues("free") ? "text-secondaryText" : ""}>Price ($)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        id="price"
-                                        name="price"
-                                        type="number"
-                                        step={0.01}
-                                        disabled={form.getValues("free")}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
-                    <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
-                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {!isLoading && "Save program"}
+                    control={form.control}
+                    name="free"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                            <FormLabel className="mt-2">Free</FormLabel>
+                            <FormControl>
+                                <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="paidSubscribersOnly"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                            <FormLabel className="mt-2">Subscribers only</FormLabel>
+                            <FormControl>
+                                <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={(form.getValues("free") || form.getValues("paidSubscribersOnly")) ? "text-secondaryText" : ""}>One-time payment price ($)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    id="price"
+                                    name="price"
+                                    type="number"
+                                    step={0.01}
+                                    disabled={(form.getValues("free") || form.getValues("paidSubscribersOnly"))}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                    <Button type="submit" variant={isSaving ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isSaving}>
+                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {!isSaving && "Save program"}
                     </Button>
                 </div>
             </form>

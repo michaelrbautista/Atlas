@@ -8,20 +8,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
-import { Dispatch, SetStateAction, memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { createProgram } from '@/server-actions/program';
-import { Tables } from '../../../../database.types';
+import { createProgram, redirectToProgram } from '@/server-actions/program';
 import { useToast } from '../../ui/use-toast';
 import { Switch } from '../../ui/switch';
 
-const NewProgramForm = ({
-    setIsOpen,
-    addProgram
-}: {
-    setIsOpen: Dispatch<SetStateAction<boolean>>,
-    addProgram: (program: Tables<"programs">) => void
-}) => {
+const NewProgramForm = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { toast } = useToast();
@@ -34,7 +27,8 @@ const NewProgramForm = ({
             description: "",
             weeks: 1,
             free: false,
-            price: 1.00,
+            paidSubscribersOnly: false,
+            price: 0,
             private: false
         }
     })
@@ -62,11 +56,13 @@ const NewProgramForm = ({
 
         formData.append("free", data.free.toString());
 
-        // if (data.price) {
-        //     formData.append("price", data.price.toString());
-        // }
+        if (!data.paidSubscribersOnly && !data.free && data.price && data.price > 0) {
+            formData.append("price", data.price.toString());
+        }
 
         formData.append("private", data.private.toString());
+
+        console.log(formData.get("price"));
 
         let { data: programData, error: programError } = await createProgram(formData);
 
@@ -78,8 +74,10 @@ const NewProgramForm = ({
             return
         }
 
-        setIsOpen(false);
-        addProgram(programData!);
+        // Redirect to new program
+        if (programData) {
+            redirectToProgram(programData.id);
+        }
     }
 
     return (
@@ -190,12 +188,28 @@ const NewProgramForm = ({
                             </FormItem>
                         )}
                     />
-                    {/* <FormField
+                    <FormField
+                        control={form.control}
+                        name="paidSubscribersOnly"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row justify-between items-center rounded-lg border p-4 pt-2">
+                                <FormLabel className="mt-2">Subscribers only</FormLabel>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
                         control={form.control}
                         name="price"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className={form.getValues("free") ? "text-secondaryText" : ""}>Price ($)</FormLabel>
+                                <FormLabel className={(form.getValues("free") || form.getValues("paidSubscribersOnly")) ? "text-secondaryText" : ""}>One-time payment price ($)</FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
@@ -203,14 +217,14 @@ const NewProgramForm = ({
                                         name="price"
                                         type="number"
                                         step={0.01}
-                                        disabled={form.getValues("free")}
+                                        disabled={(form.getValues("free") || form.getValues("paidSubscribersOnly"))}
                                     />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
-                    /> */}
-                    <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
+                    />
+                    <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3 shrink-0" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {!isLoading && "Create program"}
                     </Button>

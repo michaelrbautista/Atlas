@@ -7,22 +7,24 @@ import {
 } from "@stripe/react-stripe-js";
 import { useCallback } from "react";
 
-const StripePaymentForm = ({
-    priceId,
+const OneTimePaymentForm = ({
+    connectedAccountId,
     creatorId,
     creatorUsername,
-    connectedAccountId,
     userId,
-    customerId,
-    customerEmail
+    userEmail,
+    price,
+    programId,
+    programTitle
 }: {
-    priceId: string,
+    connectedAccountId: string,
     creatorId: string,
     creatorUsername: string,
-    connectedAccountId: string,
     userId: string,
-    customerId?: string,
-    customerEmail: string
+    userEmail: string,
+    price: number,
+    programId: string,
+    programTitle: string
 }) => {
     const stripePromise = loadStripe(
         process.env.NODE_ENV === "production" ? 
@@ -40,13 +42,15 @@ const StripePaymentForm = ({
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                priceId: priceId,
+                destinationAccountId: connectedAccountId,
                 creatorId: creatorId,
                 creatorUsername: creatorUsername,
                 userId: userId,
-                destinationAccountId: connectedAccountId,
-                customerId: customerId,
-                customerEmail: customerEmail
+                userEmail: userEmail,
+                isOneTime: true,
+                price: price,
+                programId: programId,
+                programTitle: programTitle
             })
         })
         .then((res) => res.json())
@@ -66,5 +70,4 @@ const StripePaymentForm = ({
         </div>
     )
 }
-
-export default StripePaymentForm
+export default OneTimePaymentForm

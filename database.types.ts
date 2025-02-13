@@ -185,13 +185,12 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string
-          currency: string
           description: string | null
           free: boolean
           id: string
           image_path: string | null
           image_url: string | null
-          price: number
+          price: number | null
           private: boolean
           title: string
           weeks: number
@@ -199,13 +198,12 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string
-          currency?: string
           description?: string | null
           free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
-          price?: number
+          price?: number | null
           private?: boolean
           title: string
           weeks?: number
@@ -213,13 +211,12 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string
-          currency?: string
           description?: string | null
           free?: boolean
           id?: string
           image_path?: string | null
           image_url?: string | null
-          price?: number
+          price?: number | null
           private?: boolean
           title?: string
           weeks?: number
@@ -241,6 +238,7 @@ export type Database = {
           id: string
           program_id: string
           purchased_by: string
+          stripe_checkout_session_id: string | null
         }
         Insert: {
           created_at?: string
@@ -248,6 +246,7 @@ export type Database = {
           id?: string
           program_id?: string
           purchased_by?: string
+          stripe_checkout_session_id?: string | null
         }
         Update: {
           created_at?: string
@@ -255,6 +254,7 @@ export type Database = {
           id?: string
           program_id?: string
           purchased_by?: string
+          stripe_checkout_session_id?: string | null
         }
         Relationships: [
           {

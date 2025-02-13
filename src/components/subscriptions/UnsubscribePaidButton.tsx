@@ -29,7 +29,12 @@ const UnsubscribePaidButton = ({
             })
         })
         .then((res) => res.json())
-        .then((data) => data.subscriptionId);
+        .then((data) => {
+            data.subscriptionId;
+            if (!data.error) {
+                setSubscription();
+            }
+        });
     }, []);
 
     return (
@@ -47,7 +52,6 @@ const UnsubscribePaidButton = ({
                         onClick={async () => {
                             setIsLoading(true);
                             await unsubscribe(connectedAccountId, subscriptionId);
-                            setSubscription();
                             setIsOpen(false);
                         }}
                     >

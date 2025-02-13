@@ -89,11 +89,11 @@ const User = ({
                     setSubscription={setSubscriptionAfterUnsubscribe}
                 />
             )
-        } else if (userSubscription?.tier == "monthly" && userSubscription?.is_active && creator?.stripe_price_id && userSubscription?.stripe_subscription_id) {
+        } else if (userSubscription?.tier == "monthly" && userSubscription?.is_active && creator?.stripe_account_id && userSubscription?.stripe_subscription_id) {
             // Paid, active subscription
             return (
                 <UnsubscribePaidButton
-                    connectedAccountId={creator?.stripe_price_id}
+                    connectedAccountId={creator.stripe_account_id}
                     subscriptionId={userSubscription.stripe_subscription_id}
                     setSubscription={setSubscriptionAfterUnsubscribe}
                 />

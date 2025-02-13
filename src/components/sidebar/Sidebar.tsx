@@ -34,10 +34,10 @@ const userRoutes = [
         label: "Subscriptions",
         href: "/subscriptions"
     },
-    // {
-    //     label: "Programs",
-    //     href: "/programs"
-    // }
+    {
+        label: "Programs",
+        href: "/programs"
+    }
 ]
 
 const creatorRoutes = [

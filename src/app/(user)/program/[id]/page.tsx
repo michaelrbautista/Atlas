@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { Dumbbell } from "lucide-react";
 import MobileCalendar from "@/components/program/user/calendar/MobileCalendar";
-import { getProgram } from "@/server-actions/program";
+import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
 import { checkIfSubscribed, getUser } from "@/server-actions/user";
 import { InfoList } from "@/components/program/user/InfoList";
 import { Separator } from "@/components/ui/separator";
+import PurchaseProgramButton from "@/components/program/user/PurchaseProgramButton";
 
 const Program = async ({ 
     params
@@ -19,6 +20,34 @@ const Program = async ({
 
     // Check if user is subscribed to creator
     const isSubscribed = await checkIfSubscribed(creator.id);
+
+    let isPurchased = false;
+    if (!isSubscribed) {
+        const checkPurchase = await checkIfProgramIsPurchased(program.id);
+        isPurchased = checkPurchase;
+    }
+
+    const returnContentOrButton = () => {
+        if (program.free || isSubscribed || isPurchased) {
+            return (
+                <div>
+                    <Separator />
+                    <MobileCalendar
+                        programId={program.id}
+                        weeks={program.weeks}
+                        pages={Math.floor(program.weeks / 4) + 1}
+                    />
+                </div>
+            )
+        } else if (!isSubscribed && program.price) {
+            return (
+                <PurchaseProgramButton
+                    program={program}
+                    creator={creator}
+                />
+            )
+        }
+    }
 
     return (
         <div className="flex flex-col w-full max-w-lg px-5 pt-10 pb-20 gap-10 sm:gap-10">
@@ -65,16 +94,7 @@ const Program = async ({
                         ]}
                     />
                 </div>
-                {(isSubscribed || program?.free) && (
-                    <div>
-                        <Separator />
-                        <MobileCalendar
-                            programId={program.id}
-                            weeks={program.weeks}
-                            pages={Math.floor(program.weeks / 4) + 1}
-                        />
-                    </div>
-                )}
+                {returnContentOrButton()}
             </div>
         </div>
     )

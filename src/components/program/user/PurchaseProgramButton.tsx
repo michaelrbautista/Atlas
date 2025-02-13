@@ -27,27 +27,23 @@ const PurchaseProgramButton = ({
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             </Button>
         )
+    } else if (contextUser && program.price) {
+        return (
+            <Button variant="systemBlue" size="sm" className="shrink-0" asChild>
+                <Link href={{
+                    pathname: "purchase",
+                    query: {
+                        programId: program.id
+                    }
+                }}>
+                    Buy - {formatter.format(program.price)}
+                </Link>
+            </Button>
+        )
     } else {
-        if (contextUser) {
-            return (
-                <Button variant="systemBlue" size="sm" asChild>
-                    <Link href={{
-                        pathname: "purchase",
-                        query: {
-                            programId: program.id,
-                            creatorId: creator.stripe_account_id,
-                            userId: contextUser.id
-                        }
-                    }}>
-                        Buy - {formatter.format(program.price)}
-                    </Link>
-                </Button>
-            )
-        } else {
-            return (
-                <LoggedOutPurchaseButton program={program} />
-            )
-        }
+        return (
+            <LoggedOutPurchaseButton program={program} />
+        )
     }
 }
 export default PurchaseProgramButton

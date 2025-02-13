@@ -69,9 +69,19 @@ export const useColumns = () => {
             header: "Price",
             cell: ({ row }) => {
                 const program = row.original
+
+                const checkPrice = () => {
+                    if (program.free) {
+                        return ""
+                    } else if (program.price) {
+                        return program.price
+                    } else {
+                        return "Subscribers"
+                    }
+                }
     
                 return (
-                    <p>{!program.free ? program.price : ""}</p>
+                    <p>{checkPrice()}</p>
                 )
             }
         },

@@ -15,7 +15,7 @@ import { Dialog,
 } from "@/components/ui/dialog"
 import React, { useState } from "react"
 import { Tables } from "../../../../../database.types"
-import EditProgramForm from "@/components/program/creator/EditProgramForm"
+import { redirectToEditProgram } from "@/server-actions/program"
 
 const ProgramOptionsDialog = ({
     program,
@@ -24,7 +24,6 @@ const ProgramOptionsDialog = ({
     program: Tables<"programs">,
     table: Table<Tables<"programs">>
 }) => {
-    const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -40,8 +39,7 @@ const ProgramOptionsDialog = ({
                         className="w-full"
                         onClick={(e) => {
                             e.stopPropagation();
-                            setDialogType("edit");
-                            setIsOpen(true);
+                            redirectToEditProgram(program.id);
                         }}
                     >
                         Edit program
@@ -50,7 +48,6 @@ const ProgramOptionsDialog = ({
                         className="w-full"
                         onClick={(e) => {
                             e.stopPropagation();
-                            setDialogType("delete");
                             setIsOpen(true);
                         }}
                     >
@@ -60,33 +57,21 @@ const ProgramOptionsDialog = ({
             </DropdownMenu>
             <DialogContent>
                 <DialogHeader>
-                    {dialogType == "edit" ? (
-                        <DialogTitle>Edit Program</DialogTitle>
-                    ) : (
-                        <DialogTitle>Delete Program</DialogTitle>
-                    )}
+                    <DialogTitle>Delete Program</DialogTitle>
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
-                {dialogType == "edit" ? (
-                    <EditProgramForm
-                        program={program}
-                        updateProgram={table.options.meta?.updateProgram!}
-                        setIsOpen={setIsOpen}
-                    />
-                ) : (
-                    <div className="flex flex-col gap-5 pt-5">
-                        <p>Are you sure you want to delete this program?</p>
-                        <Button
-                            onClick={() => {
-                                table.options.meta?.deleteProgram!(program);
-                                setIsOpen(false);
-                            }}
-                            variant="destructive"
-                        >
-                            Delete
-                        </Button>
-                    </div>
-                )}
+                <div className="flex flex-col gap-5 pt-5">
+                    <p>Are you sure you want to delete this program?</p>
+                    <Button
+                        onClick={() => {
+                            table.options.meta?.deleteProgram!(program);
+                            setIsOpen(false);
+                        }}
+                        variant="destructive"
+                    >
+                        Delete
+                    </Button>
+                </div>
             </DialogContent>
         </Dialog>
     )

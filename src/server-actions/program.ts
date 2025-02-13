@@ -5,6 +5,18 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tables } from "../../database.types";
 
+export const redirectToEditProgram = async (id: string) => {
+    redirect(`/creator/program/edit/${id}`);
+}
+
+export const redirectToNewProgram = async () => {
+    redirect(`/creator/program/new`);
+}
+
+export const redirectToProgram = async (id: string) => {
+    redirect(`/creator/program/${id}`);
+}
+
 export async function saveProgram(programId: string, createdBy: string) {
     const supabase = createClient();
 
@@ -105,8 +117,6 @@ export async function checkIfProgramIsPurchased(programId: string) {
     if (programsError && !programsData) {
         throw new Error(programsError.message)
     }
-
-    console.log(programsData);
 
     if (programsData.length > 0) {
         return true
@@ -408,7 +418,7 @@ export async function createProgram(formData: FormData) {
             weeks: parseInt(formData.get("weeks") as string),
             private: (formData.get("free") === "true"),
             free: (formData.get("free") === "true"),
-            // price: parseFloat(formData.get("price") as string),
+            price: parseFloat(formData.get("price") as string),
             image_url: storageUrl.publicUrl,
             image_path: storageData.path
         }
@@ -419,7 +429,7 @@ export async function createProgram(formData: FormData) {
             weeks: parseInt(formData.get("weeks") as string),
             private: (formData.get("free") === "true"),
             free: (formData.get("free") === "true"),
-            // price: parseFloat(formData.get("price") as string),
+            price: parseFloat(formData.get("price") as string),
         }
     }
 

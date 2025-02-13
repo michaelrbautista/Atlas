@@ -16,7 +16,7 @@ import SignInButton from "../../auth/SignInButton";
 import CreateAccountButton from "../../auth/CreateAccountButton";
 import { useUserContext } from "@/context";
 import UserDropdown from "./UserDropdown";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const anonRoutes = [
     // {
@@ -41,6 +41,10 @@ const userRoutes = [
     {
         label:"Subscriptions",
         href: "/subscriptions"
+    },
+    {
+        label: "Programs",
+        href: "/programs"
     }
 ]
 

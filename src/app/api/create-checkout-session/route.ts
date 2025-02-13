@@ -1,3 +1,4 @@
+import convertToSubcurrency from "@/utils/stripe/convertToSubcurrency";
 import { NextRequest, NextResponse } from "next/server";
 
 let stripeSecretKey;
@@ -14,18 +15,55 @@ export async function POST(request: NextRequest) {
     try {
         // Subscription
         const {
-            priceId,
+            // Both payment methods
+            destinationAccountId,
             creatorId,
             creatorUsername,
             userId,
-            destinationAccountId,
-            customerId,
-            customerEmail
+            userEmail,
+            // One time payment
+            isOneTime,
+            price,
+            programId,
+            programTitle,
+            // Subscription
+            priceId,
+            customerId
         } = await request.json();
 
         let checkoutSessionBody;
 
-        if (customerId) {
+        if (isOneTime) {
+            console.log("ONE TIME PAYMENT");
+            checkoutSessionBody = {
+                customer_email: userEmail,
+                line_items: [
+                    {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: programTitle,
+                        },
+                        unit_amount: convertToSubcurrency(price),
+                    },
+                    quantity: 1,
+                    },
+                ],
+                payment_intent_data: {
+                    application_fee_amount: Math.round(convertToSubcurrency(price) * .1),
+                },
+                mode: "payment",
+                ui_mode: "embedded",
+                metadata: {
+                    paymentType: "one-time",
+                    programId: programId,
+                    creatorId: creatorId,
+                    userId: userId
+                },
+                return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?program=${programId}`
+            }
+        } else if (customerId) {
+            console.log("SUBSCRIPTION");
             checkoutSessionBody = {
                 payment_method_types: ["card"],
                 customer: customerId,
@@ -38,15 +76,17 @@ export async function POST(request: NextRequest) {
                 mode: "subscription",
                 ui_mode: "embedded",
                 metadata: {
+                    paymentType: "subscription",
                     creatorId: creatorId,
                     userId: userId
                 },
                 return_url: `${request.headers.get("origin")}/checkout/{CHECKOUT_SESSION_ID}?creator=${creatorUsername}`
             }
         } else {
+            console.log("SUBSCRIPTION");
             checkoutSessionBody = {
                 payment_method_types: ["card"],
-                customer_email: customerEmail,
+                customer_email: userEmail,
                 line_items: [
                     {
                         price: priceId,
@@ -56,6 +96,7 @@ export async function POST(request: NextRequest) {
                 mode: "subscription",
                 ui_mode: "embedded",
                 metadata: {
+                    paymentType: "subscription",
                     creatorId: creatorId,
                     userId: userId
                 },

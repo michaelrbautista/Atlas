@@ -29,10 +29,10 @@ export async function POST(request: NextRequest) {
             },
         });
 
-          return NextResponse.json({
+        return NextResponse.json({
             paymentIntent: paymentIntent,
             publishableKey: stripePublishableKey
-          });
+        });
     } catch (error) {
         console.log(error);
 

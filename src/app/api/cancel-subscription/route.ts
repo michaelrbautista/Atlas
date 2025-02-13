@@ -16,6 +16,9 @@ export async function DELETE(request: NextRequest) {
             subscriptionId
         } = await request.json();
 
+        console.log(connectedAccountId);
+        console.log(subscriptionId);
+
         const subscription = await stripe.subscriptions.cancel(
             subscriptionId,
             {

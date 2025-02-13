@@ -10,6 +10,27 @@ const ProgramItem = ({
 }: {
     program: FetchedProgram
 }) => {
+    const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
+    
+    const returnPricing = () => {
+        if (program.free) {
+            return (
+                <></>
+            )
+        } else if (program.price) {
+            return (
+                <p className="text-secondaryText text-sm">{formatter.format(program.price)}</p>
+            )
+        } else {
+            return (
+                <p className="text-secondaryText text-sm">Subscribers only</p>
+            )
+        }
+    }
+
     return (
         <Link href={`/program/${program.id}`} className="flex flex-row gap-5 py-5 border-b-[1px]">
             {program.image_url ? (
@@ -37,7 +58,7 @@ const ProgramItem = ({
                 {!program.free && (
                     <div className="flex flex-row gap-1 items-center">
                         <Lock color="gray" size={16} />
-                        <p className="text-secondaryText text-sm">Subscribers only</p>
+                        {returnPricing()}
                     </div>
                 )}
             </div>

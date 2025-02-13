@@ -61,79 +61,106 @@ Deno.serve(async (request) => {
                     }
                 )
 
-                const customerId = session?.customer;
-                const customer = await stripe.customers.retrieve(
-                    customerId,
-                    {
-                        stripeAccount: event.account
+                console.log(session);
+
+                if (requestMetadata.paymentType == "one-time") {
+                    // One-time payment
+                    console.log("WEBHOOK: ONE TIME PAYMENT");
+
+                    // Create purchased program
+                    const purchasedProgram = {
+                        program_id: requestMetadata.programId,
+                        purchased_by: requestMetadata.userId,
+                        created_by: requestMetadata.creatorId,
+                        stripe_checkout_session_id: session.id
+                    };
+    
+                    const { error } = await supabaseClient
+                        .from("purchased_programs")
+                        .insert(purchasedProgram);
+    
+                    if (error) {
+                        throw error;
                     }
-                );
 
-                const priceId = session?.line_items.data[0]?.price.id;
-
-                if (customer.email) {
-                    const user = await supabaseClient
-                        .from("users")
-                        .select()
-                        .eq("email", customer.email)
-                        .single()
-
-                    if (!user) {
-                        console.log("No user found in Stripe webhook.");
-                        break
-                    }
-
-                    console.log("GOT USER");
-
-                    const previousSubscription = await supabaseClient
-                        .from("subscriptions")
-                        .select()
-                        .eq("stripe_customer_id", customerId)
-                        .single()
-
-                    console.log("GOT SUBSCRIPTION");
-
-                    if (previousSubscription) {
-                        const { error } = await supabaseClient
-                            .from("subscriptions")
-                            .update({
-                                "tier": "monthly",
-                                "stripe_price_id": priceId,
-                                "stripe_customer_id": customerId,
-                                "is_active": true,
-                                "stripe_subscription_id": session?.subscription
-                            })
-                            .eq("subscriber", requestMetadata.userId)
-                            .eq("subscribed_to", requestMetadata.creatorId)
-
-                        if (error) {
-                            throw error;
-                        }
-
-                        console.log("UPDATED SUBSCRIPTION");
-                    } else {
-                        const subscription = {
-                            subscriber: requestMetadata.userId,
-                            subscribed_to: requestMetadata.creatorId,
-                            tier: "monthly",
-                            stripe_subscription_id: session?.subscription,
-                            stripe_customer_id: customerId,
-                            stripe_price_id: priceId,
-                            is_active: true
-                        };
-        
-                        const { error } = await supabaseClient
-                            .from("subscriptions")
-                            .insert(subscription);
-        
-                        if (error) {
-                            throw error;
-                        }
-
-                        console.log("CREATED NEW SUBSCRIPTION");
-                    }
+                    console.log("CREATED NEW PURCHASED PROGRAM");
                 } else {
-                    console.log("No customer found in Stripe webhook.");
+                    // Subscription
+                    console.log("WEBHOOK: SUBSCRIPTION");
+                    const customerId = session?.customer;
+                    const customer = await stripe.customers.retrieve(
+                        customerId,
+                        {
+                            stripeAccount: event.account
+                        }
+                    );
+
+                    const priceId = session?.line_items.data[0]?.price.id;
+
+                    if (customer.email) {
+                        const user = await supabaseClient
+                            .from("users")
+                            .select()
+                            .eq("email", customer.email)
+                            .single()
+
+                        if (!user) {
+                            console.log("No user found in Stripe webhook.");
+                            break
+                        }
+
+                        console.log("GOT USER");
+
+                        const previousSubscription = await supabaseClient
+                            .from("subscriptions")
+                            .select()
+                            .eq("stripe_customer_id", customerId)
+                            .single()
+
+                        console.log("GOT SUBSCRIPTION");
+
+                        if (previousSubscription) {
+                            const { error } = await supabaseClient
+                                .from("subscriptions")
+                                .update({
+                                    "tier": "monthly",
+                                    "stripe_price_id": priceId,
+                                    "stripe_customer_id": customerId,
+                                    "is_active": true,
+                                    "stripe_subscription_id": session?.subscription
+                                })
+                                .eq("subscriber", requestMetadata.userId)
+                                .eq("subscribed_to", requestMetadata.creatorId)
+
+                            if (error) {
+                                throw error;
+                            }
+
+                            console.log("UPDATED SUBSCRIPTION");
+                        } else {
+                            const subscription = {
+                                subscriber: requestMetadata.userId,
+                                subscribed_to: requestMetadata.creatorId,
+                                tier: "monthly",
+                                stripe_subscription_id: session?.subscription,
+                                stripe_customer_id: customerId,
+                                stripe_price_id: priceId,
+                                is_active: true
+                            };
+            
+                            const { error } = await supabaseClient
+                                .from("subscriptions")
+                                .insert(subscription);
+            
+                            if (error) {
+                                throw error;
+                            }
+
+                            console.log("CREATED NEW SUBSCRIPTION");
+                        }
+                    } else {
+                        console.log("No customer found in Stripe webhook.");
+                    }
                 }
 
                 break;
