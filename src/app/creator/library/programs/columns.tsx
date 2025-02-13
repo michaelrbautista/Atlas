@@ -36,7 +36,7 @@ export const useColumns = () => {
                                 alt="profilePicture"
                                 src={program.image_url}
                                 contentMode="cover"
-                                sizes="(max-width: 640px) 80px, 80px"
+                                sizes="80px"
                                 className="rounded-md"
                                 canSelect={false}
                             />
@@ -61,6 +61,17 @@ export const useColumns = () => {
     
                 return (
                     <p>{program.free ? "Free" : "Paid"}</p>
+                )
+            }
+        },
+        {
+            accessorKey: "price",
+            header: "Price",
+            cell: ({ row }) => {
+                const program = row.original
+    
+                return (
+                    <p>{!program.free ? program.price : ""}</p>
                 )
             }
         },

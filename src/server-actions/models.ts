@@ -4,7 +4,6 @@ export type FetchedProgram = {
     description: string | null;
     image_url: string | null;
     price: number;
-    currency: string;
     weeks: number;
     free: boolean;
     private: boolean;
