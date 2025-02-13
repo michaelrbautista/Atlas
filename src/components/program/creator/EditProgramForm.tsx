@@ -33,7 +33,7 @@ const EditProgramForm = ({
             weeks: program ? program.weeks : 0,
             free: program ? program.free : false,
             paidSubscribersOnly: !program?.price,
-            price: program ? program.price : 0,
+            price: program?.price ? program.price : 0,
             private: program ? program.private : false
         }
     })

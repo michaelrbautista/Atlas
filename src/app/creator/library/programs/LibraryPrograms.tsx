@@ -57,7 +57,7 @@ const LibraryPrograms = () => {
     return (
         <div className="flex flex-col gap-5 h-full w-full">
             <div className="flex justify-end">
-                <NewProgramButton addProgram={addProgram}></NewProgramButton>
+                <NewProgramButton />
             </div>
             <DataTable
                 columns={columns}

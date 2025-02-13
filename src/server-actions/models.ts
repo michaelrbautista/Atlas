@@ -3,7 +3,7 @@ export type FetchedProgram = {
     title: string;
     description: string | null;
     image_url: string | null;
-    price: number;
+    price: number | null;
     weeks: number;
     free: boolean;
     private: boolean;
@@ -22,7 +22,7 @@ export type FetchedPurchasedProgram = {
         id: string;
         title: string;
         free: boolean;
-        price: number;
+        price: number | null;
         description: string | null;
         image_url: string | null;
     } | null;

@@ -31,7 +31,7 @@ const LoggedOutPurchaseButton = ({
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger className="w-full" asChild>
                 <Button variant="systemBlue" size="full">
-                    Purchase Program - {formatter.format(program.price)}
+                    Purchase Program {program.price && `- ${formatter.format(program.price)}`}
                 </Button>
             </DialogTrigger>
             <DialogContent>

@@ -90,8 +90,6 @@ const ProgramOptionsButton = ({
                 {dialogType == "edit" ? (
                     <EditProgramForm
                         program={program}
-                        updateProgram={updateProgram}
-                        setIsOpen={setIsOpen}
                     />
                 ) : (
                     <div className="flex flex-col gap-5 pt-5">
