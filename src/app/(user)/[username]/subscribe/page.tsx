@@ -28,14 +28,14 @@ const Page = ({
     useEffect(() => {
         const getUser = async () => {
             // Get current user
-            const currentUser = await getCurrentUser();
+            const { user, none} = await getCurrentUser();
 
-            if (!currentUser) {
+            if (none || !user) {
                 console.log("Couldn't get current user.");
                 return
             }
 
-            setCurrentUser(currentUser);
+            setCurrentUser(user);
 
             // Get creator
             const { data, error } = await getUserFromUsername(params.username);

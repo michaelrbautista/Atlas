@@ -3,15 +3,19 @@ import { getCurrentUser } from "@/server-actions/user"
 
 const page = async () => {
 
-    const user = await getCurrentUser();
+    const { user, none } = await getCurrentUser();
 
-    return (
-        <div className="h-full w-full max-w-xl px-5 sm:py-10">
-            <div className="flex justify-between items-center pb-5">
-                <p className="text-foreground text-3xl font-bold">Edit Profile</p>
+    if (none || !user) {
+        throw new Error("Couldn't get current user.");
+    } else {
+        return (
+            <div className="h-full w-full max-w-xl px-5 sm:py-10">
+                <div className="flex justify-between items-center pb-5">
+                    <p className="text-foreground text-3xl font-bold">Edit Profile</p>
+                </div>
+                <EditProfileForm user={user} />
             </div>
-            <EditProfileForm user={user} />
-        </div>
-    )
+        )
+    }
 }
 export default page

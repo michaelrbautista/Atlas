@@ -11,7 +11,11 @@ const PurchaseProgram = async ({
     const { programId = "" } = await searchParams
 
     // Get current user
-    const user = await getCurrentUser();
+    const { user, none } = await getCurrentUser();
+
+    if (!user || none) {
+        throw new Error("Couldn't get current user.");
+    }
 
     // Get program
     const program = await getProgram(programId);
