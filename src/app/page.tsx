@@ -57,29 +57,34 @@ const Page = () => {
                     </Dialog>
                 </div>
                 <div className="pt-40 flex flex-col gap-24 justify-center items-center">
-                    <div className="flex flex-col items-center gap-24 w-4/5 sm:w-[800px]">
+                    <div className="flex flex-col items-center gap-24 w-4/5 sm:w-[600px]">
                         <div className="flex flex-col items-center gap-5">
-                            <p className="text-primaryText text-4xl sm:text-6xl font-black text-center">
-                                The platform for fitness communities.
+                            <p className="text-primaryText text-4xl sm:text-5xl font-semibold text-center">
+                                The platform for fitness content creators.
                             </p>
-                            <p className="text-secondaryText text-base sm:text-2xl font-bold text-center">
-                                Give your fitness community paid access to training programs, nutrition protocols, and more.
+                            <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
+                                Grow your fitness business by giving your followers access to your 
+                                training programs, nutrition protocols, and more.
                             </p>
-                            
                         </div>
-                        <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
+                        <div className="relative flex items-center w-[350px] h-[200px] sm:w-[600px] sm:h-[400px]">
                             <BlurImage
                                 alt="firstLandingPage"
-                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageOne.png?t=2025-01-16T04%3A48%3A38.958Z"
+                                src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//landingpage1.png"
                                 contentMode="contain"
-                                sizes="(max-width: 640px) 350px, 800px"
+                                sizes="(max-width: 640px) 350px, 600px"
                                 className="rounded-md"
                                 canSelect={false}
                             />
                         </div>
                         <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
                             <DialogTrigger asChild>
-                                <Button className={buttonVariants({ variant: "systemBlue", size: "default" })}>Get Started For Free</Button>
+                                <Button
+                                    variant="systemBlue"
+                                    size="default"
+                                >
+                                    Sign up today
+                                </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-96 sm:max-w-md">
                                 <DialogTitle hidden></DialogTitle>
@@ -87,34 +92,71 @@ const Page = () => {
                             </DialogContent>
                         </Dialog>
                         <div className="flex flex-col gap-10">
-                            <div className="relative flex items-center w-[350px] h-[300px] sm:w-[600px] sm:h-[400px]">
-                                <BlurImage
-                                    alt="secondLandingPage"
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageTwo.png?t=2025-01-16T04%3A48%3A48.462Z"
-                                    contentMode="contain"
-                                    sizes="(max-width: 640px) 350px, 600px"
-                                    className="rounded-md"
-                                    canSelect={false}
-                                />
+                            <div className="flex flex-row items-center gap-5 p-5 bg-zinc-950 rounded-lg">
+                                <div className="relative flex items-center w-[100px] h-[200px] sm:w-[170px] sm:h-[350px] shrink-0">
+                                    <BlurImage
+                                        alt="feature1"
+                                        src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//landingpage1%20(1).png"
+                                        contentMode="contain"
+                                        sizes="(max-width: 640px) 350px, 600px"
+                                        className="rounded-md"
+                                        canSelect={false}
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-primaryText text-xl font-bold">
+                                        Training programs
+                                    </h1>
+                                    <p className="text-secondaryText">
+                                        Create full training programs that include detailed workouts and 
+                                        exercises.
+                                    </p>
+                                </div>
                             </div>
-                            <p className="text-secondaryText text-md sm:text-lg font-black text-center">
-                                Monetize your training and nutrition protocols in one platform.
-                            </p>
+                            <div className="flex flex-row items-center gap-5 p-5 bg-zinc-950 rounded-lg">
+                                <div className="relative flex items-center w-[100px] h-[200px] sm:w-[170px] sm:h-[350px] shrink-0">
+                                    <BlurImage
+                                        alt="secondLandingPage"
+                                        src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//landingPage2.png"
+                                        contentMode="contain"
+                                        sizes="(max-width: 640px) 350px, 600px"
+                                        className="rounded-md"
+                                        canSelect={false}
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-primaryText text-xl font-bold">
+                                        Articles
+                                    </h1>
+                                    <p className="text-secondaryText">
+                                        Write long form articles to monetize content like nutrition 
+                                        plans, sleep protocols, and more.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex flex-row items-center gap-5 p-5 bg-zinc-950 rounded-lg">
+                                <div className="relative flex items-center w-[100px] h-[200px] sm:w-[170px] sm:h-[350px] shrink-0">
+                                    <BlurImage
+                                        alt="secondLandingPage"
+                                        src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//landingPage3.png"
+                                        contentMode="contain"
+                                        sizes="(max-width: 640px) 350px, 600px"
+                                        className="rounded-md"
+                                        canSelect={false}
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-primaryText text-xl font-bold">
+                                        Flexible payment options
+                                    </h1>
+                                    <p className="text-secondaryText">
+                                        Offer access to all of your content for a monthly subscription 
+                                        and sell one-time purchase programs.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex flex-col items-center gap-10">
-                            <div className="relative flex items-center w-[350px] h-[200px] sm:w-[800px] sm:h-[400px]">
-                                <BlurImage
-                                    alt="thirdLandingPage"
-                                    src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page/landingPageThree.png"
-                                    contentMode="contain"
-                                    sizes="(max-width: 640px) 350px, 800px"
-                                    className="rounded-md"
-                                    canSelect={false}
-                                />
-                            </div>
-                            <p className="text-secondaryText text-md sm:text-lg font-black text-center">
-                                Give your community easy access to all of your content with the mobile app.
-                            </p>
+                        {/* <div className="flex flex-col items-center gap-10">
                             <a
                                 target="_blank"
                                 href="https://apps.apple.com/us/app/atlas-health-and-fitness/id6484401731"
@@ -130,10 +172,10 @@ const Page = () => {
                                     sizes="150px"
                                 />
                             </a>
-                        </div>
+                        </div> */}
                         <div className="flex flex-col items-center gap-5 py-20">
-                            <p className="text-primaryText text-base sm:text-2xl font-bold text-center">
-                                Grow your online fitness business and help your community get in better shape at the same time.
+                            <p className="text-primaryText text-base sm:text-xl font-semibold text-center">
+                                Ready to get started?
                             </p>
                             <Dialog open={showCreateAccount} onOpenChange={setShowCreateAccount}>
                                 <DialogTrigger asChild>
