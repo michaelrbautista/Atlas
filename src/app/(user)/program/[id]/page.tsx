@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Dumbbell } from "lucide-react";
 import MobileCalendar from "@/components/program/user/calendar/MobileCalendar";
 import { checkIfProgramIsPurchased, getProgram } from "@/server-actions/program";
-import { checkIfSubscribed, getUser } from "@/server-actions/user";
+import { checkIfSubscribed, getCurrentUser, getUser } from "@/server-actions/user";
 import { InfoList } from "@/components/program/user/InfoList";
 import { Separator } from "@/components/ui/separator";
 import PurchaseProgramButton from "@/components/program/user/PurchaseProgramButton";
@@ -18,13 +18,31 @@ const Program = async ({
     // Get creator
     const creator = await getUser(program.created_by);
 
-    // Check if user is subscribed to creator
-    const isSubscribed = await checkIfSubscribed(creator.id);
+    // Get current user
+    const { user, none } = await getCurrentUser();
 
+    // Check if subscribed
+    let isSubscribed = false;
     let isPurchased = false;
-    if (!isSubscribed) {
-        const checkPurchase = await checkIfProgramIsPurchased(program.id);
-        isPurchased = checkPurchase;
+
+    if (user && !none) {
+        if (program.created_by == user.id) {
+            isSubscribed = true;
+        } else if (program.created_by) {
+            const checkSubscribed  = await checkIfSubscribed(program.created_by);
+            if (checkSubscribed) {
+                isSubscribed = checkSubscribed
+            }
+
+
+        } else {
+            isSubscribed = false;
+        }
+
+        if (!isSubscribed) {
+            const checkPurchase = await checkIfProgramIsPurchased(program.id);
+            isPurchased = checkPurchase;
+        }
     }
 
     const returnContentOrButton = () => {

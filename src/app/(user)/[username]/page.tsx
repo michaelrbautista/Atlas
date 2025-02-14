@@ -69,9 +69,7 @@ const User = ({
             setIsLoading(false);
         }
 
-        if (userContext.user) {
-            getCreator();
-        }
+        getCreator();
     }, [userContext.user]);
 
     const setSubscriptionAfterUnsubscribe = useCallback(() => {

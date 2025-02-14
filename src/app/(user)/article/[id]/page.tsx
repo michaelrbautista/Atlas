@@ -13,17 +13,22 @@ const Article = async ({
     const article = await getArticle(params.id);
 
     // Get current user
-    const currentUser = await getCurrentUser();
+    const { user, none } = await getCurrentUser();
 
     // Check if subscribed
-    let isSubscribed;
+    let isSubscribed = false;
 
-    if (article.created_by?.id == currentUser.id) {
-        isSubscribed = true;
-    } else if (article.created_by?.id) {
-        isSubscribed = await checkIfSubscribed(article.created_by.id);
-    } else {
-        isSubscribed = false;
+    if (user && !none) {
+        if (article.created_by?.id == user.id) {
+            isSubscribed = true;
+        } else if (article.created_by?.id) {
+            const checkSubscribed  = await checkIfSubscribed(article.created_by.id);
+            if (checkSubscribed) {
+                isSubscribed = checkSubscribed
+            }
+        } else {
+            isSubscribed = false;
+        }
     }
 
     return (

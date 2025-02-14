@@ -62,7 +62,9 @@ export const getCurrentUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        throw new Error("Couldn't get current user.");
+        return {
+            none: "No current user."
+        }
     }
 
     const { data: userData, error: userError } = await supabase
@@ -75,7 +77,9 @@ export const getCurrentUser = async () => {
         throw new Error(userError.message);
     }
 
-    return userData
+    return {
+        user: userData
+    }
 }
 
 export const redirectToBecomeCreator = () => {
@@ -252,7 +256,7 @@ export const getUser = async (userId: string) => {
         .single()
 
     if (error && !data) {
-        throw new Error(error.message)
+        throw new Error(error.message);
     }
 
     return data
