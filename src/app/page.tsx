@@ -59,7 +59,7 @@ const Page = () => {
                 <div className="pt-40 flex flex-col gap-24 justify-center items-center">
                     <div className="flex flex-col items-center gap-24 w-4/5 sm:w-[900px]">
                         <div className="flex flex-col items-center gap-5">
-                            <p className="text-primaryText text-3xl sm:text-5xl font-semibold text-center">
+                            <p className="text-primaryText text-4xl sm:text-5xl font-semibold text-center">
                                 The platform for fitness content creators.
                             </p>
                             <p className="text-secondaryText text-base sm:text-lg font-medium text-center">
