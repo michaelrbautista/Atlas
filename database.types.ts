@@ -192,6 +192,7 @@ export type Database = {
           image_url: string | null
           price: number | null
           private: boolean
+          subs_only: boolean
           title: string
           weeks: number
         }
@@ -205,6 +206,7 @@ export type Database = {
           image_url?: string | null
           price?: number | null
           private?: boolean
+          subs_only?: boolean
           title: string
           weeks?: number
         }
@@ -218,6 +220,7 @@ export type Database = {
           image_url?: string | null
           price?: number | null
           private?: boolean
+          subs_only?: boolean
           title?: string
           weeks?: number
         }

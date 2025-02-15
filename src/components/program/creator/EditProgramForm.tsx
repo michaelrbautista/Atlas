@@ -32,8 +32,8 @@ const EditProgramForm = ({
             description: program?.description ? program.description : "",
             weeks: program ? program.weeks : 0,
             free: program ? program.free : false,
-            paidSubscribersOnly: !program?.price,
-            price: program?.price ? program.price : 0,
+            paidSubscribersOnly: program?.subs_only,
+            price: program?.price ? program.price : undefined,
             private: program ? program.private : false
         }
     })
@@ -61,7 +61,7 @@ const EditProgramForm = ({
 
         formData.append("free", data.free.toString());
 
-        if (data.price) {
+        if (!data.free && data.price) {
             formData.append("price", data.price.toString());
         }
 

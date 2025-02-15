@@ -18,7 +18,7 @@ import { Dialog,
 import { memo, useState } from "react";
 import { Tables } from "../../../../database.types";
 import EditProgramForm from "./EditProgramForm";
-import { deleteProgram } from "@/server-actions/program";
+import { deleteProgram, redirectToEditProgram } from "@/server-actions/program";
 import { redirectToLibrary } from "@/server-actions/creator";
 
 const ProgramOptionsButton = ({
@@ -31,18 +31,6 @@ const ProgramOptionsButton = ({
     const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
     const [isOpen, setIsOpen] = useState(false);
     const [deleteIsLoading, setDeleteIsLoading] = useState(false);
-
-    const returnDialogTitle = () => {
-        if (dialogType == "edit") {
-            return (
-                <DialogTitle>Edit Program</DialogTitle>
-            )
-        } else {
-            return (
-                <DialogTitle>Delete Program</DialogTitle>
-            )
-        }
-    }
 
     const deleteProgramClient = () => {
         setDeleteIsLoading(true);
@@ -58,16 +46,14 @@ const ProgramOptionsButton = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                        <DialogTrigger
-                            className="w-full"
-                            onClick={() => {
-                                setDialogType("edit");
-                                setIsOpen(true);
-                            }}
-                        >
-                            Edit program
-                        </DialogTrigger>
+                    <DropdownMenuItem
+                        className="w-full"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            redirectToEditProgram(program.id);
+                        }}
+                    >
+                        Edit program
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <DialogTrigger
@@ -84,17 +70,12 @@ const ProgramOptionsButton = ({
             </DropdownMenu>
             <DialogContent>
                 <DialogHeader>
-                    {returnDialogTitle()}
+                    <DialogTitle>Delete Program</DialogTitle>
                     <DialogDescription hidden></DialogDescription>
                 </DialogHeader>
-                {dialogType == "edit" ? (
-                    <EditProgramForm
-                        program={program}
-                    />
-                ) : (
-                    <div className="flex flex-col gap-5 pt-5">
-                        <p>Are you sure you want to delete this program?</p>
-                        <Button
+                <div className="flex flex-col gap-5 pt-5">
+                    <p>Are you sure you want to delete this program?</p>
+                    <Button
                         variant={deleteIsLoading ? "disabled" : "destructive"}
                         size="full"
                         disabled={deleteIsLoading}
@@ -106,8 +87,7 @@ const ProgramOptionsButton = ({
                         {deleteIsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {!deleteIsLoading && "Delete program"}
                     </Button>
-                    </div>
-                )}
+                </div>
             </DialogContent>
         </Dialog>
     )

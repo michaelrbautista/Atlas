@@ -75,29 +75,29 @@ const Calendar = ({
         setWorkouts([...workouts, workout]);
     }, []);
 
-    const calculateStartWeek = useCallback(() => {
+    const calculateStartWeek = () => {
         return 1 + (4 * (currentPage - 1));
-    }, []);
+    };
 
-    const calculateEndWeek = useCallback(() => {
+    const calculateEndWeek = () => {
         return 4 + (4 * (currentPage - 1));
-    }, []);
+    };
 
-    const incrementWeeks = useCallback(() => {
+    const incrementWeeks = () => {
         setCurrentPage(currentPage => currentPage + 1);
 
         if (currentPage == pages) {
             setIsEnd(true);
         }
-    }, []);
+    };
 
-    const decrementWeeks = useCallback(() => {
+    const decrementWeeks = () => {
         setCurrentPage(currentPage => currentPage - 1);
 
         if (currentPage < pages) {
             setIsEnd(false);
         }
-    }, []);
+    };
 
     return (
         <div className="flex flex-col pb-10">
