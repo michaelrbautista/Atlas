@@ -225,7 +225,7 @@ const Page = () => {
                                     <div className="relative flex items-center w-[170px] h-[260px] sm:w-[170px] sm:h-[260px] shrink-0">
                                         <BlurImage
                                             alt="mockup6final"
-                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup6final.png"
+                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup7final.png"
                                             contentMode="contain"
                                             sizes="(max-width: 640px) 170px, 170px"
                                             className="rounded-md"
@@ -238,7 +238,7 @@ const Page = () => {
                                 <div className="relative flex items-center w-[170px] h-[260px] sm:w-[170px] sm:h-[260px] shrink-0">
                                         <BlurImage
                                             alt="mockup7final"
-                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup7final.png"
+                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup8final.png"
                                             contentMode="contain"
                                             sizes="(max-width: 640px) 170px, 170px"
                                             className="rounded-md"
@@ -251,7 +251,7 @@ const Page = () => {
                                     <div className="relative flex items-center w-[170px] h-[260px] sm:w-[170px] sm:h-[260px] shrink-0">
                                         <BlurImage
                                             alt="mockup8final"
-                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup8final.png"
+                                            src="https://ltjnvfgpomlatmtqjxrk.supabase.co/storage/v1/object/public/landing_page//mockup6final.png"
                                             contentMode="contain"
                                             sizes="(max-width: 640px) 170px, 170px"
                                             className="rounded-md"
