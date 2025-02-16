@@ -69,47 +69,58 @@ const ExistingWorkoutList = ({
         getWorkouts();
     }, []);
 
+    const returnWorkouts = () => {
+        if (workouts && workouts.length == 0) {
+            return (
+                <div className="text-secondaryText text-sm pt-5">You haven't created any workouts yet.</div>
+            )
+        } else if (workouts) {
+            return (
+                <div className="flex flex-col gap-5 pb-10 w-full max-h-[400px] overflow-scroll">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Title</TableHead>
+                                <TableHead>Description</TableHead>
+                                <TableHead />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {workouts.map((workout) => {
+                                return (
+                                    <TableRow key={workout.id}>
+                                        <TableCell>{workout.title}</TableCell>
+                                        <TableCell>{workout.description}</TableCell>
+                                        <TableCell>
+                                            <AddLibraryWorkoutButton
+                                                programId={programId}
+                                                week={week}
+                                                day={day}
+                                                setIsOpen={setIsOpen}
+                                                addWorkout={addWorkout}
+                                                workout={workout}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                </div>
+            )
+        }
+    }
+
     return (
-        <div className="flex flex-col items-end h-full pt-5">
+        <div className="flex flex-col items-center h-full pt-5">
             {(isLoading || !workouts) ?
                 (
                     <div className="h-full w-full flex items-center justify-center">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     </div>
-                ) : workouts?.length == 0 ? (
-                    <div className="text-secondaryText text-sm pt-5">You haven't created any workouts yet.</div>
-                ) : 
-                    <div className="flex flex-col gap-5 pb-10 w-full max-h-[400px] overflow-scroll">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Title</TableHead>
-                                    <TableHead>Description</TableHead>
-                                    <TableHead />
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {workouts.map((workout) => {
-                                    return (
-                                        <TableRow key={workout.id}>
-                                            <TableCell>{workout.title}</TableCell>
-                                            <TableCell>{workout.description}</TableCell>
-                                            <TableCell>
-                                                <AddLibraryWorkoutButton
-                                                    programId={programId}
-                                                    week={week}
-                                                    day={day}
-                                                    setIsOpen={setIsOpen}
-                                                    addWorkout={addWorkout}
-                                                    workout={workout}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </div>
+                ) : (
+                    returnWorkouts()
+                )
             }
         </div>
     )

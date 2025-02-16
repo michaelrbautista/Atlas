@@ -46,11 +46,6 @@ const LibraryPrograms = () => {
         getTeamPrograms();
     }, []);
 
-    const addProgram = useCallback((program: Tables<"programs">) => {
-        const newPrograms = [program, ...programs];
-        setPrograms(newPrograms);
-    }, []);
-
     const columns = useColumns();
     const data = useMemo(() => programs, [programs]);
 

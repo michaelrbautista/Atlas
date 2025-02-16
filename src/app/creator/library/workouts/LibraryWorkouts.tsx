@@ -49,7 +49,7 @@ const LibraryWorkouts = () => {
     const addWorkout = useCallback((workout: Tables<"workouts">) => {
         const newWorkouts = [workout, ...workouts];
         setWorkouts(newWorkouts);
-    }, []);
+    }, [workouts]);
 
     const columns = useColumns();
     const data = useMemo(() => workouts, [workouts]);
