@@ -6,6 +6,7 @@ import { checkIfSubscribed, getCurrentUser, getUser } from "@/server-actions/use
 import { InfoList } from "@/components/program/user/InfoList";
 import { Separator } from "@/components/ui/separator";
 import PurchaseProgramButton from "@/components/program/user/PurchaseProgramButton";
+import BlurImage from "@/components/misc/BlurImage";
 
 const Program = async ({ 
     params
@@ -77,14 +78,14 @@ const Program = async ({
                             <Dumbbell className="text-secondaryText" />
                         </div>
                     ) : (
-                        <div className="relative flex items-center w-[120px] h-[120px] shrink-0">
-                            <Image
-                                className="rounded-xl"
-                                fill
-                                src={program.image_url}
+                        <div className="relative w-[120px] h-[120px] shrink-0">
+                            <BlurImage
                                 alt="programImage"
-                                style={{objectFit: "cover"}}
-                                priority
+                                src={program.image_url}
+                                contentMode="cover"
+                                sizes="120px"
+                                className="rounded-xl"
+                                canSelect={false}
                             />
                         </div>
                     )}

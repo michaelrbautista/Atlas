@@ -9,6 +9,7 @@ import Calendar from "@/components/program/creator/calendar/Calendar";
 import { useToast } from "@/components/ui/use-toast";
 import ProgramOptionsButton from "@/components/program/creator/ProgramOptionsButton";
 import { InfoList } from "@/components/program/user/InfoList";
+import BlurImage from "@/components/misc/BlurImage";
 
 const ViewCreatorProgram = ({ 
     params
@@ -90,14 +91,14 @@ const ViewCreatorProgram = ({
                                 <Dumbbell className="text-secondaryText" />
                             </div>
                         ) : (
-                            <div className="relative flex items-center w-[120px] h-[120px]">
-                                <Image
-                                    className="rounded-xl"
-                                    fill
-                                    src={programImageUrl}
+                            <div className="relative w-[120px] h-[120px] shrink-0">
+                                <BlurImage
                                     alt="programImage"
-                                    style={{objectFit: "cover"}}
-                                    priority
+                                    src={programImageUrl}
+                                    contentMode="cover"
+                                    sizes="120px"
+                                    className="rounded-xl"
+                                    canSelect={false}
                                 />
                             </div>
                         )}
