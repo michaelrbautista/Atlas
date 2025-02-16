@@ -69,11 +69,11 @@ const Calendar = ({
 
     const removeWorkout = useCallback((workoutId: string) => {
         setWorkouts(workouts => workouts.filter(workout => workout.id !== workoutId));
-    }, []);
+    }, [workouts]);
 
     const addWorkout = useCallback((workout: Tables<"program_workouts">) => {
         setWorkouts([...workouts, workout]);
-    }, []);
+    }, [workouts]);
 
     const calculateStartWeek = () => {
         return 1 + (4 * (currentPage - 1));

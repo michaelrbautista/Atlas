@@ -17,16 +17,13 @@ import { Dialog,
 } from "@/components/ui/dialog"
 import { memo, useState } from "react";
 import { Tables } from "../../../../database.types";
-import EditProgramForm from "./EditProgramForm";
 import { deleteProgram, redirectToEditProgram } from "@/server-actions/program";
 import { redirectToLibrary } from "@/server-actions/creator";
 
 const ProgramOptionsButton = ({
-    program,
-    updateProgram
+    program
 }: {
-    program: Tables<"programs">,
-    updateProgram: (updatedProgram: Tables<"programs">) => void
+    program: Tables<"programs">
 }) => {
     const [dialogType, setDialogType] = useState<"edit" | "delete">("edit");
     const [isOpen, setIsOpen] = useState(false);

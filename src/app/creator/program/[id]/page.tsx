@@ -69,11 +69,6 @@ const ViewCreatorProgram = ({
         getProgram();
     }, []);
 
-    // TODO: update program function
-    const updateProgram = useCallback((newProgram: Tables<"programs">) => {
-        setProgram(newProgram);
-    }, []);
-
     if (isLoading || !program) {
         return (
             <div className="h-full w-full flex items-center justify-center">
@@ -105,7 +100,6 @@ const ViewCreatorProgram = ({
                         <div className="shrink-0">
                             <ProgramOptionsButton
                                 program={program}
-                                updateProgram={updateProgram}
                             />
                         </div>
                     </div>
