@@ -147,7 +147,7 @@ const ViewCreatorProgram = ({
                     <Calendar
                         programId={program.id}
                         weeks={program.weeks}
-                        pages={Math.floor(program.weeks / 4) + 1}
+                        pages={Math.floor(program.weeks / 4)}
                     />
                 </div>
             </div>
