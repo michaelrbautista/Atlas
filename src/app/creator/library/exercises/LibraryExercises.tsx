@@ -21,7 +21,7 @@ const LibraryExercises = () => {
     }, []);
 
     const addExercise = useCallback((exercise: Tables<"exercises">) => {
-        const newExercises = [...exercises, exercise];
+        const newExercises = [exercise, ...exercises];
         setExercises(newExercises);
     }, [exercises]);
 
