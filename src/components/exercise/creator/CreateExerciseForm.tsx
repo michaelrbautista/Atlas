@@ -130,7 +130,7 @@ const CreateExerciseForm = ({
                     />
                     <Button type="submit" variant={isLoading ? "disabled" : "systemBlue"} size="full" className="mt-3" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoading ? "Creating exercise" : "Create exercise"}
+                        {!isLoading && "Create exercise"}
                     </Button>
                 </div>
             </form>
