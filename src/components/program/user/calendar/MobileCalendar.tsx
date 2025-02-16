@@ -86,7 +86,7 @@ const MobileCalendar = ({
     const incrementWeeks = useCallback(() => {
         setCurrentPage(currentPage => currentPage + 1);
 
-        if (currentPage == pages) {
+        if (currentPage >= pages) {
             setIsEnd(true);
         }
     }, []);

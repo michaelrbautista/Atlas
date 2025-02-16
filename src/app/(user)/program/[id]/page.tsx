@@ -53,7 +53,7 @@ const Program = async ({
                     <MobileCalendar
                         programId={program.id}
                         weeks={program.weeks}
-                        pages={Math.floor(program.weeks / 4) + 1}
+                        pages={program.weeks % 4 == 0 ? Math.floor(program.weeks / 4) : Math.floor(program.weeks / 4) + 1}
                     />
                 </div>
             )
@@ -102,12 +102,12 @@ const Program = async ({
                             },
                             {
                                 header: "Duration",
-                                info: `${program.weeks} weeks`
+                                info: `${program.weeks} ${program.weeks == 1 ? "week" : "weeks"}`
                             }
                         ] : [
                             {
                                 header: "Duration",
-                                info: `${program.weeks} weeks`
+                                info: `${program.weeks} ${program.weeks == 1 ? "week" : "weeks"}`
                             }
                         ]}
                     />

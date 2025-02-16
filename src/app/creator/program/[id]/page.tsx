@@ -117,7 +117,7 @@ const ViewCreatorProgram = ({
                             },
                             {
                                 header: "Duration",
-                                info: `${program.weeks} weeks`
+                                info: `${program.weeks} ${program.weeks == 1 ? "week" : "weeks"}`
                             },
                             {
                                 header: "Visibility",
@@ -130,7 +130,7 @@ const ViewCreatorProgram = ({
                         ] : [
                             {
                                 header: "Duration",
-                                info: `${program.weeks} weeks`
+                                info: `${program.weeks} ${program.weeks == 1 ? "week" : "weeks"}`
                             },
                             {
                                 header: "Visibility",
@@ -147,7 +147,7 @@ const ViewCreatorProgram = ({
                     <Calendar
                         programId={program.id}
                         weeks={program.weeks}
-                        pages={Math.floor(program.weeks / 4)}
+                        pages={program.weeks % 4 == 0 ? Math.floor(program.weeks / 4) : Math.floor(program.weeks / 4) + 1}
                     />
                 </div>
             </div>
