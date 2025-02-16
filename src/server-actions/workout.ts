@@ -28,6 +28,32 @@ export async function getUsersWorkouts() {
     return data
 }
 
+export async function getCreatorsWorkouts() {
+    const supabase = createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Couldn't get current user.")
+    }
+
+    const { data, error } = await supabase
+        .from("workouts")
+        .select()
+        .eq("created_by", user.id)
+        .order("created_at", { ascending: false })
+
+    if (error && !data) {
+        return {
+            error: error.message
+        }
+    }
+
+    return {
+        data: data
+    }
+}
+
 export async function getWorkoutExercises(workoutId: string) {
     const supabase = createClient();
 

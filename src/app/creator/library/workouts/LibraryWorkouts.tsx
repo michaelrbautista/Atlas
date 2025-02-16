@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import NewLibraryWorkoutButton from "../../../../components/workout/creator/library/NewLibraryWorkoutButton";
 import { DataTable } from "@/components/ui/data-table";
 import { useColumns } from "./columns";
+import { getCreatorsWorkouts } from "@/server-actions/workout";
 
 const LibraryWorkouts = () => {
     const [workouts, setWorkouts] = useState<Tables<"workouts">[]>([]);
@@ -15,31 +16,16 @@ const LibraryWorkouts = () => {
 
     useEffect(() => {
         const getCreatorsPrograms = async () => {
-            const supabase = createClient();
+            const { data, error } = await getCreatorsWorkouts();
 
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) {
+            if (error || !data) {
                 toast({
                     title: "An error occurred.",
                     description: "Couldn't get the current user."
                 })
                 return
-            }
-
-            const { data, error } = await supabase
-                .from("workouts")
-                .select()
-                .eq("created_by", user.id)
-                .order("created_at", { ascending: false })
-
-            if (data && !error) {
-                setWorkouts(data);
             } else {
-                toast({
-                    title: "An error occurred.",
-                    description: error.message
-                })
+                setWorkouts(data);
             }
         }
 

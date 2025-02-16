@@ -35,12 +35,17 @@ export async function getCreatorsExercises() {
         .from("exercises")
         .select()
         .eq("created_by", user.id)
+        .order("created_at", { ascending: false })
 
     if (error && !data) {
-        throw new Error(error.message)
+        return {
+            error: error.message
+        }
     }
 
-    return data
+    return {
+        data: data
+    }
 }
 
 export async function getWorkoutExercise(workoutExerciseId: string) {

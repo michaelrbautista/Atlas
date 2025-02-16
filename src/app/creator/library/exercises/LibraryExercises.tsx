@@ -6,15 +6,26 @@ import { getCreatorsExercises } from "@/server-actions/exercise";
 import CreateExerciseButton from "@/components/exercise/creator/CreateExerciseButton";
 import { DataTable } from "@/components/ui/data-table";
 import { useColumns } from "./columns";
+import { useToast } from "@/components/ui/use-toast";
 
 const LibraryExercises = () => {
-    const [exercises, setExercises] = useState<Tables<"exercises">[]>([])
+    const [exercises, setExercises] = useState<Tables<"exercises">[]>([]);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const getExercises = async () => {
-            const exercises = await getCreatorsExercises();
+            const { data, error } = await getCreatorsExercises();
 
-            setExercises(exercises)
+            if (error || !data) {
+                toast({
+                    title: "An error occurred.",
+                    description: "Couldn't get the current user."
+                })
+                return
+            } else {
+                setExercises(data);
+            }
         }
 
         getExercises();
