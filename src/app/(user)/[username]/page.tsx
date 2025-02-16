@@ -17,6 +17,7 @@ import CollectionList from "@/components/collections/user/CollectionList";
 import BlurImage from "@/components/misc/BlurImage";
 import UnsubscribeFreeButton from "@/components/subscriptions/UnsubscribeFreeButton";
 import { getSubscription } from "@/server-actions/subscription";
+import ManagePaymentsButton from "@/components/profile/ManagePaymentsButton";
 
 const User = ({ 
     params
@@ -145,8 +146,11 @@ const User = ({
                         <p className="text-primaryText text-base">{creator.bio}</p>
                     </div>
                 </div>
-                {userContext.user?.id == creator.id ? (
-                    <EditProfileButton />
+                {(userContext.user?.id == creator.id) && creator.stripe_account_id ? (
+                    <div className="flex flex-col gap-3">
+                        <EditProfileButton />
+                        <ManagePaymentsButton />
+                    </div>
                 ) : creator.stripe_price_id && (
                     getSubscribeButton()  
                 )}
