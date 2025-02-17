@@ -51,6 +51,7 @@ const Calendar = ({
                 .eq("program_id", programId)
                 .gte("week", calculateStartWeek())
                 .lte("week", calculateEndWeek())
+                .order("created_at", { ascending: true })
                 
             if (workoutsError && !workoutsData) {
                 toast({

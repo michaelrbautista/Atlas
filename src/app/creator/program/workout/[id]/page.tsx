@@ -50,15 +50,12 @@ const CreatorProgramWorkout = ({
     }, []);
 
     const updateWorkout = useCallback((updatedWorkout: FetchedWorkout) => {
-        const oldWorkout = workout
-        oldWorkout!.title = updatedWorkout.title
-        oldWorkout!.description = updatedWorkout.description
-        setWorkout(oldWorkout)
-    }, []);
+        setWorkout(updatedWorkout)
+    }, [workout]);
 
     const addNewTableExercise = useCallback((exercise: FetchedExercise) => {
         setExercises(exercises => [...exercises, exercise]);
-    }, []);
+    }, [exercises]);
 
     if (isLoading || !workout) {
         return (

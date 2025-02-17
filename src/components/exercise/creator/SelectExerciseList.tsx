@@ -8,6 +8,7 @@ import { createClient } from "@/utils/supabase/client";
 import ExistingExerciseForm from "./ExistingExerciseForm";
 import { useToast } from "../../ui/use-toast";
 import { FetchedExercise } from "@/server-actions/models";
+import { getCreatorsExercises } from "@/server-actions/exercise";
 
 const SelectExerciseList = ({
     workoutId,
@@ -45,15 +46,12 @@ const SelectExerciseList = ({
                 return
             }
 
-            const { data: exerciseData, error: exerciseError } = await supabase
-                .from("exercises")
-                .select()
-                .eq("created_by", user.id)
+            const { data: exerciseData, error: exerciseError } = await getCreatorsExercises();
 
-            if (exerciseError && !exerciseData) {
+            if (exerciseError || !exerciseData) {
                 toast({
                     title: "An error occurred.",
-                    description: exerciseError.message
+                    description: exerciseError
                 })
                 return
             }

@@ -14,7 +14,7 @@ export const InfoList = ({
             {infoItems.map((item) => {
                 return (
                     <div className="flex flex-col lg:flex-row lg:gap-10" key={item.header}>
-                        <h1 className="text-secondaryText text-sm lg:w-[100px]">{item.header}</h1>
+                        <h1 className="text-secondaryText text-sm lg:w-[100px] shrink-0">{item.header}</h1>
                         <p className="text-primaryText text-sm">{item.info}</p>
                     </div>
                 )
